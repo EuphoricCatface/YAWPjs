@@ -103,7 +103,7 @@ hr {
   border-radius: 3px;
   background: #eee4da;
   text-align: center;
-  line-height: 112px;
+  line-height: 102px;
   font-size: 55px;
   font-weight: bold;
   -webkit-transition: 200ms ease;
@@ -235,6 +235,98 @@ hr {
   position: absolute;
   left: 468px;
   top: 468px;
+}
+.tile.tile-qu {
+  font-size: 45px;
+}
+.tile.tile-a::before {
+  content: "1";
+}
+.tile.tile-b::before {
+  content: "3";
+}
+.tile.tile-c::before {
+  content: "3";
+}
+.tile.tile-d::before {
+  content: "2";
+}
+.tile.tile-e::before {
+  content: "1";
+}
+.tile.tile-f::before {
+  content: "4";
+}
+.tile.tile-g::before {
+  content: "2";
+}
+.tile.tile-h::before {
+  content: "4";
+}
+.tile.tile-i::before {
+  content: "1";
+}
+.tile.tile-j::before {
+  content: "8";
+}
+.tile.tile-k::before {
+  content: "5";
+}
+.tile.tile-l::before {
+  content: "1";
+}
+.tile.tile-m::before {
+  content: "3";
+}
+.tile.tile-n::before {
+  content: "1";
+}
+.tile.tile-o::before {
+  content: "1";
+}
+.tile.tile-p::before {
+  content: "3";
+}
+.tile.tile-qu::before {
+  content: "10";
+}
+.tile.tile-r::before {
+  content: "1";
+}
+.tile.tile-s::before {
+  content: "1";
+}
+.tile.tile-t::before {
+  content: "1";
+}
+.tile.tile-u::before {
+  content: "1";
+}
+.tile.tile-v::before {
+  content: "4";
+}
+.tile.tile-w::before {
+  content: "4";
+}
+.tile.tile-x::before {
+  content: "8";
+}
+.tile.tile-y::before {
+  content: "4";
+}
+.tile.tile-z::before {
+  content: "10";
+}
+.tile:before {
+  line-height: initial;
+  display: block;
+  position: absolute;
+  font-size: 25px;
+  width: 33%;
+  height: 33%;
+  line-height: 34px;
+  left: 0;
+  top: 0;
 }
 
 .game-intro {
