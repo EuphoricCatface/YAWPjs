@@ -39,6 +39,12 @@ h1 {
 
 .grid-row {
   margin-bottom: 15px;
+  cursor: default;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+      user-select: none;
 }
 .grid-row:last-child {
   margin-bottom: 0;
@@ -74,8 +80,12 @@ h1 {
   background: #eee4da;
   text-align: center;
   line-height: 112px;
-  font-size: 60px;
+  font-size: 55px;
   font-weight: bold;
+  -webkit-transition: 200ms ease;
+  -moz-transition: 200ms ease;
+  -webkit-transition-property: top, left;
+  -moz-transition-property: top, left;
 }
 .tile.tile-position-1-1 {
   position: absolute;

@@ -1,3 +1,5 @@
+@import "helpers";
+
 $field-width: 600px;
 // leaving width as 600px as this is going to be 5x5 board, not 4x4
 $grid-spacing: 15px;
@@ -51,6 +53,12 @@ h1 {
 .grid-row {
     margin-bottom: $grid-spacing;
 
+    cursor: default;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+
     &:last-child {
         margin-bottom: 0;
     }
@@ -90,8 +98,11 @@ h1 {
     background: $tile-color;
     text-align: center;
     line-height: $tile-size + 10px;
-    font-size: 60px;
+    font-size: 55px;
     font-weight: bold;
+
+    @include transition(200ms ease);
+    @include transition-property(top, left);
 
     @for $x from 1 through $grid-row-cells {
         @for $y from 1 through $grid-row-cells {
