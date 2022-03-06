@@ -4,6 +4,7 @@ html, body {
   background: #faf8ef;
   color: #776e65;
   font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
 }
 
 body {
@@ -21,8 +22,31 @@ h1 {
   margin: 0 auto;
 }
 
+p {
+  margin-top: 0;
+  margin-bottom: 10px;
+  line-height: 1.65;
+}
+
+a {
+  color: #776e65;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+strong.important {
+  text-transform: uppercase;
+}
+
+hr {
+  border: none;
+  border-bottom: 1px solid #d8d4d0;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
 .game-container {
-  margin-top: 50px;
+  margin-top: 40px;
   position: relative;
   padding: 15px;
   background: #bbada0;
@@ -211,4 +235,12 @@ h1 {
   position: absolute;
   left: 468px;
   top: 468px;
+}
+
+.game-intro {
+  margin-bottom: 0;
+}
+
+.game-explanation {
+  margin-top: 50px;
 }/*# sourceMappingURL=main.css.map */
