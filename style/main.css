@@ -104,10 +104,12 @@ hr {
   background: #eee4da;
   text-align: center;
   line-height: 102px;
-  font-size: 55px;
+  font-size: 45px;
   font-weight: bold;
+  transition: 200ms ease;
   -webkit-transition: 200ms ease;
   -moz-transition: 200ms ease;
+  transition-property: top, left;
   -webkit-transition-property: top, left;
   -moz-transition-property: top, left;
 }
@@ -236,9 +238,6 @@ hr {
   left: 468px;
   top: 468px;
 }
-.tile.tile-qu {
-  font-size: 45px;
-}
 .tile.tile-a::before {
   content: "1";
 }
@@ -327,6 +326,39 @@ hr {
   line-height: 34px;
   left: 0;
   top: 0;
+}
+.tile.double-word::after {
+  content: "DW";
+  background-color: rgba(0, 0, 255, 0.5);
+  bottom: 0;
+}
+.tile.triple-word::after {
+  content: "TW";
+  background-color: rgba(255, 0, 0, 0.5);
+  bottom: 0;
+}
+.tile.double-letter::after {
+  content: "DL";
+  background-color: rgba(0, 0, 255, 0.5);
+  top: 0;
+}
+.tile.triple-letter::after {
+  content: "TL";
+  background-color: rgba(255, 0, 0, 0.5);
+  top: 0;
+}
+.tile:after {
+  line-height: initial;
+  font-weight: normal;
+  color: #f9f6f2;
+  display: block;
+  position: absolute;
+  font-size: 20px;
+  width: 33%;
+  height: 33%;
+  border-radius: 3px;
+  line-height: 34px;
+  right: 0;
 }
 
 .game-intro {
