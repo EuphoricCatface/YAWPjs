@@ -1,3 +1,12 @@
+$field-width: 600px;
+// leaving width as 600px as this is going to be 5x5 board, not 4x4
+$grid-spacing: 15px;
+$grid-row-cells: 5;
+$tile-size: calc(($field-width - $grid-spacing * ($grid-row-cells + 1)) / $grid-row-cells);
+$tile-border-radius: 3px;
+
+$tile-color: #eee4da;
+
 html, body {
     margin: 0;
     padding: 0;
@@ -7,12 +16,90 @@ html, body {
     font-family:Arial, Helvetica, sans-serif
 }
 
+body {
+    margin: 80px 0;
+}
+
 h1 {
     font-size: 80px;
     font-weight: bold;
+    margin: 0;
 }
 
 .container {
-    width: 600px;
+    width: $field-width;
     margin: 0 auto;
+}
+
+.game-container {
+    margin-top: 50px;
+    position: relative;
+    padding: $grid-spacing;
+    
+    background: #bbada0;
+    border-radius: $tile-border-radius * 2;
+    width: $field-width;
+    height: $field-width;
+    box-sizing: border-box;
+}
+
+.grid-container {
+    position: absolute;
+    z-index: 1;
+}
+
+.grid-row {
+    margin-bottom: $grid-spacing;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    &:after {
+        content: "";
+        display: block;
+        clear: both;
+    }
+}
+
+.grid-cell {
+    width: $tile-size;
+    height: $tile-size;
+    margin-right: $grid-spacing;
+    float: left;
+
+    border-radius: $tile-border-radius;
+
+    background: rgba($tile-color, .35);
+
+    &:last-child {
+        margin-right: 0;
+    }
+}
+
+.tile-container {
+    position: absolute;
+    z-index: 2;
+}
+
+.tile {
+    background: red;
+    width: $tile-size;
+    height: $tile-size;
+    border-radius: $tile-border-radius;
+    background: $tile-color;
+    text-align: center;
+    line-height: $tile-size + 10px;
+    font-size: 60px;
+    font-weight: bold;
+
+    @for $x from 1 through $grid-row-cells {
+        @for $y from 1 through $grid-row-cells {
+            &.tile-position-#{$x}-#{$y} {
+                position: absolute;
+                left: ($tile-size + $grid-spacing) * ($x - 1);
+                top: ($tile-size + $grid-spacing) * ($y - 1);
+            }
+        }
+    }
 }
