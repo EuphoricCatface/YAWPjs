@@ -2,10 +2,11 @@
 
 $field-width: 600px;
 // leaving width as 600px as this is going to be 5x5 board, not 4x4
-$grid-spacing: 15px;
+$grid-spacing: 20px;
 $grid-row-cells: 5;
 $tile-size: calc(($field-width - $grid-spacing * ($grid-row-cells + 1)) / $grid-row-cells);
-$tile-border-radius: 3px;
+$tile-border-radius: calc($tile-size / 5);
+$tile-border-sub-radius: 3px;
 
 $text-color: #776e65;
 $bright-text-color: #f9f6f2;
@@ -75,7 +76,7 @@ hr {
     padding: $grid-spacing;
     
     background: #bbada0;
-    border-radius: $tile-border-radius * 2;
+    border-radius: $tile-border-radius * 1.5;
     width: $field-width;
     height: $field-width;
     box-sizing: border-box;
@@ -134,7 +135,7 @@ hr {
     background: $tile-color;
     text-align: center;
     line-height: $tile-size;
-    font-size: 45px;
+    font-size: 40px;
     font-weight: bold;
 
     @include transition(200ms ease);
@@ -161,9 +162,9 @@ hr {
         display: block;
         position: absolute;
         font-size: 25px;
-        width: 33%;
-        height: 33%;
-        line-height: calc($tile-size / 3);
+        width: 40%;
+        height: 40%;
+        line-height: calc($tile-size / 3) + 10px;
         left: 0;
         top: 0;
     }
@@ -172,24 +173,28 @@ hr {
         content: "DW";
         background-color: rgba(0, 0, 255, 0.500);
         bottom: 0;
+        border-radius: $tile-border-sub-radius $tile-border-sub-radius $tile-border-radius $tile-border-sub-radius;
     }
 
     &.triple-word::after {
         content: "TW";
         background-color: rgba(255, 0, 0, 0.500);
         bottom: 0;
+        border-radius: $tile-border-sub-radius $tile-border-sub-radius $tile-border-radius $tile-border-sub-radius;
     }
 
     &.double-letter::after {
         content: "DL";
         background-color: rgba(0, 0, 255, 0.500);
         top: 0;
+        border-radius: $tile-border-sub-radius $tile-border-radius $tile-border-sub-radius $tile-border-sub-radius;
     }
 
     &.triple-letter::after {
         content: "TL";
         background-color: rgba(255, 0, 0, 0.500);
         top: 0;
+        border-radius: $tile-border-sub-radius $tile-border-radius $tile-border-sub-radius $tile-border-sub-radius;
     }
 
     &:after {
@@ -199,9 +204,9 @@ hr {
         display: block;
         position: absolute;
         font-size: 20px;
+        font-family: monospace;
         width: 33%;
         height: 33%;
-        border-radius: $tile-border-radius;
         line-height: calc($tile-size / 3);
         right: 0;
     }
