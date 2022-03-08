@@ -27,7 +27,10 @@ GameManager.prototype.fill_prepare = function() {
             this.grid.tileAppend(
                 x, 
                 new Tile(
-                    [x, this.size + e], 
+                    position = {
+                        x: x,
+                        y: this.size + e
+                    },
                     this.dummyRandom()
                 )
             )

@@ -11,7 +11,15 @@ Grid.prototype.build = function () {
     for (var x = 0; x < this.size; x++) {
         this.cells[x] = [];
         for (var y = 0; y < this.size; y++) {
-            this.cells[x].push(new Tile([x, y], x * y));
+            this.cells[x].push(
+                new Tile(
+                    position = {
+                        x: x,
+                        y: y
+                    },
+                    x * y
+                )
+            );
         }
     }
 }
