@@ -25,8 +25,16 @@ Grid.prototype.build = function () {
 }
 
 Grid.prototype.getColumnsEmpty = function () {
-    console.log("getColumnsEmpty: DUMMY");
-    return [5, 5, 5, 5, 5]
+    var columnsEmpty = []
+    for (var x = 0; x < this.size; x++) {
+        columnsEmpty.push(0);
+        this.cells[x].forEach(function (element) {
+            if (element == null) {
+                columnsEmpty[x]++;
+            }
+        });
+    }
+    return columnsEmpty;
 }
 
 Grid.prototype.tileAppend = function (column, tile) {
