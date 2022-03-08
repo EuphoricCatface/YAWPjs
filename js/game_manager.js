@@ -36,7 +36,7 @@ GameManager.prototype.fill_prepare = function() {
             )
         }
     }
-    this.update()
+    this.actuate();
 }
 
 GameManager.prototype.actuate = function() {
