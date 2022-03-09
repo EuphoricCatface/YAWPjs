@@ -364,6 +364,9 @@ hr {
   line-height: 30px;
   right: 0;
 }
+.tile.selected {
+  background-color: #c0b9b1;
+}
 
 .game-intro {
   margin-bottom: 0;

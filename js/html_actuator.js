@@ -37,4 +37,8 @@ HTMLActuator.prototype.addTile = function (tile) {
 
     this.tileContainer.appendChild(element);
     element.addEventListener("dragstart",tile.dragstart_handler);
+    element.addEventListener("dragenter",tile.dragenter_handler);
+    element.addEventListener("dragleave",tile.dragleave_handler);
+    element.addEventListener("dragend",tile.dragend_handler);
+    element.addEventListener("drop",tile.drop_handler);
 };

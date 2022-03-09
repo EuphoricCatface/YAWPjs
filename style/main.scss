@@ -15,6 +15,7 @@ $tile-bonus-font-size: calc($tile-font-size * 1/2);
 $text-color: #776e65;
 $bright-text-color: #f9f6f2;
 $tile-color: #eee4da;
+$tile-color-selected: #c0b9b1;
 
 $letter-score: (
     "a": 1, "b": 3, "c": 3, "d": 2, "e": 1,
@@ -215,6 +216,10 @@ hr {
         height: 33%;
         line-height: calc($tile-size / 3);
         right: 0;
+    }
+
+    &.selected {
+        background-color: $tile-color-selected;
     }
 }
 
