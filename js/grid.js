@@ -7,7 +7,7 @@ function Grid(size) {
 }
 
 Grid.prototype.build = function () {
-    console.log("buildGrid: Dummy")
+    console.log("buildGrid: Dummy");
     for (var x = 0; x < this.size; x++) {
         this.cells[x] = [];
         for (var y = 0; y < this.size; y++) {
@@ -22,24 +22,24 @@ Grid.prototype.build = function () {
             );
         }
     }
-}
+};
 
 Grid.prototype.getColumnsEmpty = function () {
-    var columnsEmpty = []
+    var columnsEmpty = [];
     for (var x = 0; x < this.size; x++) {
         columnsEmpty.push(0);
-        this.cells[x].forEach(function (element) {
-            if (element == null) {
-                columnsEmpty[x]++;
+        this.cells.forEach(
+            element => {
+                if (element == null) columnsEmpty[x]++;
             }
-        });
+        );
     }
     return columnsEmpty;
-}
+};
 
 Grid.prototype.tileAppend = function (column, tile) {
-    this.cells[column].push(tile)
-}
+    this.cells[column].push(tile);
+};
 
 Grid.prototype.eliminateEmpty = function () {
     this.cells.entries.forEach(function (column){
@@ -52,5 +52,4 @@ Grid.prototype.eliminateEmpty = function () {
             column.splice(deleteIndex, 1);
         }
     });
-}
-
+};

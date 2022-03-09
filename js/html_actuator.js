@@ -10,17 +10,17 @@ HTMLActuator.prototype.actuate = function(grid) {
     grid.cells.forEach(function (column) {
         column.forEach(function (cell) {
             if (cell) {
-                self.addTile(cell)
+                self.addTile(cell);
             }
         });
     });
-}
+};
 
 HTMLActuator.prototype.clearContainer = function() {
     while (this.tileContainer.firstChild) {
         this.tileContainer.removeChild(this.tileContainer.firstChild);
     }
-}
+};
 
 HTMLActuator.prototype.addTile = function (tile) {
     var element = document.createElement("div");
@@ -33,4 +33,4 @@ HTMLActuator.prototype.addTile = function (tile) {
     element.textContent = tile.value;
 
     this.tileContainer.appendChild(element);
-}
+};
