@@ -30,7 +30,7 @@ HTMLActuator.prototype.addTile = function (tile) {
     var position = "tile-position-" + x + "-" + y;
 
     element.classList.add("tile", "tile-" + tile.value, position);
-    element.textContent = tile.value;
+    element.textContent = tile.value.toUpperCase();
 
     this.tileContainer.appendChild(element);
 };

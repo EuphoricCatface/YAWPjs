@@ -2,11 +2,15 @@
 
 $field-width: 600px;
 // leaving width as 600px as this is going to be 5x5 board, not 4x4
-$grid-spacing: 20px;
+$grid-spacing: 30px;
 $grid-row-cells: 5;
-$tile-size: calc(($field-width - $grid-spacing * ($grid-row-cells + 1)) / $grid-row-cells);
+$tile-size: calc(($field-width - $grid-spacing * ($grid-row-cells)) / $grid-row-cells);
 $tile-border-radius: calc($tile-size / 5);
 $tile-border-sub-radius: 3px;
+
+$tile-font-size: calc(($tile-size - $tile-border-radius) / 2);
+$tile-score-font-size: calc($tile-font-size * 2/3);
+$tile-bonus-font-size: calc($tile-font-size * 1/2);
 
 $text-color: #776e65;
 $bright-text-color: #f9f6f2;
@@ -73,7 +77,7 @@ hr {
 .game-container {
     margin-top: 40px;
     position: relative;
-    padding: $grid-spacing;
+    padding: calc($grid-spacing / 2);
     
     background: #bbada0;
     border-radius: $tile-border-radius * 1.5;
@@ -135,7 +139,7 @@ hr {
     background: $tile-color;
     text-align: center;
     line-height: $tile-size;
-    font-size: 40px;
+    font-size: $tile-font-size;
     font-weight: bold;
 
     @include transition(200ms ease);
@@ -163,7 +167,7 @@ hr {
         line-height: initial;
         display: block;
         position: absolute;
-        font-size: 25px;
+        font-size: $tile-score-font-size;
         width: 40%;
         height: 40%;
         line-height: calc($tile-size / 3) + 10px;
@@ -205,7 +209,7 @@ hr {
         color: $bright-text-color;
         display: block;
         position: absolute;
-        font-size: 20px;
+        font-size: $tile-bonus-font-size;
         font-family: monospace;
         width: 33%;
         height: 33%;
