@@ -23,19 +23,6 @@ Tile.prototype.dragenter_handler = function (ev) {
     Tile.tryAddTile(ev.target);
 };
 
-/*
-Tile.prototype.dragleave_handler = function (ev) {
-    // NOTE: sometimes, the text on a button fires dragleave_handler instead
-    console.log("dragleave");
-    var target = ev.target;
-    if (target.nodeName == "#text"){
-        console.log("This is text, replacing with parentElement");
-        target = target.parentElement;
-    }
-    target.classList.remove("selected");
-};
-*/
-
 Tile.prototype.dragend_handler = function (ev) {
     var target = ev.target;
     if (target.nodeName == "#text") {
@@ -51,19 +38,7 @@ Tile.prototype.drop_handler = function (ev) {
 Tile.prototype.dragover_handler = function (ev) {
     ev.preventDefault();
 };
-/*
-Tile.prototype.isNeighbor = function (that) {
-    console.assert(
-        isInteger(this.x) && isInteger(this.y) &&
-            isInteger(that.x) && isInteger(that.y),
-        "Tile coordinate is not Integer"
-    );
-    if ((Math.abs(this.x - that.x) <= 1) &&
-            (Math.abs(this.y - that.y) <= 1))
-        return true;
-    return false;
-};
-*/
+
 getElementPosition = function (element) {
     class_list = Array.from(element.classList);
     var pos_data = class_list.find(element => element.startsWith("tile-position"));
