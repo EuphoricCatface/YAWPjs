@@ -49,6 +49,12 @@ hr {
   margin-top: 40px;
   position: relative;
   padding: 15px;
+  cursor: default;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+      user-select: none;
   background: #bbada0;
   border-radius: 27px;
   width: 600px;
@@ -63,12 +69,6 @@ hr {
 
 .grid-row {
   margin-bottom: 30px;
-  cursor: default;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-      user-select: none;
 }
 .grid-row:last-child {
   margin-bottom: 0;
