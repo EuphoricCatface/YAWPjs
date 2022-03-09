@@ -73,9 +73,6 @@ Tile.tryAddTile = function (element, tile) {
         "selected tiles and word length mismatch"
     );
 
-    if (Tile.selected_elements.find( e => e === element ))
-        return;
-
     if (element.nodeName == "#text"){
         // unlikely
         console.warn("tryAddTile: arg is #text node. Trying parent instead.");
@@ -106,6 +103,10 @@ Tile.tryAddTile = function (element, tile) {
             return;
         }
 
+        if (Tile.selected_elements.find( e => e === element ))
+            // element is already in the list;
+            // ignoring
+            return;
     } while(false); // ADD:
 
     Tile.selected_elements.push(element);
