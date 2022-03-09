@@ -9,27 +9,26 @@ function Tile(position, value) {
 
     Tile.word_construct = "";
     Tile.selected_elements = [];
+    Tile.selected_tiles = [];
 }
 
 Tile.prototype.dragstart_handler = function (ev) {
     ev.dataTransfer.setData("text/plain", ev.target.id);
 
     // transparent drag object: https://stackoverflow.com/q/27989602/
-    var crt = this.cloneNode(true);
+    var crt = ev.target.cloneNode(true);
     crt.style.display = "none";
     document.body.appendChild(crt);
     ev.dataTransfer.setDragImage(crt, 0, 0);
 
     // Workaround: sometimes first tile does not register
-    Tile.tryAddTile(ev.target);
+    var self = this;
+    Tile.tryAddTile(ev.target, self);
 };
 
 Tile.prototype.dragenter_handler = function (ev) {
-    Tile.tryAddTile(ev.target);
-
-    //console.log(this);
-    // `this` suddenly points at the html element here??
-    // - refactor stash leaved behind.
+    var self = this;
+    Tile.tryAddTile(ev.target, self);
 };
 
 Tile.prototype.dragend_handler = function (ev) {
@@ -50,36 +49,24 @@ Tile.prototype.dragover_handler = function (ev) {
     ev.preventDefault();
 };
 
-function getElementPosition(element) {
-    var class_list = Array.from(element.classList);
-    var pos_data = class_list.find(element => element.startsWith("tile-position"));
-    // ex) "tile-position-1-2"
-    var x = parseInt(pos_data.charAt(14));
-    var y = parseInt(pos_data.charAt(16));
-
-    return {
-        x: x,
-        y: y
-    };
-}
-
-function isNeighborElement (one, another) {
-    var one_position = getElementPosition(one);
-    var another_position = getElementPosition(another);
-
+Tile.prototype.isNeighbor = function (that) {
     console.assert(
-        Number.isInteger(one_position.x) && Number.isInteger(one_position.y) &&
-        Number.isInteger(another_position.x) && Number.isInteger(another_position.y),
+        Number.isInteger(this.x) && Number.isInteger(this.y) &&
+        Number.isInteger(that.x) && Number.isInteger(that.y),
         "Tile coordinate is not Integer"
     );
 
-    if ((Math.abs(one_position.x - another_position.x) <= 1) &&
-            (Math.abs(one_position.y - another_position.y) <= 1))
+    if ((Math.abs(this.x - that.x) <= 1) &&
+            (Math.abs(this.y - that.y) <= 1))
         return true;
     return false;
 };
 
-Tile.tryAddTile = function (element) {
+Tile.tryAddTile = function (element, tile) {
+    console.assert(
+        Tile.selected_tiles.length == Tile.selected_elements.length,
+        "selected tiles and elements length mismatch"
+    );
     console.assert(
         Tile.selected_elements.length ==
             Tile.word_construct.length - [...Tile.word_construct.matchAll("Qu")].length,
@@ -106,7 +93,7 @@ Tile.tryAddTile = function (element) {
             // ignoring
             return;
 
-        if (!isNeighborElement(Tile.selected_elements.at(-1), element))
+        if (!tile.isNeighbor(Tile.selected_tiles.at(-1)))
             // current tile is somehow too far from the last selected tile;
             // ignoring
             return;
@@ -122,6 +109,7 @@ Tile.tryAddTile = function (element) {
     } while(false); // ADD:
 
     Tile.selected_elements.push(element);
+    Tile.selected_tiles.push(tile);
     Tile.word_construct += element.textContent;
 
     element.classList.add("selected");
@@ -129,12 +117,17 @@ Tile.tryAddTile = function (element) {
 
 Tile.popTile = function () {
     console.assert(
+        Tile.selected_tiles.length == Tile.selected_elements.length,
+        "selected tiles and elements length mismatch"
+    );
+    console.assert(
         Tile.selected_elements.length ==
             Tile.word_construct.length - [...Tile.word_construct.matchAll("Qu")].length,
         "selected tiles and word length mismatch"
     );
 
     var element = Tile.selected_elements.pop();
+    Tile.selected_tiles.pop();
     Tile.word_construct = Tile.word_construct.slice(0, Tile.word_construct.length-1);
     if (Tile.word_construct.endsWith("Q"))
         Tile.word_construct = Tile.word_construct.slice(0, Tile.word_construct.length-1);
@@ -149,7 +142,8 @@ Tile.finishSelection = function () {
     while (Tile.selected_elements.length)
         Tile.popTile();
 
-    console.assert(Tile.selected_elements.length == 0 &&
+    console.assert(Tile.selected_tiles.length == 0 &&
+        Tile.selected_elements.length == 0 &&
         Tile.word_construct.length == 0,
         "finishSelection: internal selection did not clear!");
 };
