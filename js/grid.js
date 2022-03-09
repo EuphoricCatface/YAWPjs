@@ -21,14 +21,13 @@ Grid.prototype.build = function () {
 
 Grid.prototype.getColumnsEmpty = function () {
     var columnsEmpty = [];
-    for (var x = 0; x < this.size; x++) {
-        columnsEmpty.push(0);
-        this.cells[x].forEach(
-            element => {
+    this.cells.forEach( (column, x) => {
+            columnsEmpty.push(0);
+            column.forEach( element => {
                 if (element == null) columnsEmpty[x]++;
-            }
-        );
-    }
+            });
+        }
+    );
     return columnsEmpty;
 };
 
@@ -51,12 +50,10 @@ Grid.prototype.eliminateEmpty = function () {
 };
 
 Grid.prototype.cellCoordRefresh = function () {
-    for (var x = 0; x < this.size; x++) {
-        column = this.cells[x];
-        for (var y = 0; y < column.length; y++) {
-            element = column[y];
+    this.cells.forEach( (columns, x) => {
+        columns.forEach( (element, y) => {
             element.x = x;
             element.y = y;
-        }
-    }
+        });
+    });
 };
