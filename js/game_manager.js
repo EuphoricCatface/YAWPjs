@@ -9,7 +9,8 @@ function GameManager(size, actuator) {
 
 // Set up the game
 GameManager.prototype.setup = function() {
-    // this.addStartTiles();
+    this.fill_prepare();
+    this.squash();
 
     this.actuate();
 };
@@ -36,7 +37,6 @@ GameManager.prototype.fill_prepare = function() {
             );
         }
     }
-    this.actuate();
 };
 
 GameManager.prototype.actuate = function() {
@@ -45,6 +45,4 @@ GameManager.prototype.actuate = function() {
 
 GameManager.prototype.squash = function (direction) {
     this.grid.eliminateEmpty();
-    this.actuate();
 };
-
