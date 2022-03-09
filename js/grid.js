@@ -45,4 +45,14 @@ Grid.prototype.eliminateEmpty = function () {
             column.splice(deleteIndex, 1);
         }
     });
+
+Grid.prototype.cellCoordRefresh = function () {
+    for (var x = 0; x < this.size; x++) {
+        column = this.cells[x];
+        for (var y = 0; y < column.length; y++) {
+            element = column[y];
+            element.x = x;
+            element.y = y;
+        }
+    }
 };
