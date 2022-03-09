@@ -24,6 +24,10 @@ Tile.prototype.dragstart_handler = function (ev) {
 
 Tile.prototype.dragenter_handler = function (ev) {
     Tile.tryAddTile(ev.target);
+
+    //console.log(this);
+    // `this` suddenly points at the html element here??
+    // - refactor stash leaved behind.
 };
 
 Tile.prototype.dragend_handler = function (ev) {
