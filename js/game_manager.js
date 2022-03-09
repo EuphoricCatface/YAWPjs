@@ -1,3 +1,5 @@
+'use strict';
+
 function GameManager(size, actuator) {
     this.size = size;
     this.actuator = actuator;
@@ -18,21 +20,20 @@ GameManager.prototype.setup = function() {
 // Will evolve into weightedRandom.
 GameManager.prototype.pureRandom = function() {
     console.log("pureRandom: WeightedRandom NYI");
-    r = Math.floor(Math.random() * 26);
-    char = String.fromCharCode("a".charCodeAt(0) + r);
+    var r = Math.floor(Math.random() * 26);
+    var char = String.fromCharCode("a".charCodeAt(0) + r);
     if (char == "q")
         char = "qu";
     return char;
 };
 
 GameManager.prototype.fill_prepare = function() {
-    columnsEmpty = this.grid.getColumnsEmpty();
+    var columnsEmpty = this.grid.getColumnsEmpty();
     for (var x = 0; x < this.size; x++) {
         for (var e = 0; e < columnsEmpty[x]; e++){
             this.grid.tileAppend(
                 x, 
-                new Tile(
-                    position = {
+                new Tile({
                         x: x,
                         y: this.size + e
                     },

@@ -1,3 +1,5 @@
+'use strict';
+
 function HTMLActuator() {
     this.tileContainer = document.getElementsByClassName("tile-container")[0];
 }

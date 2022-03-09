@@ -1,3 +1,5 @@
+'use strict';
+
 function Tile(position, value) {
     this.x = position.x;
     this.y = position.y;
@@ -48,8 +50,8 @@ Tile.prototype.dragover_handler = function (ev) {
     ev.preventDefault();
 };
 
-getElementPosition = function (element) {
-    class_list = Array.from(element.classList);
+function getElementPosition(element) {
+    var class_list = Array.from(element.classList);
     var pos_data = class_list.find(element => element.startsWith("tile-position"));
     // ex) "tile-position-1-2"
     var x = parseInt(pos_data.charAt(14));
@@ -59,9 +61,9 @@ getElementPosition = function (element) {
         x: x,
         y: y
     };
-};
+}
 
-isNeighborElement = function (one, another) {
+function isNeighborElement (one, another) {
     var one_position = getElementPosition(one);
     var another_position = getElementPosition(another);
 
@@ -132,7 +134,7 @@ Tile.popTile = function () {
         "selected tiles and word length mismatch"
     );
 
-    element = Tile.selected_elements.pop();
+    var element = Tile.selected_elements.pop();
     Tile.word_construct = Tile.word_construct.slice(0, Tile.word_construct.length-1);
     if (Tile.word_construct.endsWith("Q"))
         Tile.word_construct = Tile.word_construct.slice(0, Tile.word_construct.length-1);

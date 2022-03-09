@@ -1,3 +1,5 @@
+'use strict';
+
 function Grid(size) {
     this.size = size;
 
@@ -38,7 +40,7 @@ Grid.prototype.tileAppend = function (column, tile) {
 Grid.prototype.eliminateEmpty = function () {
     this.cells.forEach(function (column){
         while (true) {
-            deleteIndex = column.findIndex(
+            var deleteIndex = column.findIndex(
                 element => element == null
             );
             if (deleteIndex == -1)
