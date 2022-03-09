@@ -15,10 +15,12 @@ GameManager.prototype.setup = function() {
     this.actuate();
 };
 
-// Will evolve into pureRandom, and then into weightedRandom.
-GameManager.prototype.dummyRandom = function() {
-    console.log("dummyRandom: DUMMY");
-    return "a";
+// Will evolve into weightedRandom.
+GameManager.prototype.pureRandom = function() {
+    console.log("pureRandom: WeightedRandom NYI");
+    r = Math.floor(Math.random() * 26);
+    char = String.fromCharCode("a".charCodeAt(0) + r);
+    return char;
 };
 
 GameManager.prototype.fill_prepare = function() {
@@ -32,7 +34,7 @@ GameManager.prototype.fill_prepare = function() {
                         x: x,
                         y: this.size + e
                     },
-                    this.dummyRandom()
+                    this.pureRandom()
                 )
             );
         }
