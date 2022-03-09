@@ -17,6 +17,9 @@ Tile.prototype.dragstart_handler = function (ev) {
     crt.style.display = "none";
     document.body.appendChild(crt);
     ev.dataTransfer.setDragImage(crt, 0, 0);
+
+    // Workaround: sometimes first tile does not register
+    Tile.tryAddTile(ev.target);
 };
 
 Tile.prototype.dragenter_handler = function (ev) {
