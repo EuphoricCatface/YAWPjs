@@ -7,6 +7,7 @@ function GameManager(size, actuator) {
     this.grid = new Grid(this.size);
 
     this.setup();
+    Tile.on("finishSelect", this.input.bind(this));
 }
 
 // Set up the game
@@ -50,4 +51,10 @@ GameManager.prototype.actuate = function() {
 
 GameManager.prototype.squash = function (direction) {
     this.grid.eliminateEmpty();
+};
+
+GameManager.prototype.input = function (inputData) {
+    // inputData: tiles, elements, word
+    console.log("DUMMY: GM.input");
+    console.log(inputData["word_construct"]);
 };

@@ -10,6 +10,8 @@ function Tile(position, value) {
     Tile.word_construct = "";
     Tile.selected_elements = [];
     Tile.selected_tiles = [];
+
+    Tile.events = {};
 }
 
 Tile.prototype.dragstart_handler = function (ev) {
@@ -137,8 +139,11 @@ Tile.popTile = function () {
 };
 
 Tile.finishSelection = function () {
-    console.log("DUMMY: finishSelection");
-    console.log(Tile.word_construct);
+    Tile.emit("finishSelect", {
+        tiles: Tile.selected_tiles,
+        elements: Tile.selected_elements,
+        word: Tile.word_construct
+    });
 
     while (Tile.selected_elements.length)
         Tile.popTile();
@@ -147,4 +152,20 @@ Tile.finishSelection = function () {
         Tile.selected_elements.length == 0 &&
         Tile.word_construct.length == 0,
         "finishSelection: internal selection did not clear!");
+};
+
+Tile.on = function (event, callback) {
+    if (!Tile.events[event]) {
+        Tile.events[event] = [];
+    }
+    Tile.events[event].push(callback);
+};
+
+Tile.emit = function (event, data) {
+    var callbacks = Tile.events[event];
+    if (callbacks) {
+        callbacks.forEach(function (callback) {
+            callback(data);
+        });
+    }
 };
