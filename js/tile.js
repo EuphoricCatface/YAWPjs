@@ -29,6 +29,8 @@ Tile.prototype.dragend_handler = function (ev) {
         console.log("This is text, replacing with parentElement");
         target = target.parentElement;
     }
+
+    Tile.finishSelection();
 };
 
 Tile.prototype.drop_handler = function (ev) {
@@ -126,4 +128,16 @@ Tile.popTile = function () {
         Tile.word_construct = Tile.word_construct.slice(0, Tile.word_construct.length-1);
 
     element.classList.remove("selected");
+};
+
+Tile.finishSelection = function () {
+    console.log("DUMMY: finishSelection");
+    console.log(Tile.word_construct);
+
+    while (Tile.selected_elements.length)
+        Tile.popTile();
+
+    console.assert(Tile.selected_elements.length == 0 &&
+        Tile.word_construct.length == 0,
+        "finishSelection: internal selection did not clear!");
 };
