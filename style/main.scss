@@ -141,12 +141,14 @@ hr {
     @include transition(200ms ease);
     @include transition-property(top, left);
 
+    // Columns don't interact between each other. Let's treat each column as a list
+    // The first column is on the left, and the first element is at the bottom
     @for $x from 1 through $grid-row-cells {
         @for $y from 1 through $grid-row-cells {
-            &.tile-position-#{$x}-#{$y} {
+            &.tile-position-#{$x}-#{($y)} {
                 position: absolute;
                 left: ($tile-size + $grid-spacing) * ($x - 1);
-                top: ($tile-size + $grid-spacing) * ($y - 1);
+                top: ($tile-size + $grid-spacing) * ($grid-row-cells - $y);
             }
         }
     }

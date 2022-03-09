@@ -6,6 +6,8 @@ function Grid(size) {
     this.build();
 }
 
+// Columns don't interact between each other. Let's treat each column as a list
+// The first column is on the left, and the first element is at the bottom
 Grid.prototype.build = function () {
     for (var x = 0; x < this.size; x++) {
         this.cells[x] = [];
