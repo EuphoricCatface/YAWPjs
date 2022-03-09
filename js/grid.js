@@ -21,7 +21,7 @@ Grid.prototype.getColumnsEmpty = function () {
     var columnsEmpty = [];
     for (var x = 0; x < this.size; x++) {
         columnsEmpty.push(0);
-        this.cells.forEach(
+        this.cells[x].forEach(
             element => {
                 if (element == null) columnsEmpty[x]++;
             }
@@ -35,7 +35,7 @@ Grid.prototype.tileAppend = function (column, tile) {
 };
 
 Grid.prototype.eliminateEmpty = function () {
-    this.cells.entries.forEach(function (column){
+    this.cells.forEach(function (column){
         while (true) {
             deleteIndex = column.findIndex(
                 element => element == null
@@ -45,6 +45,8 @@ Grid.prototype.eliminateEmpty = function () {
             column.splice(deleteIndex, 1);
         }
     });
+    this.cellCoordRefresh();
+};
 
 Grid.prototype.cellCoordRefresh = function () {
     for (var x = 0; x < this.size; x++) {
