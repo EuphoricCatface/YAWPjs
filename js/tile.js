@@ -11,7 +11,7 @@ function Tile(position, value) {
     Tile.selected_elements = [];
     Tile.selected_tiles = [];
 
-    Tile.events = {};
+    Tile.events = Tile.events || {};
 }
 
 Tile.prototype.dragstart_handler = function (ev) {

@@ -55,6 +55,27 @@ GameManager.prototype.squash = function (direction) {
 
 GameManager.prototype.input = function (inputData) {
     // inputData: tiles, elements, word
-    console.log("DUMMY: GM.input");
-    console.log(inputData["word_construct"]);
+    if (!this.verify(inputData.word))
+        return;
+
+    inputData.elements.forEach(element => {
+        element.remove();
+    });
+    inputData.tiles.forEach(element => {
+        this.grid.coordDelete({
+            x: element.x,
+            y: element.y
+        });
+    });
+
+    this.fill_prepare();
+    this.squash();
+    this.actuate();
+};
+
+GameManager.prototype.verify = function (word) {
+    console.log("DUMMY: GM.verify");
+    console.log(word);
+
+    return true;
 };

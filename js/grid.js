@@ -59,3 +59,7 @@ Grid.prototype.cellCoordRefresh = function () {
         });
     });
 };
+
+Grid.prototype.coordDelete = function (position) {
+    this.cells[position.x][position.y] = null;
+};
