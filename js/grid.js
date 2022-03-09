@@ -42,6 +42,15 @@ Grid.prototype.tileAppend = function (column, tile) {
 }
 
 Grid.prototype.eliminateEmpty = function () {
-    console.log("eliminateEmpty: DUMMY");
+    this.cells.entries.forEach(function (column){
+        while (true) {
+            deleteIndex = column.findIndex(
+                element => element == null
+            );
+            if (deleteIndex == -1)
+                return;
+            column.splice(deleteIndex, 1);
+        }
+    });
 }
 
