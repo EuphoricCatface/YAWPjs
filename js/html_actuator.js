@@ -31,6 +31,8 @@ HTMLActuator.prototype.addTile = function (tile) {
 
     element.classList.add("tile", "tile-" + tile.value, position);
     element.textContent = tile.value.toUpperCase();
+    if (element.textContent == "QU")
+        element.textContent = "Qu";
     element.setAttribute("draggable", true);
 
     this.tileContainer.appendChild(element);

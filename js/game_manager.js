@@ -20,6 +20,8 @@ GameManager.prototype.pureRandom = function() {
     console.log("pureRandom: WeightedRandom NYI");
     r = Math.floor(Math.random() * 26);
     char = String.fromCharCode("a".charCodeAt(0) + r);
+    if (char == "q")
+        char = "qu";
     return char;
 };
 
