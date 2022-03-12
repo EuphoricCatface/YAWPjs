@@ -21,14 +21,6 @@ $transition-speed: 800ms;// * 2; // testing
 // Rough approximation
 $OutCubic: cubic-bezier(0.4, 1, 0.66, 1);
 
-$letter-score: (
-    "a": 1, "b": 3, "c": 3, "d": 2, "e": 1,
-    "f": 4, "g": 2, "h": 4, "i": 1, "j": 8,
-    "k": 5, "l": 1, "m": 3, "n": 1, "o": 1,
-    "p": 3, "qu": 10, "r": 1, "s": 1, "t": 1,
-    "u": 1, "v": 4, "w": 4, "x": 8, "y": 4, "z": 10
-);
-
 html, body {
     margin: 0;
     padding: 0;
@@ -163,13 +155,7 @@ hr {
         }
     }
 
-    @each $letter, $score in $letter-score {
-        &.tile-#{$letter}::before {
-            content: "#{$score}";
-        }
-    }
-
-    &:before {
+    &>.tileScore {
         line-height: initial;
         display: block;
         position: absolute;
