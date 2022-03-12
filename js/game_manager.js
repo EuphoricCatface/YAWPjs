@@ -7,15 +7,18 @@ function GameManager(size, actuator) {
 
     this.grid = new Grid(this.size);
 
-    // Allow drop on game-container, not just Tile
-    var gameContainer = document.getElementsByClassName("game-container")[0];
-    gameContainer.setAttribute("draggable", true);
-    gameContainer.addEventListener("dragover",Tile.dragover_handler);
-    gameContainer.addEventListener("drop",Tile.drop_handler);
-
+    this.allowDropOnGameContainer();
     this.setup();
     Tile.on("finishSelect", this.input.bind(this));
 }
+
+GameManager.prototype.allowDropOnGameContainer = function() {
+    var gameContainer = document.getElementsByClassName("game-container")[0];
+    // These two are like "static" functions, but changing these to ones cause a problem:
+    //      <dragend does not fire if not on an element with proper handlers>
+    gameContainer.addEventListener("dragover",Tile.prototype.dragover_handler);
+    gameContainer.addEventListener("drop",Tile.prototype.drop_handler);
+};
 
 // Set up the game
 GameManager.prototype.setup = function() {
