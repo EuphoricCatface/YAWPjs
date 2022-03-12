@@ -28,11 +28,21 @@ GameManager.prototype.setup = function() {
     this.actuate();
 };
 
-// Will evolve into weightedRandom.
-GameManager.prototype.pureRandom = function() {
-    console.log("pureRandom: WeightedRandom NYI");
-    var r = Math.floor(Math.random() * 26);
-    var char = String.fromCharCode("a".charCodeAt(0) + r);
+GameManager.prototype.weightedRandom = function() {
+    var inverse_frequency_list = [120, 40, 40, 60, 120, 30, 60, 30, 120, 15, 24, 120, 40, 120, 120, 40, 12, 120, 120, 120, 120, 30, 30, 15, 30, 12];
+    var inverse_frequency_sum = 1708;
+
+    var rand = Math.floor(Math.random() * (inverse_frequency_sum - 1));
+    var result;
+
+    for (var i = 0; i < inverse_frequency_list.length; i++) {
+        rand -= inverse_frequency_list[i];
+        if (rand < 0) {
+            result = i;
+            break;
+        }
+    }
+    var char = String.fromCharCode("a".charCodeAt(0) + result);
     if (char == "q")
         char = "qu";
     return char;
@@ -48,7 +58,7 @@ GameManager.prototype.fill_prepare = function() {
                         x: x,
                         y: this.size + e
                     },
-                    this.pureRandom()
+                    this.weightedRandom()
                 )
             );
         }
