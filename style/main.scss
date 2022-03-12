@@ -17,7 +17,7 @@ $bright-text-color: #f9f6f2;
 $tile-color: #eee4da;
 $tile-color-selected: #c0b9b1;
 
-$transition-speed: 800ms;
+$transition-speed: 800ms;// * 2; // testing
 // Rough approximation
 $OutCubic: cubic-bezier(0.4, 1, 0.66, 1);
 
@@ -226,22 +226,26 @@ hr {
     &.selected {
         background-color: $tile-color-selected;
     }
-
+/*
     &.tile-new {
-        //@include animation(appear $transition-speed $OutCubic);
+        @include animation(appear $transition-speed ease);
         @include animation-fill-mode(both)
     }
+*/
 }
 
+/* These do not come out satisfying...
 @include keyframes(appear) {
     // Opacity makes it unnecessarily laggy
     0% {
-        //opacity: 0;
+        -webkit-transform: scale(0.33);
+        //opacity: 0.5;
     }
-    100% {
+    75% {
+        -webkit-transform: scale(1);
         //opacity: 1;
     }
-}
+}*/
 
 .game-intro {
     margin-bottom: 0;

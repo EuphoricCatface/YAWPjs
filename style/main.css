@@ -113,6 +113,12 @@ hr {
   transition-property: top, left;
   -webkit-transition-property: top, left;
   -moz-transition-property: top, left;
+  /*
+      &.tile-new {
+          @include animation(appear $transition-speed ease);
+          @include animation-fill-mode(both)
+      }
+  */
 }
 .tile.tile-position-1-1 {
   position: absolute;
@@ -493,13 +499,19 @@ hr {
 .tile.selected {
   background-color: #c0b9b1;
 }
-.tile.tile-new {
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-}
 
-@-webkit-keyframes appear {}
-@keyframes appear {}
+/* These do not come out satisfying...
+@include keyframes(appear) {
+    // Opacity makes it unnecessarily laggy
+    0% {
+        -webkit-transform: scale(0.33);
+        //opacity: 0.5;
+    }
+    75% {
+        -webkit-transform: scale(1);
+        //opacity: 1;
+    }
+}*/
 .game-intro {
   margin-bottom: 0;
 }
