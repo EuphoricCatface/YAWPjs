@@ -1,11 +1,10 @@
 'use strict';
 
 function Tile(position, value) {
-    this.x = position.x;
-    this.y = position.y;
+    this.pos = position;
     this.value = value;
 
-    this.previousPosition = null;
+    this.prevPos = null;
 
     Tile.word_construct = "";
     Tile.selected_elements = [];
@@ -15,36 +14,61 @@ function Tile(position, value) {
 }
 
 Tile.prototype.dragstart_handler = function (ev) {
-    ev.dataTransfer.setData("text/plain", ev.target.id);
-
     // transparent drag object: https://stackoverflow.com/q/27989602/
+    ev.dataTransfer.setData("text", "Tile");
     var crt = ev.target.cloneNode(true);
     crt.style.display = "none";
     document.body.appendChild(crt);
     ev.dataTransfer.setDragImage(crt, 0, 0);
 
     // Workaround: sometimes first tile does not register
-    var self = this;
-    Tile.tryAddTile(ev.target, self);
+    Tile.tryAddTile(ev.target, this);
 };
 
 Tile.prototype.dragenter_handler = function (ev) {
-    var self = this;
-    Tile.tryAddTile(ev.target, self);
+    var target = ev.target;
+    if (ev.dataTransfer.getData("text") != "Tile")
+        return;
+    if (target.className == "tileScore")
+        target = target.parentElement;
+
+    Tile.tryAddTile(target, this);
 };
 
 Tile.prototype.dragend_handler = function (ev) {
-    var target = ev.target;
-    if (target.nodeName == "#text") {
-        console.log("This is text, replacing with parentElement");
-        target = target.parentElement;
-    }
+    // "dragEnd" seem to fire after the "drop"
+    while (Tile.selected_elements.length)
+        Tile.popTile();
 
-    Tile.finishSelection();
+    console.assert(Tile.selected_tiles.length == 0 &&
+        Tile.selected_elements.length == 0 &&
+        Tile.word_construct.length == 0,
+        "dragend: internal selection did not clear!");
 };
 
 Tile.prototype.drop_handler = function (ev) {
     ev.preventDefault();
+
+    var target = ev.target;
+    if (target.nodeName == "#text") {
+        console.log("drop: Target is text, replacing with parentElement");
+        target = target.parentElement;
+    }
+
+    // test if it's inside the gamecontainer
+    while (target) {
+        //console.log(target);
+        if (target.className == "game-container") {
+            Tile.finishSelection();
+            return true;
+        }
+        target = target.parentElement;
+    }
+    // // console.error("Drop event seem to have fired outside of game-container.");
+    // Drop fires twice when dropped onto the tile: once from the tile, and once from the board.
+    // The test above essentially does the test for the second drop, because a deleted node's parent is null.
+    // console.error("Invalid Drop");
+    return false;
 };
 
 Tile.prototype.dragover_handler = function (ev) {
@@ -52,19 +76,17 @@ Tile.prototype.dragover_handler = function (ev) {
 };
 
 Tile.prototype.isNeighbor = function (that) {
-    console.assert(
-        Number.isInteger(this.x) && Number.isInteger(this.y) &&
-        Number.isInteger(that.x) && Number.isInteger(that.y),
-        "Tile coordinate is not Integer"
-    );
-
-    if ((Math.abs(this.x - that.x) <= 1) &&
-            (Math.abs(this.y - that.y) <= 1))
+    if ((Math.abs(this.pos.x - that.pos.x) <= 1) &&
+            (Math.abs(this.pos.y - that.pos.y) <= 1))
         return true;
     return false;
 };
 
 Tile.tryAddTile = function (element, tile) {
+    console.assert(
+        Number.isInteger(tile.pos.x) && Number.isInteger(tile.pos.y),
+        "Tile coordinate is not Integer"
+    );
     console.assert(
         Tile.selected_tiles.length == Tile.selected_elements.length,
         "selected tiles and elements length mismatch"
@@ -113,7 +135,7 @@ Tile.tryAddTile = function (element, tile) {
 
     Tile.selected_elements.push(element);
     Tile.selected_tiles.push(tile);
-    Tile.word_construct += element.textContent;
+    Tile.word_construct += tile.value;
 
     element.classList.add("selected");
 };
@@ -139,19 +161,16 @@ Tile.popTile = function () {
 };
 
 Tile.finishSelection = function () {
+    console.assert(Tile.selected_tiles.length &&
+        Tile.selected_elements.length &&
+        Tile.word_construct.length,
+        "finishSelection: internal selection has already gone!");
+
     Tile.emit("finishSelect", {
         tiles: Tile.selected_tiles,
         elements: Tile.selected_elements,
         word: Tile.word_construct
     });
-
-    while (Tile.selected_elements.length)
-        Tile.popTile();
-
-    console.assert(Tile.selected_tiles.length == 0 &&
-        Tile.selected_elements.length == 0 &&
-        Tile.word_construct.length == 0,
-        "finishSelection: internal selection did not clear!");
 };
 
 Tile.on = function (event, callback) {

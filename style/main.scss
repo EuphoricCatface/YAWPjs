@@ -17,13 +17,9 @@ $bright-text-color: #f9f6f2;
 $tile-color: #eee4da;
 $tile-color-selected: #c0b9b1;
 
-$letter-score: (
-    "a": 1, "b": 3, "c": 3, "d": 2, "e": 1,
-    "f": 4, "g": 2, "h": 4, "i": 1, "j": 8,
-    "k": 5, "l": 1, "m": 3, "n": 1, "o": 1,
-    "p": 3, "qu": 10, "r": 1, "s": 1, "t": 1,
-    "u": 1, "v": 4, "w": 4, "x": 8, "y": 4, "z": 10
-);
+$transition-speed: 800ms;// * 2; // testing
+// Rough approximation
+$OutCubic: cubic-bezier(0.4, 1, 0.66, 1);
 
 html, body {
     margin: 0;
@@ -36,11 +32,11 @@ html, body {
 }
 
 body {
-    margin: 80px 0;
+    margin: 40px 0;
 }
 
 h1 {
-    font-size: 80px;
+    font-size: 40px;
     font-weight: bold;
     margin: 0;
 }
@@ -76,6 +72,7 @@ hr {
 }
 
 .game-container {
+    overflow: hidden;
     margin-top: 40px;
     position: relative;
     padding: calc($grid-spacing / 2);
@@ -143,13 +140,13 @@ hr {
     font-size: $tile-font-size;
     font-weight: bold;
 
-    @include transition(200ms ease);
+    @include transition($transition-speed $OutCubic);
     @include transition-property(top, left);
 
     // Columns don't interact between each other. Let's treat each column as a list
     // The first column is on the left, and the first element is at the bottom
     @for $x from 1 through $grid-row-cells {
-        @for $y from 1 through $grid-row-cells {
+        @for $y from 1 through $grid-row-cells * 2 {
             &.tile-position-#{$x}-#{($y)} {
                 position: absolute;
                 left: ($tile-size + $grid-spacing) * ($x - 1);
@@ -158,13 +155,7 @@ hr {
         }
     }
 
-    @each $letter, $score in $letter-score {
-        &.tile-#{$letter}::before {
-            content: "#{$score}";
-        }
-    }
-
-    &:before {
+    &>.tileScore {
         line-height: initial;
         display: block;
         position: absolute;
@@ -221,7 +212,26 @@ hr {
     &.selected {
         background-color: $tile-color-selected;
     }
+/*
+    &.tile-new {
+        @include animation(appear $transition-speed ease);
+        @include animation-fill-mode(both)
+    }
+*/
 }
+
+/* These do not come out satisfying...
+@include keyframes(appear) {
+    // Opacity makes it unnecessarily laggy
+    0% {
+        -webkit-transform: scale(0.33);
+        //opacity: 0.5;
+    }
+    75% {
+        -webkit-transform: scale(1);
+        //opacity: 1;
+    }
+}*/
 
 .game-intro {
     margin-bottom: 0;
