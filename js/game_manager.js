@@ -1,4 +1,5 @@
 'use strict';
+/* global Grid, Tile: true */
 
 function GameManager(size, actuator) {
     this.size = size;
