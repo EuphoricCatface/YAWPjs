@@ -1,11 +1,10 @@
 'use strict';
 
 function Tile(position, value) {
-    this.x = position.x;
-    this.y = position.y;
+    this.pos = position;
     this.value = value;
 
-    this.previousPosition = null;
+    this.prevPos = null;
 
     Tile.word_construct = "";
     Tile.selected_elements = [];
@@ -53,13 +52,13 @@ Tile.prototype.dragover_handler = function (ev) {
 
 Tile.prototype.isNeighbor = function (that) {
     console.assert(
-        Number.isInteger(this.x) && Number.isInteger(this.y) &&
-        Number.isInteger(that.x) && Number.isInteger(that.y),
+        Number.isInteger(this.pos.x) && Number.isInteger(this.pos.y) &&
+        Number.isInteger(that.pos.x) && Number.isInteger(that.pos.y),
         "Tile coordinate is not Integer"
     );
 
-    if ((Math.abs(this.x - that.x) <= 1) &&
-            (Math.abs(this.y - that.y) <= 1))
+    if ((Math.abs(this.pos.x - that.pos.x) <= 1) &&
+            (Math.abs(this.pos.y - that.pos.y) <= 1))
         return true;
     return false;
 };

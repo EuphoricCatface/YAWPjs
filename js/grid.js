@@ -54,8 +54,12 @@ Grid.prototype.eliminateEmpty = function () {
 Grid.prototype.cellCoordRefresh = function () {
     this.cells.forEach( (columns, x) => {
         columns.forEach( (element, y) => {
-            element.x = x;
-            element.y = y;
+            // save previous positions for actuator animation
+            var newpos = {x: x, y: y};
+            var oldpos = Object.assign({}, element.pos);
+            // ES6 shallow copy
+            element.prevPos = oldpos;
+            element.pos = newpos;
         });
     });
 };

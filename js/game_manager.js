@@ -64,8 +64,8 @@ GameManager.prototype.input = function (inputData) {
     });
     inputData.tiles.forEach(element => {
         this.grid.coordDelete({
-            x: element.x,
-            y: element.y
+            x: element.pos.x,
+            y: element.pos.y
         });
     });
 

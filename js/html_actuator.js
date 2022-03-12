@@ -27,8 +27,8 @@ HTMLActuator.prototype.clearContainer = function() {
 HTMLActuator.prototype.addTile = function (tile) {
     var element = document.createElement("div");
     
-    var x = tile.x + 1;
-    var y = tile.y + 1;
+    var x = tile.pos.x + 1;
+    var y = tile.pos.y + 1;
     var position = "tile-position-" + x + "-" + y;
 
     element.classList.add("tile", "tile-" + tile.value, position);
