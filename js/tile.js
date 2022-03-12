@@ -51,12 +51,6 @@ Tile.prototype.dragover_handler = function (ev) {
 };
 
 Tile.prototype.isNeighbor = function (that) {
-    console.assert(
-        Number.isInteger(this.pos.x) && Number.isInteger(this.pos.y) &&
-        Number.isInteger(that.pos.x) && Number.isInteger(that.pos.y),
-        "Tile coordinate is not Integer"
-    );
-
     if ((Math.abs(this.pos.x - that.pos.x) <= 1) &&
             (Math.abs(this.pos.y - that.pos.y) <= 1))
         return true;
@@ -64,6 +58,10 @@ Tile.prototype.isNeighbor = function (that) {
 };
 
 Tile.tryAddTile = function (element, tile) {
+    console.assert(
+        Number.isInteger(tile.pos.x) && Number.isInteger(tile.pos.y),
+        "Tile coordinate is not Integer"
+    );
     console.assert(
         Tile.selected_tiles.length == Tile.selected_elements.length,
         "selected tiles and elements length mismatch"
