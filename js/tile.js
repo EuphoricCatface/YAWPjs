@@ -15,6 +15,7 @@ function Tile(position, value) {
 
 Tile.prototype.dragstart_handler = function (ev) {
     // transparent drag object: https://stackoverflow.com/q/27989602/
+    ev.dataTransfer.setData("text", "Tile");
     var crt = ev.target.cloneNode(true);
     crt.style.display = "none";
     document.body.appendChild(crt);
@@ -31,8 +32,6 @@ Tile.prototype.dragenter_handler = function (ev) {
 };
 
 Tile.dragend_handler = function (ev) {
-    console.log("dragEnd");
-
     // "dragEnd" seem to fire after the "drop"
     while (Tile.selected_elements.length)
         Tile.popTile();
@@ -44,18 +43,16 @@ Tile.dragend_handler = function (ev) {
 };
 
 Tile.drop_handler = function (ev) {
-    console.log("drop");
     ev.preventDefault();
 
     var target = ev.target;
     if (target.nodeName == "#text") {
-        console.log("This is text, replacing with parentElement");
+        console.log("drop: Target is text, replacing with parentElement");
         target = target.parentElement;
     }
 
     // test if it's inside the gamecontainer
     while (target) {
-        console.log(target.className);
         if (target.className == "game-container") {
             Tile.finishSelection();
             return true;

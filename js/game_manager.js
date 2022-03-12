@@ -81,8 +81,7 @@ GameManager.prototype.input = function (inputData) {
 };
 
 GameManager.prototype.verify = function (word) {
-    console.log("DUMMY: GM.verify");
-    console.log(word);
+    console.log("DUMMY: GM.verify, "+ word);
 
     return true;
 };
