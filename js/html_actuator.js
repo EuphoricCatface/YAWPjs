@@ -56,5 +56,6 @@ HTMLActuator.prototype.addHTMLTile = function (tile) {
     element.addEventListener("dragenter",tile.dragenter_handler.bind(tile));
     // element.addEventListener("dragleave",tile.dragleave_handler.bind(tile));
     element.addEventListener("dragend",tile.dragend_handler.bind(tile));
+    element.addEventListener("dragover",tile.dragover_handler.bind(tile));
     element.addEventListener("drop",tile.drop_handler.bind(tile));
 };

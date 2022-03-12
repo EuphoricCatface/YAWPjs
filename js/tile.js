@@ -14,8 +14,6 @@ function Tile(position, value) {
 }
 
 Tile.prototype.dragstart_handler = function (ev) {
-    ev.dataTransfer.setData("text/plain", ev.target.id);
-
     // transparent drag object: https://stackoverflow.com/q/27989602/
     var crt = ev.target.cloneNode(true);
     crt.style.display = "none";
@@ -43,6 +41,7 @@ Tile.prototype.dragend_handler = function (ev) {
 };
 
 Tile.prototype.drop_handler = function (ev) {
+    console.log("drop");
     ev.preventDefault();
 };
 
