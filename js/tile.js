@@ -22,8 +22,7 @@ Tile.prototype.dragstart_handler = function (ev) {
     ev.dataTransfer.setDragImage(crt, 0, 0);
 
     // Workaround: sometimes first tile does not register
-    var self = this;
-    Tile.tryAddTile(ev.target, self);
+    Tile.tryAddTile(ev.target, this);
 };
 
 Tile.prototype.dragenter_handler = function (ev) {
@@ -58,13 +57,17 @@ Tile.prototype.drop_handler = function (ev) {
 
     // test if it's inside the gamecontainer
     while (target) {
+        //console.log(target);
         if (target.className == "game-container") {
             Tile.finishSelection();
             return true;
         }
         target = target.parentElement;
     }
-    console.error("Drop event seem to have fired outside of game-container.");
+    // // console.error("Drop event seem to have fired outside of game-container.");
+    // Drop fires twice when dropped onto the tile: once from the tile, and once from the board.
+    // The test above essentially does the test for the second drop, because a deleted node's parent is null.
+    // console.error("Invalid Drop");
     return false;
 };
 
