@@ -31,18 +31,39 @@ Tile.prototype.dragenter_handler = function (ev) {
 };
 
 Tile.prototype.dragend_handler = function (ev) {
+    console.log("dragEnd");
+
+    // "dragEnd" seem to fire after the "drop"
+    while (Tile.selected_elements.length)
+        Tile.popTile();
+
+    console.assert(Tile.selected_tiles.length == 0 &&
+        Tile.selected_elements.length == 0 &&
+        Tile.word_construct.length == 0,
+        "dragend: internal selection did not clear!");
+};
+
+Tile.prototype.drop_handler = function (ev) {
+    console.log("drop");
+    ev.preventDefault();
+
     var target = ev.target;
     if (target.nodeName == "#text") {
         console.log("This is text, replacing with parentElement");
         target = target.parentElement;
     }
 
-    Tile.finishSelection();
-};
-
-Tile.prototype.drop_handler = function (ev) {
-    console.log("drop");
-    ev.preventDefault();
+    // test if it's inside the gamecontainer
+    while (target) {
+        console.log(target.className);
+        if (target.className == "game-container") {
+            Tile.finishSelection();
+            return true;
+        }
+        target = target.parentElement;
+    }
+    console.error("Drop event seem to have fired outside of game-container.");
+    return false;
 };
 
 Tile.prototype.dragover_handler = function (ev) {
@@ -135,19 +156,16 @@ Tile.popTile = function () {
 };
 
 Tile.finishSelection = function () {
+    console.assert(Tile.selected_tiles.length &&
+        Tile.selected_elements.length &&
+        Tile.word_construct.length,
+        "finishSelection: internal selection has already gone!");
+
     Tile.emit("finishSelect", {
         tiles: Tile.selected_tiles,
         elements: Tile.selected_elements,
         word: Tile.word_construct
     });
-
-    while (Tile.selected_elements.length)
-        Tile.popTile();
-
-    console.assert(Tile.selected_tiles.length == 0 &&
-        Tile.selected_elements.length == 0 &&
-        Tile.word_construct.length == 0,
-        "finishSelection: internal selection did not clear!");
 };
 
 Tile.on = function (event, callback) {
