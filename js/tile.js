@@ -27,13 +27,13 @@ Tile.prototype.dragstart_handler = function (ev) {
 };
 
 Tile.prototype.dragenter_handler = function (ev) {
-    var self = this;
-
-    console.log(ev.dataTransfer.getData("text"));
+    var target = ev.target;
     if (ev.dataTransfer.getData("text") != "Tile")
         return;
+    if (target.className == "tileScore")
+        target = target.parentElement;
 
-    Tile.tryAddTile(ev.target, self);
+    Tile.tryAddTile(target, this);
 };
 
 Tile.prototype.dragend_handler = function (ev) {
@@ -132,7 +132,7 @@ Tile.tryAddTile = function (element, tile) {
 
     Tile.selected_elements.push(element);
     Tile.selected_tiles.push(tile);
-    Tile.word_construct += element.textContent;
+    Tile.word_construct += tile.value;
 
     element.classList.add("selected");
 };

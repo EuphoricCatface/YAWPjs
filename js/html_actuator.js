@@ -50,12 +50,12 @@ HTMLActuator.prototype.addHTMLTile = function (tile) {
         element.textContent = "Qu";
     element.setAttribute("draggable", true);
 
-    this.tileContainer.appendChild(element);
-
     var tileScore = document.createElement("div");
     tileScore.classList.add("tileScore");
     tileScore.textContent = this.letter_score[tile.value];
+
     element.appendChild(tileScore);
+    this.tileContainer.appendChild(element);
 
     window.requestAnimationFrame(() => {
         element.classList.remove(element.classList[2]);
