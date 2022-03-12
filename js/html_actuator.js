@@ -7,13 +7,15 @@ function HTMLActuator() {
 HTMLActuator.prototype.actuate = function(grid) {
     var self = this;
 
-    self.clearContainer();
+    window.requestAnimationFrame(function () {
+        self.clearContainer();
 
-    grid.cells.forEach(function (column) {
-        column.forEach(function (cell) {
-            if (cell) {
-                self.addTile(cell);
-            }
+        grid.cells.forEach(function (column) {
+            column.forEach(function (cell) {
+                if (cell) {
+                    self.addHTMLTile(cell);
+                }
+            });
         });
     });
 };
@@ -24,20 +26,32 @@ HTMLActuator.prototype.clearContainer = function() {
     }
 };
 
-HTMLActuator.prototype.addTile = function (tile) {
+HTMLActuator.prototype.addHTMLTile = function (tile) {
     var element = document.createElement("div");
-    
-    var x = tile.pos.x + 1;
-    var y = tile.pos.y + 1;
-    var position = "tile-position-" + x + "-" + y;
 
-    element.classList.add("tile", "tile-" + tile.value, position);
+    function pos_offset(pos, offset)
+    { return {x: pos.x + offset, y: pos.y + offset}; }
+    function tile_pos_attr(pos)
+    { return "tile-position-" + pos.x + "-" + pos.y; }
+    
+    var pos_jsobj = pos_offset(tile.prevPos || tile.pos, 1);
+
+    element.classList.add("tile", "tile-" + tile.value, tile_pos_attr(pos_jsobj));
     element.textContent = tile.value.toUpperCase();
     if (element.textContent == "QU")
         element.textContent = "Qu";
     element.setAttribute("draggable", true);
 
     this.tileContainer.appendChild(element);
+
+    window.requestAnimationFrame(() => {
+        element.classList.remove(element.classList[2]);
+        element.classList.add(tile_pos_attr(pos_offset(tile.pos, 1)));
+    });
+    if (tile.prevPos.y > 4) {
+        element.classList.add("tile-new");
+    }
+
     element.addEventListener("dragstart",tile.dragstart_handler.bind(tile));
     element.addEventListener("dragenter",tile.dragenter_handler.bind(tile));
     // element.addEventListener("dragleave",tile.dragleave_handler.bind(tile));

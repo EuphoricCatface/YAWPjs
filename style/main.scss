@@ -17,6 +17,10 @@ $bright-text-color: #f9f6f2;
 $tile-color: #eee4da;
 $tile-color-selected: #c0b9b1;
 
+$transition-speed: 800ms;
+// Rough approximation
+$OutCubic: cubic-bezier(0.4, 1, 0.66, 1);
+
 $letter-score: (
     "a": 1, "b": 3, "c": 3, "d": 2, "e": 1,
     "f": 4, "g": 2, "h": 4, "i": 1, "j": 8,
@@ -76,6 +80,7 @@ hr {
 }
 
 .game-container {
+    overflow: hidden;
     margin-top: 40px;
     position: relative;
     padding: calc($grid-spacing / 2);
@@ -143,13 +148,13 @@ hr {
     font-size: $tile-font-size;
     font-weight: bold;
 
-    @include transition(200ms ease);
+    @include transition($transition-speed $OutCubic);
     @include transition-property(top, left);
 
     // Columns don't interact between each other. Let's treat each column as a list
     // The first column is on the left, and the first element is at the bottom
     @for $x from 1 through $grid-row-cells {
-        @for $y from 1 through $grid-row-cells {
+        @for $y from 1 through $grid-row-cells * 2 {
             &.tile-position-#{$x}-#{($y)} {
                 position: absolute;
                 left: ($tile-size + $grid-spacing) * ($x - 1);
@@ -220,6 +225,21 @@ hr {
 
     &.selected {
         background-color: $tile-color-selected;
+    }
+
+    &.tile-new {
+        //@include animation(appear $transition-speed $OutCubic);
+        @include animation-fill-mode(both)
+    }
+}
+
+@include keyframes(appear) {
+    // Opacity makes it unnecessarily laggy
+    0% {
+        //opacity: 0;
+    }
+    100% {
+        //opacity: 1;
     }
 }
 

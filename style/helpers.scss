@@ -10,3 +10,28 @@
     -webkit-transition-property: $args;
     -moz-transition-property: $args;
 }
+
+@mixin keyframes($animation-name) {
+    @-webkit-keyframes #{$animation-name} {
+        @content;
+    }
+    @-moz-keyframes #{$animation-name} {
+        @content;
+    }
+    @keyframes #{$animation-name} {
+        @content;
+    }
+}
+
+@mixin animation($str) {
+    -webkit-animation: #{$str};
+    -moz-animation: #{$str};
+    animation: #{$str};
+}
+
+@mixin animation-fill-mode($str) {
+    -webkit-animation-fill-mode: #{$str};
+    -moz-animation-fill-mode: #{$str};
+
+    animation-fill-mode: #{$str};
+}

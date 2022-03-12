@@ -46,6 +46,7 @@ hr {
 }
 
 .game-container {
+  overflow: hidden;
   margin-top: 40px;
   position: relative;
   padding: 15px;
@@ -106,9 +107,9 @@ hr {
   line-height: 90px;
   font-size: 36px;
   font-weight: bold;
-  transition: 200ms ease;
-  -webkit-transition: 200ms ease;
-  -moz-transition: 200ms ease;
+  transition: 800ms cubic-bezier(0.4, 1, 0.66, 1);
+  -webkit-transition: 800ms cubic-bezier(0.4, 1, 0.66, 1);
+  -moz-transition: 800ms cubic-bezier(0.4, 1, 0.66, 1);
   transition-property: top, left;
   -webkit-transition-property: top, left;
   -moz-transition-property: top, left;
@@ -138,6 +139,31 @@ hr {
   left: 0px;
   top: 0px;
 }
+.tile.tile-position-1-6 {
+  position: absolute;
+  left: 0px;
+  top: -120px;
+}
+.tile.tile-position-1-7 {
+  position: absolute;
+  left: 0px;
+  top: -240px;
+}
+.tile.tile-position-1-8 {
+  position: absolute;
+  left: 0px;
+  top: -360px;
+}
+.tile.tile-position-1-9 {
+  position: absolute;
+  left: 0px;
+  top: -480px;
+}
+.tile.tile-position-1-10 {
+  position: absolute;
+  left: 0px;
+  top: -600px;
+}
 .tile.tile-position-2-1 {
   position: absolute;
   left: 120px;
@@ -162,6 +188,31 @@ hr {
   position: absolute;
   left: 120px;
   top: 0px;
+}
+.tile.tile-position-2-6 {
+  position: absolute;
+  left: 120px;
+  top: -120px;
+}
+.tile.tile-position-2-7 {
+  position: absolute;
+  left: 120px;
+  top: -240px;
+}
+.tile.tile-position-2-8 {
+  position: absolute;
+  left: 120px;
+  top: -360px;
+}
+.tile.tile-position-2-9 {
+  position: absolute;
+  left: 120px;
+  top: -480px;
+}
+.tile.tile-position-2-10 {
+  position: absolute;
+  left: 120px;
+  top: -600px;
 }
 .tile.tile-position-3-1 {
   position: absolute;
@@ -188,6 +239,31 @@ hr {
   left: 240px;
   top: 0px;
 }
+.tile.tile-position-3-6 {
+  position: absolute;
+  left: 240px;
+  top: -120px;
+}
+.tile.tile-position-3-7 {
+  position: absolute;
+  left: 240px;
+  top: -240px;
+}
+.tile.tile-position-3-8 {
+  position: absolute;
+  left: 240px;
+  top: -360px;
+}
+.tile.tile-position-3-9 {
+  position: absolute;
+  left: 240px;
+  top: -480px;
+}
+.tile.tile-position-3-10 {
+  position: absolute;
+  left: 240px;
+  top: -600px;
+}
 .tile.tile-position-4-1 {
   position: absolute;
   left: 360px;
@@ -213,6 +289,31 @@ hr {
   left: 360px;
   top: 0px;
 }
+.tile.tile-position-4-6 {
+  position: absolute;
+  left: 360px;
+  top: -120px;
+}
+.tile.tile-position-4-7 {
+  position: absolute;
+  left: 360px;
+  top: -240px;
+}
+.tile.tile-position-4-8 {
+  position: absolute;
+  left: 360px;
+  top: -360px;
+}
+.tile.tile-position-4-9 {
+  position: absolute;
+  left: 360px;
+  top: -480px;
+}
+.tile.tile-position-4-10 {
+  position: absolute;
+  left: 360px;
+  top: -600px;
+}
 .tile.tile-position-5-1 {
   position: absolute;
   left: 480px;
@@ -237,6 +338,31 @@ hr {
   position: absolute;
   left: 480px;
   top: 0px;
+}
+.tile.tile-position-5-6 {
+  position: absolute;
+  left: 480px;
+  top: -120px;
+}
+.tile.tile-position-5-7 {
+  position: absolute;
+  left: 480px;
+  top: -240px;
+}
+.tile.tile-position-5-8 {
+  position: absolute;
+  left: 480px;
+  top: -360px;
+}
+.tile.tile-position-5-9 {
+  position: absolute;
+  left: 480px;
+  top: -480px;
+}
+.tile.tile-position-5-10 {
+  position: absolute;
+  left: 480px;
+  top: -600px;
 }
 .tile.tile-a::before {
   content: "1";
@@ -367,7 +493,13 @@ hr {
 .tile.selected {
   background-color: #c0b9b1;
 }
+.tile.tile-new {
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
 
+@-webkit-keyframes appear {}
+@keyframes appear {}
 .game-intro {
   margin-bottom: 0;
 }
