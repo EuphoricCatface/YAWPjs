@@ -30,7 +30,7 @@ Tile.prototype.dragenter_handler = function (ev) {
     Tile.tryAddTile(ev.target, self);
 };
 
-Tile.prototype.dragend_handler = function (ev) {
+Tile.dragend_handler = function (ev) {
     console.log("dragEnd");
 
     // "dragEnd" seem to fire after the "drop"
@@ -43,7 +43,7 @@ Tile.prototype.dragend_handler = function (ev) {
         "dragend: internal selection did not clear!");
 };
 
-Tile.prototype.drop_handler = function (ev) {
+Tile.drop_handler = function (ev) {
     console.log("drop");
     ev.preventDefault();
 
@@ -66,7 +66,7 @@ Tile.prototype.drop_handler = function (ev) {
     return false;
 };
 
-Tile.prototype.dragover_handler = function (ev) {
+Tile.dragover_handler = function (ev) {
     ev.preventDefault();
 };
 

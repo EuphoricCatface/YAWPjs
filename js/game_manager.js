@@ -7,6 +7,12 @@ function GameManager(size, actuator) {
 
     this.grid = new Grid(this.size);
 
+    // Allow drop on game-container, not just Tile
+    var gameContainer = document.getElementsByClassName("game-container")[0];
+    gameContainer.setAttribute("draggable", true);
+    gameContainer.addEventListener("dragover",Tile.dragover_handler);
+    gameContainer.addEventListener("drop",Tile.drop_handler);
+
     this.setup();
     Tile.on("finishSelect", this.input.bind(this));
 }
