@@ -7,6 +7,8 @@ function GameManager(size, actuator) {
 
     this.grid = new Grid(this.size);
 
+    this.score = 0;
+
     this.allowDropOnGameContainer();
     this.setup();
     Tile.on("finishSelect", this.input.bind(this));
@@ -67,6 +69,7 @@ GameManager.prototype.fill_prepare = function() {
 
 GameManager.prototype.actuate = function() {
     this.actuator.actuate(this.grid);
+    this.actuator.setScore(this.score);
 };
 
 GameManager.prototype.squash = function (direction) {
@@ -82,6 +85,7 @@ GameManager.prototype.input = function (inputData) {
         element.remove();
     });
     inputData.tiles.forEach(element => {
+        this.score += this.actuator.letter_score[element.value];
         this.grid.coordDelete({
             x: element.pos.x,
             y: element.pos.y

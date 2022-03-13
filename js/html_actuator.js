@@ -72,3 +72,8 @@ HTMLActuator.prototype.addHTMLTile = function (tile) {
     element.addEventListener("dragover",tile.dragover_handler.bind(tile));
     element.addEventListener("drop",tile.drop_handler.bind(tile));
 };
+
+HTMLActuator.prototype.setScore = function (score) {
+    var score_total = document.getElementsByClassName("score-total")[0];
+    score_total.textContent = score;
+};
