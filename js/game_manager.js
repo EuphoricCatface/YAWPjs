@@ -28,6 +28,20 @@ GameManager.prototype.setup = function() {
     this.squash();
 
     this.actuate();
+    const myRequest = new Request('words_alpha.txt');
+
+    fetch(myRequest)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status ${ response.status }`);
+            }
+
+            return response.text();
+        })
+        .then((response) => {
+            var match = response.split('\n');
+            console.log(match.length);
+        });
 };
 
 GameManager.prototype.weightedRandom = function() {
