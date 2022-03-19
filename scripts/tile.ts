@@ -42,16 +42,15 @@ class Tile {
     }
     dragend_handler(_ev: DragEvent) {
         // "dragEnd" seem to fire after the "drop"
-        while (Tile.selected_elements.length)
-            Tile.popTile();
-
-        console.assert(Tile.selected_tiles.length == 0 &&
-            Tile.selected_elements.length == 0 &&
-            Tile.word_construct.length == 0,
-            "dragend: internal selection did not clear!");
+        // "dragEnd" also happens when "drop" fails
+        this.selection_clear();
     }
     drop_handler(ev: DragEvent) {
         ev.preventDefault();
+
+        // Workaround: duplicate_check
+        if (Tile.selected_tiles.length == 0)
+            return;
 
         var target = (ev.target as HTMLElement);
         if (target.nodeName == "#text") {
@@ -60,22 +59,35 @@ class Tile {
         }
 
         // test if it's inside the gamecontainer
+        var valid_drop = false;
         while (target) {
             //console.log(target);
             if (target.className == "game-container") {
-                Tile.finishSelection();
-                return true;
+                valid_drop = true
             }
             target = target.parentElement;
         }
-        // // console.error("Drop event seem to have fired outside of game-container.");
-        // Drop fires twice when dropped onto the tile: once from the tile, and once from the board.
-        // The test above essentially does the test for the second drop, because a deleted node's parent is null.
-        // console.error("Invalid Drop");
-        return false;
+        if (valid_drop)
+            Tile.finishSelection();
+        
+        this.selection_clear();
+        // Workaround: duplicate_check
+        // This probably will happen on dragend_handler eventually,
+        // but problem is that the board may fire the drop as well as the tile,
+        // making the check duplicate.
+        return true;
     }
     dragover_handler(ev: DragEvent) {
         ev.preventDefault();
+    }
+    selection_clear() {
+        while (Tile.selected_elements.length)
+        Tile.popTile();
+
+        console.assert(Tile.selected_tiles.length == 0 &&
+            Tile.selected_elements.length == 0 &&
+            Tile.word_construct.length == 0,
+            "dragend: internal selection did not clear!");
     }
     isNeighbor(that: Tile) {
         if ((Math.abs(this.pos.x - that.pos.x) <= 1) &&
