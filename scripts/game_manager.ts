@@ -11,12 +11,11 @@ class GameManager {
         this.actuator = actuator;
 
         this.grid = new Grid(this.size);
-
         this.score = 0;
-
         this.allowDropOnGameContainer();
-        this.setup();
-        Tile.on("finishSelect", this.input.bind(this));
+
+        this.validator = new Validator();
+        setTimeout(this.initAfterValidatorLoop.bind(this), 100);
     }
     allowDropOnGameContainer() {
         var gameContainer = document.getElementsByClassName("game-container")[0];
@@ -25,10 +24,16 @@ class GameManager {
         gameContainer.addEventListener("dragover", Tile.prototype.dragover_handler);
         gameContainer.addEventListener("drop", Tile.prototype.drop_handler);
     }
+    initAfterValidatorLoop() {
+        if (this.validator.wordlist.size == 0){
+            setTimeout(this.initAfterValidatorLoop, 100);
+            return;
+        }
+        this.setup();
+        Tile.on("finishSelect", this.input.bind(this));
+    }
     // Set up the game
     setup() {
-        this.validator = new Validator();
-        
         this.fill_prepare();
         this.squash();
         this.actuate();
