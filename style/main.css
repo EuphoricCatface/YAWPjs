@@ -45,9 +45,8 @@ hr {
   margin-bottom: 30px;
 }
 
-.game-container {
+.scoreboard, .game-container {
   overflow: hidden;
-  margin-top: 40px;
   position: relative;
   padding: 15px;
   cursor: default;
@@ -58,9 +57,37 @@ hr {
       user-select: none;
   background: #bbada0;
   border-radius: 27px;
+  box-sizing: border-box;
+}
+
+.scoreboard {
+  width: 600px;
+  height: 100px;
+}
+.scoreboard .score-total {
+  position: relative;
+  width: 570px;
+  height: 60px;
+  margin-right: 30px;
+  float: left;
+  border-radius: 18px;
+  background: rgba(238, 228, 218, 0.35);
+  font-size: 40px;
+  text-align: center;
+}
+.scoreboard .score-total::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-weight: bold;
+  font-size: 25px;
+  content: "Total Score: ";
+}
+
+.game-container {
+  margin-top: 20px;
   width: 600px;
   height: 600px;
-  box-sizing: border-box;
 }
 
 .grid-container {

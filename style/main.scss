@@ -71,9 +71,8 @@ hr {
     margin-bottom: 30px;
 }
 
-.game-container {
+.scoreboard, .game-container {
     overflow: hidden;
-    margin-top: 40px;
     position: relative;
     padding: calc($grid-spacing / 2);
     
@@ -85,9 +84,43 @@ hr {
 
     background: #bbada0;
     border-radius: $tile-border-radius * 1.5;
+    box-sizing: border-box;
+}
+
+.scoreboard {
+    width: $field-width;
+    height: 100px;
+
+    & .score-total/*, & .turns, & .construct-word, & .score-word*/ {
+        position: relative;
+        // width: $tile-size * 2.5;
+        // height: $tile-size / 2;
+        width: $field-width - $grid-spacing;
+        height: $tile-size - $grid-spacing;
+        margin-right: $grid-spacing;
+        float: left;
+
+        border-radius: $tile-border-radius;
+
+        background: rgba($tile-color, .35);
+
+        font-size: 40px;
+        text-align: center;
+    }
+    & .score-total::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-weight: bold;
+        font-size: 25px;
+        content: "Total Score: "
+    }
+}
+
+.game-container {
+    margin-top: 20px;
     width: $field-width;
     height: $field-width;
-    box-sizing: border-box;
 }
 
 .grid-container {

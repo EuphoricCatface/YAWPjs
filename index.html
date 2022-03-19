@@ -6,19 +6,27 @@
 
         <link href="style/main.css" rel="stylesheet" type="text/css">
 
-        <script src="js/html_actuator.js"></script>
-        <script src="js/grid.js"></script>
-        <script src="js/tile.js"></script>
-        <script src="js/game_manager.js"></script>
-        <script src="js/application.js"></script>
+        <script src="scripts/html_actuator.js"></script>
+        <script src="scripts/grid.js"></script>
+        <script src="scripts/tile.js"></script>
+        <script src="scripts/validator.js"></script>
+        <script src="scripts/game_manager.js"></script>
+        <script src="scripts/application.js"></script>
     </head>
     <body>
         <div class="container">
             <h1>Yet Another Word Puzzle (.js)</h1>
             <p class="game-intro">Connect the letters into a word to score. Get the as much score as possible in 20 turns!</p>
-            <hr>
-            <p><strong class="important">Attention!</strong> This game is <strong>not completed</strong>. TODO is written at the bottom of the page. Stay tuned!</p>
-
+            <div class="scoreboard">
+                <div class="game-info">
+                    <div class="score-total"></div>
+                    <div class="turns"></div>
+                </div>
+                <div class="turn-info">
+                    <div class="construct-word"></div>
+                    <div class="score-word"></div>
+                </div>
+            </div>
             <div class="game-container">
                 <div class="grid-container">
                     <div class="grid-row">
@@ -61,7 +69,9 @@
                 <div class="tile-container">
                 </div>
             </div>
-            
+            <p>
+                <strong class="important">Attention!</strong> This game is <strong>not completed</strong>. TODO is written at the bottom of the page. Stay tuned!
+            </p>
             <p class="game-explanation">
                 <strong class="important">How to play:</strong> Drag your <strong>mouse cursor</strong> to thread the tiles. When the threaded tiles make a word, they <strong>get squashed!</strong>
             </p>
