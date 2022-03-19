@@ -25,10 +25,14 @@ class GameManager {
         gameContainer.addEventListener("drop", Tile.prototype.drop_handler);
     }
     initAfterValidatorLoop() {
-        if (this.validator.wordlist.size == 0){
+        try{ if (this.validator.wordlist.size == 0) {
+                throw 'not init yet';
+        }}
+        catch (_e){
             setTimeout(this.initAfterValidatorLoop, 100);
             return;
         }
+
         this.setup();
         Tile.on("finishSelect", this.input.bind(this));
     }
@@ -101,17 +105,9 @@ class GameManager {
         this.actuate();
     }
     verify(word: string) {
-        console.log("DUMMY: GM.verify, " + word);
+        var rtn =  this.validator.validate(word);
+        console.log("GM.verify: " + word + ", " + rtn);
 
-        return true;
+        return rtn;
     }
 }
-
-
-
-
-
-
-
-
-

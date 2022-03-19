@@ -1,4 +1,9 @@
 'use strict';
+/* Debug
+interface Window {
+    wordlist: Set<string>
+}
+*/
 class Validator {
     wordlist;
     constructor() {
@@ -16,15 +21,20 @@ class Validator {
             return lines = response_text.split('\n');
         })
             .then((response_lines) => {
-            for (var line in response_lines) {
+            console.log(response_lines);
+            for (var line of response_lines) {
+                line = line.trim();
                 if (line.startsWith("#"))
                     continue;
                 if (line.length - [...line.matchAll(/Qu/gi)].length < 3)
                     continue;
                 this.wordlist.add(line);
             }
-            console.log(this.wordlist.size);
+            // window.wordlist = this.wordlist  // Debug
         });
+    }
+    validate(word) {
+        return this.wordlist.has(word.toLowerCase());
     }
 }
 //# sourceMappingURL=validator.js.map
