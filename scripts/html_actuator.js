@@ -61,7 +61,7 @@ class HTMLActuator {
     }
     setScore(score) {
         var score_total = document.getElementsByClassName("score-total")[0];
-        score_total.textContent = score;
+        score_total.textContent = score.toString();
     }
 }
 //# sourceMappingURL=html_actuator.js.map

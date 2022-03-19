@@ -1,13 +1,11 @@
 'use strict';
 
 class Grid {
-    size: any;
-    cells: any[];
-    constructor(size) {
+    size: number;
+    cells: Tile[][];
+    constructor(size: number) {
         this.size = size;
-
         this.cells = [];
-
         this.build();
     }
     // Columns don't interact between each other. Let's treat each column as a list
@@ -34,7 +32,7 @@ class Grid {
         );
         return columnsEmpty;
     }
-    tileAppend(column, tile) {
+    tileAppend(column: number, tile: Tile) {
         this.cells[column].push(tile);
     }
     eliminateEmpty() {
@@ -62,7 +60,7 @@ class Grid {
             });
         });
     }
-    coordDelete(position) {
+    coordDelete(position: CoordType) {
         this.cells[position.x][position.y] = null;
     }
 }
