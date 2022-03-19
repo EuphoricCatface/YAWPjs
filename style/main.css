@@ -446,7 +446,8 @@ hr {
   right: 0;
 }
 .tile.selected {
-  background-color: #c0b9b1;
+  background-color: #776e65;
+  color: #f9f6f2;
 }
 
 /* These do not come out satisfying...

@@ -243,7 +243,9 @@ hr {
     }
 
     &.selected {
-        background-color: $tile-color-selected;
+        //background-color: $tile-color-selected;
+        background-color: $text-color;
+        color: $bright-text-color;
     }
 /*
     &.tile-new {
