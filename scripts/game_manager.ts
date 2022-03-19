@@ -111,7 +111,7 @@ class GameManager {
                 y: tile.pos.y
             });
         });
-        this.score += (pure_word_score + letter_bonus_score) * word_modifier)
+        this.score += (pure_word_score + letter_bonus_score) * word_modifier;
 
         this.prepareNextTurn();
     }
@@ -142,10 +142,14 @@ class GameManager {
     calculate_bonus_bottom() {
         // Bottom row, word bonuses: 10% no bonus, 60% double, 30% triple
         for (var i = 0; i < this.grid.size; i++) {
-            var rand = Math.floor(Math.random() * 10);
             var tile = this.grid.getTileRef({x: i, y: 0});
+            if (tile.bonus.includes("word"))
+                continue;
+
+            var rand = Math.floor(Math.random() * 10);
             switch (rand) {
                 case 0:
+                    tile.bonus = "word-none"
                     break;
                 case 1: case 2: case 3:
                     tile.bonus = "triple-word";
