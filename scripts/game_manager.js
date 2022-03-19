@@ -12,7 +12,7 @@ class GameManager {
         this.score = 0;
         this.allowDropOnGameContainer();
         this.validator = new Validator();
-        setTimeout(this.initAfterValidatorLoop.bind(this), 100);
+        setTimeout(this.initAfterValidatorLoop.bind(this), 500);
     }
     allowDropOnGameContainer() {
         var gameContainer = document.getElementsByClassName("game-container")[0];
@@ -28,7 +28,8 @@ class GameManager {
             }
         }
         catch (_e) {
-            setTimeout(this.initAfterValidatorLoop, 100);
+            console.log("init loop");
+            setTimeout(this.initAfterValidatorLoop, 500);
             return;
         }
         this.setup();
