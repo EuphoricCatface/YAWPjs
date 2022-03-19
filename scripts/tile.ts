@@ -7,6 +7,7 @@ class Tile {
     pos: CoordType;
     value: string;
     prevPos: CoordType;
+    bonus: string;
     static DRAG_DEBUG: Boolean;
     static word_construct: string;
     static selected_elements: HTMLElement[];
@@ -17,8 +18,8 @@ class Tile {
 
         this.pos = position;
         this.value = value;
-
         this.prevPos = null;
+        this.bonus = "";
 
         Tile.word_construct = "";
         Tile.selected_elements = [];
