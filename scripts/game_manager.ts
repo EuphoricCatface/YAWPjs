@@ -2,11 +2,11 @@
 /* global Grid, Tile: true */
 
 class GameManager {
-    size: any;
-    actuator: any;
+    size: number;
+    actuator: HTMLActuator;
     grid: Grid;
     score: number;
-    constructor(size, actuator) {
+    constructor(size: number, actuator: HTMLActuator) {
         this.size = size;
         this.actuator = actuator;
 
@@ -51,7 +51,7 @@ class GameManager {
         var inverse_frequency_sum = 1708;
 
         var rand = Math.floor(Math.random() * (inverse_frequency_sum - 1));
-        var result;
+        var result: number;
 
         for (var i = 0; i < inverse_frequency_list.length; i++) {
             rand -= inverse_frequency_list[i];
@@ -88,7 +88,7 @@ class GameManager {
     squash() {
         this.grid.eliminateEmpty();
     }
-    input(inputData) {
+    input(inputData: SelectionInputType) {
         // inputData: tiles, elements, word
         if (!this.verify(inputData.word))
             return;
@@ -108,7 +108,7 @@ class GameManager {
         this.squash();
         this.actuate();
     }
-    verify(word) {
+    verify(word: string) {
         console.log("DUMMY: GM.verify, " + word);
 
         return true;

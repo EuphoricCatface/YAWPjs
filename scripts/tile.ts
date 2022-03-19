@@ -1,14 +1,17 @@
 'use strict';
 
+type CoordType = {x: number, y: number};
+type SelectionInputType = {tiles: Tile[], elements: HTMLElement[], word: string};
+
 class Tile {
-    pos: any;
-    value: any;
-    prevPos: any;
+    pos: CoordType;
+    value: string;
+    prevPos: CoordType;
     static word_construct: string;
-    static selected_elements: any[];
-    static selected_tiles: any[];
-    static events: any;
-    constructor(position, value) {
+    static selected_elements: HTMLElement[];
+    static selected_tiles: Tile[];
+    static events: Map<string, CallableFunction[]>;
+    constructor(position: CoordType, value: string) {
         this.pos = position;
         this.value = value;
 
@@ -18,18 +21,18 @@ class Tile {
         Tile.selected_elements = [];
         Tile.selected_tiles = [];
 
-        Tile.events = Tile.events || {};
+        Tile.events = Tile.events || new Map;
     }
-    dragstart_handler(ev) {
+    dragstart_handler(ev: DragEvent) {
         // transparent drag object: https://stackoverflow.com/q/27989602/
         ev.dataTransfer.setData("text", "Tile");
         ev.dataTransfer.setDragImage(new Image(0, 0), 0, 0);
 
         // Workaround: sometimes first tile does not register
-        Tile.tryAddTile(ev.target, this);
+        Tile.tryAddTile((ev.target as HTMLElement), this);
     }
-    dragenter_handler(ev) {
-        var target = ev.target;
+    dragenter_handler(ev: DragEvent) {
+        var target = (ev.target as HTMLElement);
         if (ev.dataTransfer.getData("text") != "Tile")
             return;
         if (target.className == "tileScore")
@@ -37,7 +40,7 @@ class Tile {
 
         Tile.tryAddTile(target, this);
     }
-    dragend_handler(ev) {
+    dragend_handler(_ev: DragEvent) {
         // "dragEnd" seem to fire after the "drop"
         while (Tile.selected_elements.length)
             Tile.popTile();
@@ -47,10 +50,10 @@ class Tile {
             Tile.word_construct.length == 0,
             "dragend: internal selection did not clear!");
     }
-    drop_handler(ev) {
+    drop_handler(ev: DragEvent) {
         ev.preventDefault();
 
-        var target = ev.target;
+        var target = (ev.target as HTMLElement);
         if (target.nodeName == "#text") {
             console.log("drop: Target is text, replacing with parentElement");
             target = target.parentElement;
@@ -71,16 +74,16 @@ class Tile {
         // console.error("Invalid Drop");
         return false;
     }
-    dragover_handler(ev) {
+    dragover_handler(ev: DragEvent) {
         ev.preventDefault();
     }
-    isNeighbor(that) {
+    isNeighbor(that: Tile) {
         if ((Math.abs(this.pos.x - that.pos.x) <= 1) &&
             (Math.abs(this.pos.y - that.pos.y) <= 1))
             return true;
         return false;
     }
-    static tryAddTile(element, tile) {
+    static tryAddTile(element: HTMLElement, tile: Tile) {
         console.assert(
             Number.isInteger(tile.pos.x) && Number.isInteger(tile.pos.y),
             "Tile coordinate is not Integer"
@@ -168,14 +171,14 @@ class Tile {
             word: Tile.word_construct
         });
     }
-    static on(event, callback) {
+    static on(event: string, callback: CallableFunction) {
         if (!Tile.events[event]) {
             Tile.events[event] = [];
         }
         Tile.events[event].push(callback);
     }
-    static emit(event, data) {
-        var callbacks = Tile.events[event];
+    static emit(event: string, data: SelectionInputType) {
+        var callbacks: CallableFunction[] = Tile.events[event];
         if (callbacks) {
             callbacks.forEach(function (callback) {
                 callback(data);
@@ -183,15 +186,3 @@ class Tile {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

@@ -14,7 +14,7 @@ class HTMLActuator {
 
         this.tileContainer = document.getElementsByClassName("tile-container")[0];
     }
-    actuate(grid) {
+    actuate(grid: Grid) {
         var self = this;
 
         window.requestAnimationFrame(function () {
@@ -34,11 +34,11 @@ class HTMLActuator {
             this.tileContainer.removeChild(this.tileContainer.firstChild);
         }
     }
-    addHTMLTile(tile) {
+    addHTMLTile(tile: Tile) {
         var element = document.createElement("div");
 
-        function pos_offset(pos, offset) { return { x: pos.x + offset, y: pos.y + offset }; }
-        function tile_pos_attr(pos) { return "tile-position-" + pos.x + "-" + pos.y; }
+        function pos_offset(pos:CoordType, offset: number) { return { x: pos.x + offset, y: pos.y + offset }; }
+        function tile_pos_attr(pos: CoordType) { return "tile-position-" + pos.x + "-" + pos.y; }
 
         var pos_jsobj = pos_offset(tile.prevPos || tile.pos, 1);
 
@@ -70,9 +70,9 @@ class HTMLActuator {
         element.addEventListener("dragover", tile.dragover_handler.bind(tile));
         element.addEventListener("drop", tile.drop_handler.bind(tile));
     }
-    setScore(score) {
+    setScore(score: number) {
         var score_total = document.getElementsByClassName("score-total")[0];
-        score_total.textContent = score;
+        score_total.textContent = score.toString();
     }
 }
 
