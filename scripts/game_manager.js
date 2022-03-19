@@ -80,16 +80,31 @@ class GameManager {
         // inputData: tiles, elements, word
         if (!this.verify(inputData.word))
             return;
+        var word_modifier = 1;
+        var pure_word_score = 0;
+        var letter_bonus_score = 0;
         inputData.elements.forEach(element => {
             element.remove();
         });
-        inputData.tiles.forEach(element => {
-            this.score += this.actuator.letter_score[element.value];
+        inputData.tiles.forEach(tile => {
+            var letter_bonus_modifier = 0;
+            var pure_letter_score = this.actuator.letter_score[tile.value];
+            if (tile.bonus == "double-letter")
+                letter_bonus_modifier = 1;
+            if (tile.bonus == "triple-letter")
+                letter_bonus_modifier = 2;
+            if (tile.bonus == "double-word" && word_modifier != 3)
+                word_modifier = 2;
+            if (tile.bonus == "triple-word")
+                word_modifier = 3;
+            pure_word_score += pure_letter_score;
+            letter_bonus_score += pure_letter_score * letter_bonus_modifier;
             this.grid.coordDelete({
-                x: element.pos.x,
-                y: element.pos.y
+                x: tile.pos.x,
+                y: tile.pos.y
             });
         });
+        this.score += (pure_word_score + letter_bonus_score) * word_modifier;
         this.prepareNextTurn();
     }
     verify(word) {
