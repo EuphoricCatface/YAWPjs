@@ -32,12 +32,12 @@ class GameManager {
         catch (_e) {
             return;
         }
-        this.setup();
+        // Set up the game
+        this.prepareNextTurn();
         Tile.on("finishSelect", this.input.bind(this));
         clearInterval(this.validator_wait_loop);
     }
-    // Set up the game
-    setup() {
+    prepareNextTurn() {
         this.fill_prepare();
         this.squash();
         this.actuate();
@@ -63,10 +63,7 @@ class GameManager {
         var columnsEmpty = this.grid.getColumnsEmpty();
         for (var x = 0; x < this.size; x++) {
             for (var e = 0; e < columnsEmpty[x]; e++) {
-                this.grid.tileAppend(x, new Tile({
-                    x: x,
-                    y: this.size + e
-                }, this.weightedRandom()));
+                this.grid.tileAppend(x, new Tile({ x: x, y: this.size + e }, this.weightedRandom()));
             }
         }
     }
@@ -91,9 +88,7 @@ class GameManager {
                 y: element.pos.y
             });
         });
-        this.fill_prepare();
-        this.squash();
-        this.actuate();
+        this.prepareNextTurn();
     }
     verify(word) {
         var rtn = this.validator.validate(word);
