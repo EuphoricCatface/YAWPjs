@@ -5,6 +5,7 @@ class GameManager {
     grid;
     score;
     validator;
+    validator_wait_loop;
     constructor(size, actuator) {
         this.size = size;
         this.actuator = actuator;
@@ -12,7 +13,7 @@ class GameManager {
         this.score = 0;
         this.allowDropOnGameContainer();
         this.validator = new Validator();
-        setTimeout(this.initAfterValidatorLoop.bind(this), 500);
+        this.validator_wait_loop = setInterval(this.initAfterValidatorLoop.bind(this), 50);
     }
     allowDropOnGameContainer() {
         var gameContainer = document.getElementsByClassName("game-container")[0];
@@ -22,18 +23,18 @@ class GameManager {
         gameContainer.addEventListener("drop", Tile.prototype.drop_handler);
     }
     initAfterValidatorLoop() {
+        console.log("init loop");
         try {
             if (this.validator.wordlist.size == 0) {
                 throw 'not init yet';
             }
         }
         catch (_e) {
-            console.log("init loop");
-            setTimeout(this.initAfterValidatorLoop, 500);
             return;
         }
         this.setup();
         Tile.on("finishSelect", this.input.bind(this));
+        clearInterval(this.validator_wait_loop);
     }
     // Set up the game
     setup() {
