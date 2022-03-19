@@ -1,15 +1,15 @@
 'use strict';
 /* global Grid, Tile: true */
-
 class GameManager {
+    size;
+    actuator;
+    grid;
+    score;
     constructor(size, actuator) {
         this.size = size;
         this.actuator = actuator;
-
         this.grid = new Grid(this.size);
-
         this.score = 0;
-
         this.allowDropOnGameContainer();
         this.setup();
         Tile.on("finishSelect", this.input.bind(this));
@@ -25,30 +25,25 @@ class GameManager {
     setup() {
         this.fill_prepare();
         this.squash();
-
         this.actuate();
         const myRequest = new Request('words_alpha.txt');
-
         fetch(myRequest)
             .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status ${response.status}`);
-                }
-
-                return response.text();
-            })
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status ${response.status}`);
+            }
+            return response.text();
+        })
             .then((response) => {
-                var match = response.split('\n');
-                console.log(match.length);
-            });
+            var match = response.split('\n');
+            console.log(match.length);
+        });
     }
     weightedRandom() {
         var inverse_frequency_list = [120, 40, 40, 60, 120, 30, 60, 30, 120, 15, 24, 120, 40, 120, 120, 40, 12, 120, 120, 120, 120, 30, 30, 15, 30, 12];
         var inverse_frequency_sum = 1708;
-
         var rand = Math.floor(Math.random() * (inverse_frequency_sum - 1));
         var result;
-
         for (var i = 0; i < inverse_frequency_list.length; i++) {
             rand -= inverse_frequency_list[i];
             if (rand < 0) {
@@ -65,15 +60,10 @@ class GameManager {
         var columnsEmpty = this.grid.getColumnsEmpty();
         for (var x = 0; x < this.size; x++) {
             for (var e = 0; e < columnsEmpty[x]; e++) {
-                this.grid.tileAppend(
-                    x,
-                    new Tile({
-                        x: x,
-                        y: this.size + e
-                    },
-                        this.weightedRandom()
-                    )
-                );
+                this.grid.tileAppend(x, new Tile({
+                    x: x,
+                    y: this.size + e
+                }, this.weightedRandom()));
             }
         }
     }
@@ -81,14 +71,13 @@ class GameManager {
         this.actuator.actuate(this.grid);
         this.actuator.setScore(this.score);
     }
-    squash(direction) {
+    squash() {
         this.grid.eliminateEmpty();
     }
     input(inputData) {
         // inputData: tiles, elements, word
         if (!this.verify(inputData.word))
             return;
-
         inputData.elements.forEach(element => {
             element.remove();
         });
@@ -99,23 +88,13 @@ class GameManager {
                 y: element.pos.y
             });
         });
-
         this.fill_prepare();
         this.squash();
         this.actuate();
     }
     verify(word) {
         console.log("DUMMY: GM.verify, " + word);
-
         return true;
     }
 }
-
-
-
-
-
-
-
-
-
+//# sourceMappingURL=game_manager.js.map

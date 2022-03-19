@@ -1,11 +1,10 @@
 'use strict';
-
 class Grid {
+    size;
+    cells;
     constructor(size) {
         this.size = size;
-
         this.cells = [];
-
         this.build();
     }
     // Columns don't interact between each other. Let's treat each column as a list
@@ -14,9 +13,7 @@ class Grid {
         for (var x = 0; x < this.size; x++) {
             this.cells[x] = [];
             for (var y = 0; y < this.size; y++) {
-                this.cells[x].push(
-                    null
-                );
+                this.cells[x].push(null);
             }
         }
     }
@@ -28,8 +25,7 @@ class Grid {
                 if (element == null)
                     columnsEmpty[x]++;
             });
-        }
-        );
+        });
         return columnsEmpty;
     }
     tileAppend(column, tile) {
@@ -38,9 +34,7 @@ class Grid {
     eliminateEmpty() {
         this.cells.forEach(function (column) {
             while (true) {
-                var deleteIndex = column.findIndex(
-                    element => element == null
-                );
+                var deleteIndex = column.findIndex(element => element == null);
                 if (deleteIndex == -1)
                     return;
                 column.splice(deleteIndex, 1);
@@ -64,10 +58,4 @@ class Grid {
         this.cells[position.x][position.y] = null;
     }
 }
-
-
-
-
-
-
-
+//# sourceMappingURL=grid.js.map
