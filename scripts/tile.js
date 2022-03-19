@@ -34,7 +34,7 @@ class Tile {
     dragend_handler(_ev) {
         // "dragEnd" seem to fire after the "drop"
         // "dragEnd" also happens when "drop" fails
-        this.selection_clear();
+        Tile.selection_clear();
     }
     drop_handler(ev) {
         ev.preventDefault();
@@ -57,7 +57,7 @@ class Tile {
         }
         if (valid_drop)
             Tile.finishSelection();
-        this.selection_clear();
+        Tile.selection_clear();
         // Workaround: duplicate_check
         // This probably will happen on dragend_handler eventually,
         // but problem is that the board may fire the drop as well as the tile,
@@ -67,7 +67,7 @@ class Tile {
     dragover_handler(ev) {
         ev.preventDefault();
     }
-    selection_clear() {
+    static selection_clear() {
         while (Tile.selected_elements.length)
             Tile.popTile();
         console.assert(Tile.selected_tiles.length == 0 &&
