@@ -43,6 +43,8 @@ class HTMLActuator {
         var pos_jsobj = pos_offset(tile.prevPos || tile.pos, 1);
 
         element.classList.add("tile", "tile-" + tile.value, tile_pos_attr(pos_jsobj));
+        if (tile.bonus)
+            element.classList.add(tile.bonus);
         element.textContent = tile.value.toUpperCase();
         if (element.textContent == "QU")
             element.textContent = "Qu";
