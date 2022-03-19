@@ -3,6 +3,7 @@ class Tile {
     pos;
     value;
     prevPos;
+    bonus;
     static DRAG_DEBUG;
     static word_construct;
     static selected_elements;
@@ -13,6 +14,7 @@ class Tile {
         this.pos = position;
         this.value = value;
         this.prevPos = null;
+        this.bonus = "";
         Tile.word_construct = "";
         Tile.selected_elements = [];
         Tile.selected_tiles = [];

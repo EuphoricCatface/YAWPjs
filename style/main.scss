@@ -121,6 +121,26 @@ hr {
     margin-top: 20px;
     width: $field-width;
     height: $field-width;
+
+    &.game-over:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        content: "Game over!";
+        display: block;
+        background: rgba($tile-color, .5);
+        text-align: center;
+        height: $field-width;
+        line-height: $field-width;
+        z-index: 100;
+        font-size: 60px;
+        font-weight: bold;
+
+        @include animation(fade-in 800ms ease $transition-speed * 12);
+        @include animation-fill-mode(both);
+    }
 }
 
 .grid-container {
@@ -243,7 +263,9 @@ hr {
     }
 
     &.selected {
-        background-color: $tile-color-selected;
+        //background-color: $tile-color-selected;
+        background-color: $text-color;
+        color: $bright-text-color;
     }
 /*
     &.tile-new {

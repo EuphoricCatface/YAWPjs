@@ -28,10 +28,27 @@ class Grid {
                 if (element == null)
                     columnsEmpty[x]++;
             });
-        }
-        );
+        });
         return columnsEmpty;
     }
+    getColumnsLength() {
+        var columnsLength = [];
+        this.cells.forEach((column, x) => {
+            columnsLength.push(column.length);
+        });
+        return columnsLength;
+    }
+    getTileRef(pos: CoordType) { // probably shallow copy
+        return this.cells[pos.x][pos.y]
+    }
+    /*
+    getTile(pos: CoordType) {
+        
+    }
+    setTile(pos: CoordType, tile: Tile) {
+        this.cells[pos.x][pos.y]
+    }
+    */
     tileAppend(column: number, tile: Tile) {
         this.cells[column].push(tile);
     }

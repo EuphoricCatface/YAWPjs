@@ -2,6 +2,7 @@
 class HTMLActuator {
     letter_score;
     tileContainer;
+    gameContainer;
     constructor() {
         this.letter_score = {
             "a": 1, "b": 3, "c": 3, "d": 2, "e": 1,
@@ -11,6 +12,7 @@ class HTMLActuator {
             "u": 1, "v": 4, "w": 4, "x": 8, "y": 4, "z": 10
         };
         this.tileContainer = document.getElementsByClassName("tile-container")[0];
+        this.gameContainer = document.getElementsByClassName("game-container")[0];
     }
     actuate(grid) {
         var self = this;
@@ -36,6 +38,8 @@ class HTMLActuator {
         function tile_pos_attr(pos) { return "tile-position-" + pos.x + "-" + pos.y; }
         var pos_jsobj = pos_offset(tile.prevPos || tile.pos, 1);
         element.classList.add("tile", "tile-" + tile.value, tile_pos_attr(pos_jsobj));
+        if (tile.bonus)
+            element.classList.add(tile.bonus);
         element.textContent = tile.value.toUpperCase();
         if (element.textContent == "QU")
             element.textContent = "Qu";
@@ -62,6 +66,9 @@ class HTMLActuator {
     setScore(score) {
         var score_total = document.getElementsByClassName("score-total")[0];
         score_total.textContent = score.toString();
+    }
+    gameOver() {
+        this.gameContainer.classList.add("game-over");
     }
 }
 //# sourceMappingURL=html_actuator.js.map

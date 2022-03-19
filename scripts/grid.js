@@ -28,6 +28,24 @@ class Grid {
         });
         return columnsEmpty;
     }
+    getColumnsLength() {
+        var columnsLength = [];
+        this.cells.forEach((column, x) => {
+            columnsLength.push(column.length);
+        });
+        return columnsLength;
+    }
+    getTileRef(pos) {
+        return this.cells[pos.x][pos.y];
+    }
+    /*
+    getTile(pos: CoordType) {
+        
+    }
+    setTile(pos: CoordType, tile: Tile) {
+        this.cells[pos.x][pos.y]
+    }
+    */
     tileAppend(column, tile) {
         this.cells[column].push(tile);
     }
