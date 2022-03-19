@@ -94,7 +94,7 @@ class Tile {
         );
         console.assert(
             Tile.selected_elements.length ==
-            Tile.word_construct.length - [...Tile.word_construct.matchAll(/Qu/)].length,
+            Tile.word_construct.length - [...Tile.word_construct.matchAll(/Qu/gi)].length,
             "selected tiles and word length mismatch"
         );
 
@@ -147,14 +147,14 @@ class Tile {
         );
         console.assert(
             Tile.selected_elements.length ==
-            Tile.word_construct.length - [...Tile.word_construct.matchAll(/Qu/)].length,
+            Tile.word_construct.length - [...Tile.word_construct.matchAll(/Qu/gi)].length,
             "selected tiles and word length mismatch"
         );
 
         var element = Tile.selected_elements.pop();
         Tile.selected_tiles.pop();
         Tile.word_construct = Tile.word_construct.slice(0, Tile.word_construct.length - 1);
-        if (Tile.word_construct.endsWith("Q"))
+        if (Tile.word_construct.endsWith("q"))
             Tile.word_construct = Tile.word_construct.slice(0, Tile.word_construct.length - 1);
 
         element.classList.remove("selected");

@@ -77,7 +77,7 @@ class Tile {
         console.assert(Number.isInteger(tile.pos.x) && Number.isInteger(tile.pos.y), "Tile coordinate is not Integer");
         console.assert(Tile.selected_tiles.length == Tile.selected_elements.length, "selected tiles and elements length mismatch");
         console.assert(Tile.selected_elements.length ==
-            Tile.word_construct.length - [...Tile.word_construct.matchAll(/Qu/)].length, "selected tiles and word length mismatch");
+            Tile.word_construct.length - [...Tile.word_construct.matchAll(/Qu/gi)].length, "selected tiles and word length mismatch");
         if (element.nodeName == "#text") {
             // unlikely
             console.warn("tryAddTile: arg is #text node. Trying parent instead.");
@@ -116,11 +116,11 @@ class Tile {
     static popTile() {
         console.assert(Tile.selected_tiles.length == Tile.selected_elements.length, "selected tiles and elements length mismatch");
         console.assert(Tile.selected_elements.length ==
-            Tile.word_construct.length - [...Tile.word_construct.matchAll(/Qu/)].length, "selected tiles and word length mismatch");
+            Tile.word_construct.length - [...Tile.word_construct.matchAll(/Qu/gi)].length, "selected tiles and word length mismatch");
         var element = Tile.selected_elements.pop();
         Tile.selected_tiles.pop();
         Tile.word_construct = Tile.word_construct.slice(0, Tile.word_construct.length - 1);
-        if (Tile.word_construct.endsWith("Q"))
+        if (Tile.word_construct.endsWith("q"))
             Tile.word_construct = Tile.word_construct.slice(0, Tile.word_construct.length - 1);
         element.classList.remove("selected");
     }
