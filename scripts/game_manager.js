@@ -1,5 +1,4 @@
 'use strict';
-/* global Grid, Tile: true */
 class GameManager {
     size;
     actuator;
