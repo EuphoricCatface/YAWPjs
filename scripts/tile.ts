@@ -23,10 +23,7 @@ class Tile {
     dragstart_handler(ev) {
         // transparent drag object: https://stackoverflow.com/q/27989602/
         ev.dataTransfer.setData("text", "Tile");
-        var crt = ev.target.cloneNode(true);
-        crt.style.display = "none";
-        document.body.appendChild(crt);
-        ev.dataTransfer.setDragImage(crt, 0, 0);
+        ev.dataTransfer.setDragImage(new Image(0, 0), 0, 0);
 
         // Workaround: sometimes first tile does not register
         Tile.tryAddTile(ev.target, this);
@@ -94,7 +91,7 @@ class Tile {
         );
         console.assert(
             Tile.selected_elements.length ==
-            Tile.word_construct.length - [...Tile.word_construct.matchAll(/Qu/)].length,
+            Tile.word_construct.length - [...Tile.word_construct.matchAll(/Qu/gi)].length,
             "selected tiles and word length mismatch"
         );
 
@@ -147,14 +144,14 @@ class Tile {
         );
         console.assert(
             Tile.selected_elements.length ==
-            Tile.word_construct.length - [...Tile.word_construct.matchAll(/Qu/)].length,
+            Tile.word_construct.length - [...Tile.word_construct.matchAll(/Qu/gi)].length,
             "selected tiles and word length mismatch"
         );
 
         var element = Tile.selected_elements.pop();
         Tile.selected_tiles.pop();
         Tile.word_construct = Tile.word_construct.slice(0, Tile.word_construct.length - 1);
-        if (Tile.word_construct.endsWith("Q"))
+        if (Tile.word_construct.endsWith("q"))
             Tile.word_construct = Tile.word_construct.slice(0, Tile.word_construct.length - 1);
 
         element.classList.remove("selected");
