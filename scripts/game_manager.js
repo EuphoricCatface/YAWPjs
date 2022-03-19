@@ -39,7 +39,9 @@ class GameManager {
     }
     prepareNextTurn() {
         this.fill_prepare();
+        this.calculate_bonus_new();
         this.squash();
+        this.calculate_bonus_bottom();
         this.actuate();
     }
     weightedRandom() {
@@ -94,6 +96,44 @@ class GameManager {
         var rtn = this.validator.validate(word);
         console.log("GM.verify: " + word + ", " + rtn);
         return rtn;
+    }
+    calculate_bonus_new() {
+        // New tiles, letter bonuses: 90% no bonus, 6% double, 4% triple
+        var columnsLength = this.grid.getColumnsLength();
+        for (var i = 0; i < this.grid.size; i++) {
+            for (var j = this.grid.size; j < columnsLength[i]; j++) {
+                var rand = Math.floor(Math.random() * 50);
+                var tile = this.grid.getTileRef({ x: i, y: j });
+                switch (rand) {
+                    case 0:
+                        tile.bonus = "triple-letter";
+                    case 1:
+                    case 2:
+                    case 3:
+                        tile.bonus = "double-letter";
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+    calculate_bonus_bottom() {
+        // Bottom row, word bonuses: 10% no bonus, 60% double, 30% triple
+        for (var i = 0; i < this.grid.size; i++) {
+            var rand = Math.floor(Math.random() * 10);
+            var tile = this.grid.getTileRef({ x: i, y: 0 });
+            switch (rand) {
+                case 0:
+                    break;
+                case 1:
+                case 2:
+                case 3:
+                    tile.bonus = "triple-word";
+                    break;
+                default:
+                    tile.bonus = "double-word";
+            }
+        }
     }
 }
 //# sourceMappingURL=game_manager.js.map
