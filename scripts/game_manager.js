@@ -4,6 +4,7 @@ class GameManager {
     actuator;
     grid;
     score;
+    validator;
     constructor(size, actuator) {
         this.size = size;
         this.actuator = actuator;
@@ -22,21 +23,10 @@ class GameManager {
     }
     // Set up the game
     setup() {
+        this.validator = new Validator();
         this.fill_prepare();
         this.squash();
         this.actuate();
-        const myRequest = new Request('words_alpha.txt');
-        fetch(myRequest)
-            .then((response) => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status ${response.status}`);
-            }
-            return response.text();
-        })
-            .then((response) => {
-            var match = response.split('\n');
-            console.log(match.length);
-        });
     }
     weightedRandom() {
         var inverse_frequency_list = [120, 40, 40, 60, 120, 30, 60, 30, 120, 15, 24, 120, 40, 120, 120, 40, 12, 120, 120, 120, 120, 30, 30, 15, 30, 12];
