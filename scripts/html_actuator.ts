@@ -3,6 +3,7 @@
 class HTMLActuator {
     letter_score: Record<string, number>;
     tileContainer: Element;
+    gameContainer: Element;
     constructor() {
         this.letter_score = {
             "a": 1, "b": 3, "c": 3, "d": 2, "e": 1,
@@ -13,6 +14,7 @@ class HTMLActuator {
         };
 
         this.tileContainer = document.getElementsByClassName("tile-container")[0];
+        this.gameContainer  = document.getElementsByClassName("game-container")[0];
     }
     actuate(grid: Grid) {
         var self = this;
@@ -75,6 +77,9 @@ class HTMLActuator {
     setScore(score: number) {
         var score_total = document.getElementsByClassName("score-total")[0];
         score_total.textContent = score.toString();
+    }
+    gameOver() {
+        this.gameContainer.classList.add("game-over");
     }
 }
 

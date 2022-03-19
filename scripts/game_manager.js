@@ -6,6 +6,7 @@ class GameManager {
     score;
     validator;
     validator_wait_loop;
+    turns;
     constructor(size, actuator) {
         this.size = size;
         this.actuator = actuator;
@@ -33,9 +34,13 @@ class GameManager {
             return;
         }
         // Set up the game
+        this.gameInit();
+        clearInterval(this.validator_wait_loop);
+    }
+    gameInit() {
+        this.turns = 0;
         this.prepareNextTurn();
         Tile.on("finishSelect", this.input.bind(this));
-        clearInterval(this.validator_wait_loop);
     }
     prepareNextTurn() {
         this.fill_prepare();
@@ -43,6 +48,12 @@ class GameManager {
         this.squash();
         this.calculate_bonus_bottom();
         this.actuate();
+        if (this.turns == 20) {
+            this.actuator.gameOver();
+            return;
+        }
+        this.turns += 1;
+        console.log("turns: " + this.turns);
     }
     weightedRandom() {
         var inverse_frequency_list = [120, 40, 40, 60, 120, 30, 60, 30, 120, 15, 24, 120, 40, 120, 120, 40, 12, 120, 120, 120, 120, 30, 30, 15, 30, 12];
