@@ -109,8 +109,8 @@ class GameManager {
         var columnsLength = this.grid.getColumnsLength();
         for (var i = 0; i < this.grid.size; i++) {
             for (var j = this.grid.size; j < columnsLength[i]; j++) {
-                var rand = Math.floor(Math.random() * 50)
-                var tile = this.grid.getTileRef({x: i, y: j})
+                var rand = Math.floor(Math.random() * 50);
+                var tile = this.grid.getTileRef({x: i, y: j});
                 switch (rand) {
                     case 0:
                         tile.bonus = "triple-letter";
@@ -125,8 +125,8 @@ class GameManager {
     calculate_bonus_bottom() {
         // Bottom row, word bonuses: 10% no bonus, 60% double, 30% triple
         for (var i = 0; i < this.grid.size; i++) {
-            var rand = Math.floor(Math.random() * 10)
-            var tile = this.grid.getTileRef({x: i, y: 0})
+            var rand = Math.floor(Math.random() * 10);
+            var tile = this.grid.getTileRef({x: i, y: 0});
             switch (rand) {
                 case 0:
                     break;
