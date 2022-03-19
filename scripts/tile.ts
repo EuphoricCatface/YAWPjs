@@ -23,10 +23,7 @@ class Tile {
     dragstart_handler(ev) {
         // transparent drag object: https://stackoverflow.com/q/27989602/
         ev.dataTransfer.setData("text", "Tile");
-        var crt = ev.target.cloneNode(true);
-        crt.style.display = "none";
-        document.body.appendChild(crt);
-        ev.dataTransfer.setDragImage(crt, 0, 0);
+        ev.dataTransfer.setDragImage(new Image(0, 0), 0, 0);
 
         // Workaround: sometimes first tile does not register
         Tile.tryAddTile(ev.target, this);
