@@ -33,10 +33,12 @@ class Tile {
             console.log(this);
         }
         var target = ev.target;
+        /* // Chrome doesn't seem to like this
         if (ev.dataTransfer.getData("text") != "Tile") {
             if (Tile.DRAG_DEBUG) console.log(ev.dataTransfer.getData("text"));
             return;
         }
+        */
         if (target.className == "tileScore")
             target = target.parentElement;
         Tile.tryAddTile(target, this);
