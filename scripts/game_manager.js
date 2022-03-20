@@ -7,11 +7,11 @@ class GameManager {
     validator;
     validator_wait_loop;
     turns;
+    recent_input;
     constructor(size, actuator) {
         this.size = size;
         this.actuator = actuator;
         this.grid = new Grid(this.size);
-        this.score = 0;
         this.allowDropOnGameContainer();
         this.validator = new Validator();
         this.validator_wait_loop = setInterval(this.initAfterValidatorLoop.bind(this), 50);
@@ -41,6 +41,8 @@ class GameManager {
         this.turns = 0;
         this.prepareNextTurn();
         Tile.on("sendInput", this.input.bind(this));
+        Tile.on("finishSelect", this.finishSelect.bind(this));
+        this.actuator.setScore(0);
     }
     prepareNextTurn() {
         this.fill_prepare();
@@ -82,7 +84,6 @@ class GameManager {
     }
     actuate_grid() {
         this.actuator.actuate_grid(this.grid);
-        this.actuator.setScore(this.score);
     }
     actuate_word(word, pure_score, letter_bonus, word_bonus) {
         this.actuator.actuate_word(word, pure_score, letter_bonus, word_bonus);
@@ -92,20 +93,12 @@ class GameManager {
     }
     input(inputData) {
         // inputData: tiles, elements, word
-        /*
-        if (!this.verify(inputData.word))
-            return;
-        */
-        console.log("input: " + inputData.word);
+        this.recent_input = inputData;
+        console.log("input: " + this.recent_input.word);
         var word_modifier = 1;
         var pure_word_score = 0;
         var letter_bonus_score = 0;
-        /*
-        inputData.elements.forEach(element => {
-            element.remove();
-        });
-        */
-        inputData.tiles.forEach(tile => {
+        this.recent_input.tiles.forEach(tile => {
             var letter_bonus_modifier = 0;
             var pure_letter_score = this.actuator.letter_score[tile.value];
             if (tile.bonus == "double-letter")
@@ -118,18 +111,24 @@ class GameManager {
                 word_modifier = 3;
             pure_word_score += pure_letter_score;
             letter_bonus_score += pure_letter_score * letter_bonus_modifier;
-            /*
-                this.grid.coordDelete({
-                    x: tile.pos.x,
-                    y: tile.pos.y
-                });
-            });
-            this.score += (pure_word_score + letter_bonus_score) * word_modifier;
-    
-            this.prepareNextTurn();
-            */
-            this.actuate_word(inputData.word, pure_word_score, letter_bonus_score, word_modifier);
+            this.actuate_word(this.recent_input.word, pure_word_score, letter_bonus_score, word_modifier);
         });
+    }
+    finishSelect(_) {
+        // inputData: tiles, elements, word
+        if (!this.verify(this.recent_input.word))
+            return;
+        this.recent_input.elements.forEach(element => {
+            element.remove();
+        });
+        this.recent_input.tiles.forEach(tile => {
+            this.grid.coordDelete({
+                x: tile.pos.x,
+                y: tile.pos.y
+            });
+        });
+        this.actuator.addScore();
+        this.prepareNextTurn();
     }
     verify(word) {
         var rtn = this.validator.validate(word);

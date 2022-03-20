@@ -84,8 +84,8 @@ class Tile {
             }
             target = target.parentElement;
         }
-        //if (valid_drop)
-        //    Tile.finishSelection();
+        if (valid_drop)
+            Tile.finishSelect();
         
         Tile.selection_clear();
         // Workaround: duplicate_check
@@ -211,13 +211,20 @@ class Tile {
             word: Tile.word_construct
         });
     }
+    static finishSelect() {
+        console.assert(Boolean(Tile.selected_tiles.length) &&
+            Boolean(Tile.selected_elements.length) &&
+            Boolean(Tile.word_construct.length),
+            "finishSelect: internal selection is somehow gone!");
+        Tile.emit("finishSelect", {});
+    }
     static on(event: string, callback: CallableFunction) {
         if (!Tile.events[event]) {
             Tile.events[event] = [];
         }
         Tile.events[event].push(callback);
     }
-    static emit(event: string, data: SelectionInputType) {
+    static emit(event: string, data: any) {
         var callbacks: CallableFunction[] = Tile.events[event];
         if (callbacks) {
             callbacks.forEach(function (callback) {
