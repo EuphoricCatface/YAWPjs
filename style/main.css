@@ -121,14 +121,22 @@ hr {
   width: 600px;
   height: 75px;
 }
-.turn-info .grid-row {
-  width: 360px;
+.turn-info .word-construct, .turn-info .score-word strong {
+  font-size: 30px;
+  line-height: 45px;
 }
-.turn-info .grid-cell {
-  width: 45px;
+.turn-info .word-construct {
+  padding: 0px 10px;
+  background-color: #eee4da;
+  font-family: monospace;
+  width: 330px;
   height: 45px;
-  border-radius: 9px;
-  margin-right: 15px;
+  float: left;
+  padding: 0 10px;
+}
+.turn-info .score-word {
+  float: right;
+  color: #f9f6f2;
 }
 
 .game-container {

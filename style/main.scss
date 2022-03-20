@@ -149,15 +149,23 @@ hr {
 
 .turn-info {
     width: $field-width;
-    height: $tile-size / 2 + $grid-spacing;
-    & .grid-row {
-        width: $field-width * 3 / 5
+    height: calc($tile-size / 2 + $grid-spacing);
+    & .word-construct, & .score-word strong {
+        font-size: calc($tile-size / 3);
+        line-height: calc($tile-size / 2);
     }
-    & .grid-cell {
-        width: $tile-size / 2;
-        height: $tile-size / 2;
-        border-radius: $tile-border-radius / 2;
-        margin-right: $grid-spacing / 2;
+    & .word-construct {
+        padding: 0px 10px;
+        background-color: $tile-color;
+        font-family: monospace;
+        width: calc($field-width * 3 / 5) - $grid-spacing;
+        height: calc($tile-size / 2);
+        float: left;
+        padding: 0 10px;
+    }
+    & .score-word {
+        float: right;
+        color: $bright-text-color;
     }
 }
 
