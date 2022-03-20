@@ -4,6 +4,8 @@ class HTMLActuator {
     letter_score: Record<string, number>;
     tileContainer: Element;
     gameContainer: Element;
+    wordConstruct: Element;
+    scoreWord: Element;
     constructor() {
         this.letter_score = {
             "a": 1, "b": 3, "c": 3, "d": 2, "e": 1,
@@ -14,9 +16,11 @@ class HTMLActuator {
         };
 
         this.tileContainer = document.getElementsByClassName("tile-container")[0];
-        this.gameContainer  = document.getElementsByClassName("game-container")[0];
+        this.gameContainer = document.getElementsByClassName("game-container")[0];
+        this.wordConstruct = document.getElementsByClassName("word-construct")[0];
+        this.scoreWord = document.getElementsByClassName("score-word")[0];
     }
-    actuate(grid: Grid) {
+    actuate_grid(grid: Grid) {
         var self = this;
 
         window.requestAnimationFrame(function () {
@@ -30,6 +34,17 @@ class HTMLActuator {
                 });
             });
         });
+    }
+    actuate_word(word: string, pure_score: number, letter_bonus: number, word_bonus: number) {
+        this.wordConstruct.textContent = word;
+        while (this.scoreWord.firstChild) {
+            this.scoreWord.removeChild(this.scoreWord.firstChild)
+        }
+        this.scoreWord.textContent = "(" + pure_score + " + " + letter_bonus + ") * " + word_bonus
+            + " = ";
+        var element = document.createElement("strong");
+        element.textContent = ((pure_score + letter_bonus) * word_bonus).toString();
+        this.scoreWord.appendChild(element);
     }
     clearContainer() {
         while (this.tileContainer.firstChild) {

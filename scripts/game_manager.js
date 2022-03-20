@@ -84,6 +84,9 @@ class GameManager {
         this.actuator.actuate_grid(this.grid);
         this.actuator.setScore(this.score);
     }
+    actuate_word(word, pure_score, letter_bonus, word_bonus) {
+        this.actuator.actuate_word(word, pure_score, letter_bonus, word_bonus);
+    }
     squash() {
         this.grid.eliminateEmpty();
     }
@@ -125,6 +128,7 @@ class GameManager {
     
             this.prepareNextTurn();
             */
+            this.actuate_word(inputData.word, pure_word_score, letter_bonus_score, word_modifier);
         });
     }
     verify(word) {
