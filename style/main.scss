@@ -46,6 +46,16 @@ h1 {
     margin: 0 auto;
 }
 
+@include keyframes(fade-in) {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 p {
     margin-top: 0;
     margin-bottom: 10px;
@@ -138,7 +148,7 @@ hr {
         font-size: 60px;
         font-weight: bold;
 
-        @include animation(fade-in 800ms ease $transition-speed * 12);
+        @include animation(fade-in 800ms ease $transition-speed);
         @include animation-fill-mode(both);
     }
 }

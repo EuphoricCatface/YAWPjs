@@ -22,6 +22,22 @@ h1 {
   margin: 0 auto;
 }
 
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 p {
   margin-top: 0;
   margin-bottom: 10px;
@@ -104,8 +120,8 @@ hr {
   z-index: 100;
   font-size: 60px;
   font-weight: bold;
-  -webkit-animation: fade-in 800ms ease 9600ms;
-  animation: fade-in 800ms ease 9600ms;
+  -webkit-animation: fade-in 800ms ease 800ms;
+  animation: fade-in 800ms ease 800ms;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
