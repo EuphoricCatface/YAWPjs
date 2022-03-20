@@ -41,14 +41,14 @@ class GameManager {
     gameInit() {
         this.turns = 0;
         this.prepareNextTurn();
-        Tile.on("finishSelect", this.input.bind(this));
+        Tile.on("sendInput", this.input.bind(this));
     }
     prepareNextTurn() {
         this.fill_prepare();
         this.calculate_bonus_new();
         this.squash();
         this.calculate_bonus_bottom();
-        this.actuate();
+        this.actuate_grid();
         if (this.turns == 20) {
             this.actuator.gameOver();
             return;
@@ -84,8 +84,8 @@ class GameManager {
             }
         }
     }
-    actuate() {
-        this.actuator.actuate(this.grid);
+    actuate_grid() {
+        this.actuator.actuate_grid(this.grid);
         this.actuator.setScore(this.score);
     }
     squash() {
@@ -93,16 +93,19 @@ class GameManager {
     }
     input(inputData: SelectionInputType) {
         // inputData: tiles, elements, word
+        /*
         if (!this.verify(inputData.word))
             return;
-
+        */
+        console.log("input: " + inputData.word);
         var word_modifier = 1;
         var pure_word_score = 0;
         var letter_bonus_score = 0;
-
+        /*
         inputData.elements.forEach(element => {
             element.remove();
         });
+        */
         inputData.tiles.forEach(tile => {
             var letter_bonus_modifier = 0;
             var pure_letter_score = this.actuator.letter_score[tile.value];
@@ -116,7 +119,7 @@ class GameManager {
                 word_modifier = 3;
             pure_word_score += pure_letter_score;
             letter_bonus_score += pure_letter_score * letter_bonus_modifier;
-
+        /*
             this.grid.coordDelete({
                 x: tile.pos.x,
                 y: tile.pos.y
@@ -125,6 +128,7 @@ class GameManager {
         this.score += (pure_word_score + letter_bonus_score) * word_modifier;
 
         this.prepareNextTurn();
+        */
     }
     verify(word: string) {
         var rtn =  this.validator.validate(word);
