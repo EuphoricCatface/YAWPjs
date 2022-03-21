@@ -17,6 +17,8 @@ $bright-text-color: #f9f6f2;
 $tile-color: #eee4da;
 $tile-color-selected: #c0b9b1;
 
+$intro-height: 160px;
+
 $transition-speed: 800ms;// * 2; // testing
 // Rough approximation
 $OutCubic: cubic-bezier(0.4, 1, 0.66, 1);
@@ -32,7 +34,7 @@ html, body {
 }
 
 body {
-    margin: 40px 0;
+    margin: 20px 0;
 }
 
 h1 {
@@ -44,6 +46,29 @@ h1 {
 .container {
     width: $field-width;
     margin: 0 auto;
+}
+
+@include keyframes(fade-in) {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.game-intro {
+    position: relative;
+    float: left;
+    width: calc($field-width * 3 / 5);
+    height: $intro-height;
+
+    & .game-intro-explanation {
+        position: absolute;
+        bottom: 0;
+        margin-bottom: 0;
+    }
 }
 
 p {
@@ -71,10 +96,11 @@ hr {
     margin-bottom: 30px;
 }
 
-.scoreboard, .game-container {
+.turn-info, .game-info, .game-container {
     overflow: hidden;
     position: relative;
     padding: calc($grid-spacing / 2);
+    margin-bottom: 10px;
     
     cursor: default;
     -webkit-touch-callout: none;
@@ -83,19 +109,23 @@ hr {
     user-select: none;
 
     background: #bbada0;
-    border-radius: $tile-border-radius * 1.5;
     box-sizing: border-box;
 }
 
-.scoreboard {
-    width: $field-width;
-    height: 100px;
+.turn-info, .game-info {
+    border-radius: $tile-border-radius;
+}
+
+.game-info {
+    float: right;
+    width: calc($field-width * 2 / 5  - $grid-spacing / 2);
+    height: $intro-height;
 
     & .score-total/*, & .turns, & .construct-word, & .score-word*/ {
         position: relative;
         // width: $tile-size * 2.5;
         // height: $tile-size / 2;
-        width: $field-width - $grid-spacing;
+        width: calc($field-width * 2 / 5 - $grid-spacing * 1.5);
         height: $tile-size - $grid-spacing;
         margin-right: $grid-spacing;
         float: left;
@@ -117,10 +147,33 @@ hr {
     }
 }
 
+.turn-info {
+    width: $field-width;
+    height: calc($tile-size / 2 + $grid-spacing);
+    & .word-construct, & .score-word strong {
+        font-size: calc($tile-size / 3);
+        line-height: calc($tile-size / 2);
+    }
+    & .word-construct {
+        padding: 0px 10px;
+        background-color: $tile-color;
+        font-family: monospace;
+        width: calc($field-width * 3 / 5) - $grid-spacing;
+        height: calc($tile-size / 2);
+        float: left;
+        padding: 0 10px;
+    }
+    & .score-word {
+        float: right;
+        color: $bright-text-color;
+    }
+}
+
 .game-container {
-    margin-top: 20px;
+    margin-top: 10px;
     width: $field-width;
     height: $field-width;
+    border-radius: $tile-border-radius * 1.5;
 
     &.game-over:after {
         position: absolute;
@@ -138,7 +191,7 @@ hr {
         font-size: 60px;
         font-weight: bold;
 
-        @include animation(fade-in 800ms ease $transition-speed * 12);
+        @include animation(fade-in 800ms ease $transition-speed);
         @include animation-fill-mode(both);
     }
 }
@@ -287,10 +340,6 @@ hr {
         //opacity: 1;
     }
 }*/
-
-.game-intro {
-    margin-bottom: 0;
-}
 
 .game-explanation {
     margin-top: 50px;

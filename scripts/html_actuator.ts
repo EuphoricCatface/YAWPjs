@@ -4,6 +4,11 @@ class HTMLActuator {
     letter_score: Record<string, number>;
     tileContainer: Element;
     gameContainer: Element;
+    wordConstruct: Element;
+    scoreWord: Element;
+    scoreTotalElem: Element;
+    recentScore: number;
+    totalScore: number;
     constructor() {
         this.letter_score = {
             "a": 1, "b": 3, "c": 3, "d": 2, "e": 1,
@@ -14,9 +19,14 @@ class HTMLActuator {
         };
 
         this.tileContainer = document.getElementsByClassName("tile-container")[0];
-        this.gameContainer  = document.getElementsByClassName("game-container")[0];
+        this.gameContainer = document.getElementsByClassName("game-container")[0];
+        this.wordConstruct = document.getElementsByClassName("word-construct")[0];
+        this.scoreWord = document.getElementsByClassName("score-word")[0];
+        this.scoreTotalElem = document.getElementsByClassName("score-total")[0];
+        this.recentScore = 0;
+        this.totalScore = 0;
     }
-    actuate(grid: Grid) {
+    actuate_grid(grid: Grid) {
         var self = this;
 
         window.requestAnimationFrame(function () {
@@ -35,6 +45,18 @@ class HTMLActuator {
         while (this.tileContainer.firstChild) {
             this.tileContainer.removeChild(this.tileContainer.firstChild);
         }
+    }
+    actuate_word(word: string, pure_score: number, letter_bonus: number, word_bonus: number) {
+        this.wordConstruct.textContent = word;
+        while (this.scoreWord.firstChild) {
+            this.scoreWord.removeChild(this.scoreWord.firstChild)
+        }
+        this.scoreWord.textContent = "(" + pure_score + " + " + letter_bonus + ") * " + word_bonus
+            + " = ";
+        var element = document.createElement("strong");
+        this.recentScore = (pure_score + letter_bonus) * word_bonus;
+        element.textContent = (this.recentScore).toString();
+        this.scoreWord.appendChild(element);
     }
     addHTMLTile(tile: Tile) {
         var element = document.createElement("div");
@@ -75,8 +97,12 @@ class HTMLActuator {
         element.addEventListener("drop", tile.drop_handler.bind(tile));
     }
     setScore(score: number) {
-        var score_total = document.getElementsByClassName("score-total")[0];
-        score_total.textContent = score.toString();
+        this.scoreTotalElem.textContent = score.toString();
+        this.totalScore = score;
+    }
+    addScore() {
+        this.totalScore = this.totalScore + this.recentScore;
+        this.scoreTotalElem.textContent = this.totalScore.toString();
     }
     gameOver() {
         this.gameContainer.classList.add("game-over");

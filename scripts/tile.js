@@ -27,7 +27,7 @@ class Tile {
         if (Tile.DRAG_DEBUG)
             console.log("dragstart");
         // Workaround: sometimes first tile does not register
-        Tile.tryAddTile(ev.target, this);
+        Tile.nextTile(ev.target, this);
     }
     dragenter_handler(ev) {
         if (Tile.DRAG_DEBUG) {
@@ -43,7 +43,9 @@ class Tile {
         */
         if (target.className == "tileScore")
             target = target.parentElement;
-        Tile.tryAddTile(target, this);
+        var selectionChanged = Tile.nextTile(target, this);
+        if (selectionChanged)
+            Tile.sendInput();
     }
     dragend_handler(_ev) {
         if (Tile.DRAG_DEBUG)
@@ -74,7 +76,7 @@ class Tile {
             target = target.parentElement;
         }
         if (valid_drop)
-            Tile.finishSelection();
+            Tile.finishSelect();
         Tile.selection_clear();
         // Workaround: duplicate_check
         // This probably will happen on dragend_handler eventually,
@@ -99,63 +101,64 @@ class Tile {
             return true;
         return false;
     }
-    static tryAddTile(element, tile) {
+    static nextTile(element, tile) {
         if (Tile.DRAG_DEBUG)
-            console.log("tryadd start");
+            console.log("nextTile start");
         console.assert(Number.isInteger(tile.pos.x) && Number.isInteger(tile.pos.y), "Tile coordinate is not Integer");
         console.assert(Tile.selected_tiles.length == Tile.selected_elements.length, "selected tiles and elements length mismatch");
         console.assert(Tile.selected_elements.length ==
             Tile.word_construct.length - [...Tile.word_construct.matchAll(/Qu/gi)].length, "selected tiles and word length mismatch");
         if (element.nodeName == "#text") {
             // unlikely
-            console.warn("tryAddTile: arg is #text node. Trying parent instead.");
+            console.warn("nextTile: arg is #text node. Trying parent instead.");
             element = element.parentElement;
         }
         do { // do ... while as goto replacement
             if (Tile.selected_elements.length == 0) {
                 if (Tile.DRAG_DEBUG)
-                    console.log("tryadd cond 1");
+                    console.log("nextTile cond 1");
                 // start of selection;
                 // adding unconditionally
                 continue; // goto ADD;
             }
             if (Tile.selected_elements.at(-1) === element) {
                 if (Tile.DRAG_DEBUG)
-                    console.log("tryadd cond 2");
+                    console.log("nextTile cond 2");
                 // current tile is same as the last selected tile;
                 // ignoring
-                return;
+                return false;
             }
             if (!tile.isNeighbor(Tile.selected_tiles.at(-1))) {
                 if (Tile.DRAG_DEBUG)
-                    console.log("tryadd cond 3");
+                    console.log("nextTile cond 3");
                 // current tile is somehow too far from the last selected tile;
                 // ignoring
-                return;
+                return false;
             }
             if (Tile.selected_elements.length >= 2 &&
                 Tile.selected_elements.at(-2) === element) {
                 if (Tile.DRAG_DEBUG)
-                    console.log("tryadd cond 4");
+                    console.log("nextTile cond 4");
                 // The user has retreated from the last selection;
                 // pop the last tile
                 Tile.popTile();
-                return;
+                return true;
             }
             if (Tile.selected_elements.find(e => e === element)) {
                 if (Tile.DRAG_DEBUG)
-                    console.log("tryadd cond 5");
+                    console.log("nextTile cond 5");
                 // element is already in the list;
                 // ignoring
-                return;
+                return false;
             }
         } while (false); // ADD:
         if (Tile.DRAG_DEBUG)
-            console.log("tryadd cond 6");
+            console.log("nextTile cond 6");
         Tile.selected_elements.push(element);
         Tile.selected_tiles.push(tile);
         Tile.word_construct += tile.value;
         element.classList.add("selected");
+        return true;
     }
     static popTile() {
         console.assert(Tile.selected_tiles.length == Tile.selected_elements.length, "selected tiles and elements length mismatch");
@@ -168,15 +171,21 @@ class Tile {
             Tile.word_construct = Tile.word_construct.slice(0, Tile.word_construct.length - 1);
         element.classList.remove("selected");
     }
-    static finishSelection() {
+    static sendInput() {
         console.assert(Boolean(Tile.selected_tiles.length) &&
             Boolean(Tile.selected_elements.length) &&
-            Boolean(Tile.word_construct.length), "finishSelection: internal selection has already gone!");
-        Tile.emit("finishSelect", {
+            Boolean(Tile.word_construct.length), "sendInput: internal selection is somehow gone!");
+        Tile.emit("sendInput", {
             tiles: Tile.selected_tiles,
             elements: Tile.selected_elements,
             word: Tile.word_construct
         });
+    }
+    static finishSelect() {
+        console.assert(Boolean(Tile.selected_tiles.length) &&
+            Boolean(Tile.selected_elements.length) &&
+            Boolean(Tile.word_construct.length), "finishSelect: internal selection is somehow gone!");
+        Tile.emit("finishSelect", {});
     }
     static on(event, callback) {
         if (!Tile.events[event]) {

@@ -34,7 +34,7 @@ class Tile {
         if (Tile.DRAG_DEBUG) console.log("dragstart");
 
         // Workaround: sometimes first tile does not register
-        Tile.tryAddTile((ev.target as HTMLElement), this);
+        Tile.nextTile((ev.target as HTMLElement), this);
     }
     dragenter_handler(ev: DragEvent) {
         if (Tile.DRAG_DEBUG) {
@@ -51,7 +51,9 @@ class Tile {
         if (target.className == "tileScore")
             target = target.parentElement;
 
-        Tile.tryAddTile(target, this);
+        var selectionChanged = Tile.nextTile(target, this);
+        if (selectionChanged)
+            Tile.sendInput()
     }
     dragend_handler(_ev: DragEvent) {
         if (Tile.DRAG_DEBUG) console.log("dragend");
@@ -83,7 +85,7 @@ class Tile {
             target = target.parentElement;
         }
         if (valid_drop)
-            Tile.finishSelection();
+            Tile.finishSelect();
         
         Tile.selection_clear();
         // Workaround: duplicate_check
@@ -111,8 +113,8 @@ class Tile {
             return true;
         return false;
     }
-    static tryAddTile(element: HTMLElement, tile: Tile) {
-        if (Tile.DRAG_DEBUG) console.log("tryadd start");
+    static nextTile(element: HTMLElement, tile: Tile) {
+        if (Tile.DRAG_DEBUG) console.log("nextTile start");
         console.assert(
             Number.isInteger(tile.pos.x) && Number.isInteger(tile.pos.y),
             "Tile coordinate is not Integer"
@@ -129,53 +131,54 @@ class Tile {
 
         if (element.nodeName == "#text") {
             // unlikely
-            console.warn("tryAddTile: arg is #text node. Trying parent instead.");
+            console.warn("nextTile: arg is #text node. Trying parent instead.");
             element = element.parentElement;
         }
 
         do { // do ... while as goto replacement
             if (Tile.selected_elements.length == 0) {
-                if (Tile.DRAG_DEBUG) console.log("tryadd cond 1");
+                if (Tile.DRAG_DEBUG) console.log("nextTile cond 1");
                 // start of selection;
                 // adding unconditionally
                 continue; // goto ADD;
             }
             if (Tile.selected_elements.at(-1) === element) {
-                if (Tile.DRAG_DEBUG) console.log("tryadd cond 2");
+                if (Tile.DRAG_DEBUG) console.log("nextTile cond 2");
                 // current tile is same as the last selected tile;
                 // ignoring
-                return;
+                return false;
             }
 
             if (!tile.isNeighbor(Tile.selected_tiles.at(-1))){
-                if (Tile.DRAG_DEBUG) console.log("tryadd cond 3");
+                if (Tile.DRAG_DEBUG) console.log("nextTile cond 3");
                 // current tile is somehow too far from the last selected tile;
                 // ignoring
-                return;
+                return false;
             }
             if (Tile.selected_elements.length >= 2 &&
                     Tile.selected_elements.at(-2) === element) {
-                if (Tile.DRAG_DEBUG) console.log("tryadd cond 4");
+                if (Tile.DRAG_DEBUG) console.log("nextTile cond 4");
                 // The user has retreated from the last selection;
                 // pop the last tile
                 Tile.popTile();
-                return;
+                return true;
             }
 
             if (Tile.selected_elements.find(e => e === element)){
-                if (Tile.DRAG_DEBUG) console.log("tryadd cond 5");
+                if (Tile.DRAG_DEBUG) console.log("nextTile cond 5");
                 // element is already in the list;
                 // ignoring
-                return;
+                return false;
             }
         } while (false); // ADD:
-        if (Tile.DRAG_DEBUG) console.log("tryadd cond 6");
+        if (Tile.DRAG_DEBUG) console.log("nextTile cond 6");
 
         Tile.selected_elements.push(element);
         Tile.selected_tiles.push(tile);
         Tile.word_construct += tile.value;
 
         element.classList.add("selected");
+        return true;
     }
     static popTile() {
         console.assert(
@@ -196,17 +199,24 @@ class Tile {
 
         element.classList.remove("selected");
     }
-    static finishSelection() {
+    static sendInput() {
         console.assert(Boolean(Tile.selected_tiles.length) &&
             Boolean(Tile.selected_elements.length) &&
             Boolean(Tile.word_construct.length),
-            "finishSelection: internal selection has already gone!");
+            "sendInput: internal selection is somehow gone!");
 
-        Tile.emit("finishSelect", {
+        Tile.emit("sendInput", {
             tiles: Tile.selected_tiles,
             elements: Tile.selected_elements,
             word: Tile.word_construct
         });
+    }
+    static finishSelect() {
+        console.assert(Boolean(Tile.selected_tiles.length) &&
+            Boolean(Tile.selected_elements.length) &&
+            Boolean(Tile.word_construct.length),
+            "finishSelect: internal selection is somehow gone!");
+        Tile.emit("finishSelect", {});
     }
     static on(event: string, callback: CallableFunction) {
         if (!Tile.events[event]) {
@@ -214,7 +224,7 @@ class Tile {
         }
         Tile.events[event].push(callback);
     }
-    static emit(event: string, data: SelectionInputType) {
+    static emit(event: string, data: any) {
         var callbacks: CallableFunction[] = Tile.events[event];
         if (callbacks) {
             callbacks.forEach(function (callback) {
