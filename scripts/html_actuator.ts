@@ -95,6 +95,8 @@ class HTMLActuator {
         element.addEventListener("dragend", tile.dragend_handler.bind(tile));
         element.addEventListener("dragover", tile.dragover_handler.bind(tile));
         element.addEventListener("drop", tile.drop_handler.bind(tile));
+        element.addEventListener("mousedown", tile.mousedown_handler.bind(tile));
+        element.addEventListener("mouseup", tile.mouseup_handler.bind(tile));
     }
     setScore(score: number) {
         this.scoreTotalElem.textContent = score.toString();
