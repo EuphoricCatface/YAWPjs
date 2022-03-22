@@ -94,7 +94,7 @@ class GameManager {
     input(inputData) {
         // inputData: tiles, elements, word
         this.recent_input = inputData;
-        console.log("input: " + this.recent_input.word);
+        // console.log("input: " + this.recent_input.word);
         var word_modifier = 1;
         var pure_word_score = 0;
         var letter_bonus_score = 0;
