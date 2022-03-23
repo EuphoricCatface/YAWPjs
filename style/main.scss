@@ -147,6 +147,18 @@ hr {
     }
 }
 
+@include keyframes(pop) {
+    0% {
+        @include transform(scale(0%));
+    }
+    50% {
+        @include transform(scale(150%));
+    }
+    100% {
+        @include transform(scale(100%));
+    }
+}
+
 .turn-info {
     width: $field-width;
     height: calc($tile-size / 2 + $grid-spacing);
@@ -164,6 +176,8 @@ hr {
         padding: 0 10px;
         & .construct {
             display: inline;
+            @include animation(pop 800ms ease 800ms);
+            @include animation-fill-mode(backwards);
         }
         & .tileScore {
             visibility: hidden;

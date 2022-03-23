@@ -23,6 +23,13 @@
     }
 }
 
+@mixin transform($args...) {
+    -webkit-transform: $args;
+    -moz-transform: $args;
+    -ms-transform: $args;
+    transform: $args;
+}
+
 @mixin animation($str) {
     -webkit-animation: #{$str};
     -moz-animation: #{$str};

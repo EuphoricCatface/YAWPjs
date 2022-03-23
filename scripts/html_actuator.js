@@ -43,13 +43,16 @@ class HTMLActuator {
         }
     }
     actuate_word(tiles, pure_score, letter_bonus, word_bonus) {
-        while (this.wordConstruct.firstChild) {
-            this.wordConstruct.removeChild(this.wordConstruct.firstChild);
-        }
-        tiles.forEach((tile) => {
-            var tilecopy = tile.cloneNode(true);
-            tilecopy.removeChild(tilecopy.firstElementChild);
-            this.wordConstruct.appendChild(tilecopy);
+        window.requestAnimationFrame(() => {
+            while (this.wordConstruct.firstChild) {
+                this.wordConstruct.removeChild(this.wordConstruct.firstChild);
+            }
+            tiles.forEach((tile) => {
+                var tilecopy = tile.cloneNode(true);
+                tilecopy.removeChild(tilecopy.firstElementChild);
+                this.wordConstruct.appendChild(tilecopy);
+                tilecopy.classList.add("construct");
+            });
         });
         while (this.scoreWord.firstChild) {
             this.scoreWord.removeChild(this.scoreWord.firstChild);
