@@ -46,10 +46,17 @@ class HTMLActuator {
             this.tileContainer.removeChild(this.tileContainer.firstChild);
         }
     }
-    actuate_word(word: string, pure_score: number, letter_bonus: number, word_bonus: number) {
-        this.wordConstruct.textContent = word;
+    actuate_word(tiles: HTMLElement[], pure_score: number, letter_bonus: number, word_bonus: number) {
+        while (this.wordConstruct.firstChild) {
+            this.wordConstruct.removeChild(this.wordConstruct.firstChild);
+        }
+        tiles.forEach((tile) => {
+            var tilecopy = tile.cloneNode(true);
+            tilecopy.removeChild((tilecopy as HTMLElement).firstElementChild)
+            this.wordConstruct.appendChild(tilecopy);
+        });
         while (this.scoreWord.firstChild) {
-            this.scoreWord.removeChild(this.scoreWord.firstChild)
+            this.scoreWord.removeChild(this.scoreWord.firstChild);
         }
         this.scoreWord.textContent = "(" + pure_score + " + " + letter_bonus + ") * " + word_bonus
             + " = ";

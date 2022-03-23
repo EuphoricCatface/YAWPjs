@@ -162,6 +162,26 @@ hr {
         height: calc($tile-size / 2);
         float: left;
         padding: 0 10px;
+        & .construct {
+            display: inline;
+        }
+        & .tileScore {
+            visibility: hidden;
+        }
+        & .double-letter {
+            background-color: #0000ff3f;
+        }
+        & .triple-letter {
+            background-color: #ff00003f;
+        }
+        & .double-word {
+            font-weight: bold;
+            color: #3b3bffbf;
+        }
+        & .triple-word {
+            font-weight: bold;
+            color: #ff3b3bbf;
+        }
     }
     & .score-word {
         float: right;
@@ -235,7 +255,7 @@ hr {
     z-index: 2;
 }
 
-.tile {
+.tile-container .tile {
     background: red;
     width: $tile-size;
     height: $tile-size;
