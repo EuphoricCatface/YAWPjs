@@ -32,7 +32,10 @@ class Tile {
     }
     mousedown_handler(ev: MouseEvent) {
         Tile.mousedown_nodrag = true;
-        var selectionChanged = Tile.nextTile((ev.target as HTMLElement), this);
+        var target = ev.target as HTMLElement
+        if (target.classList.contains("tileScore"))
+            target = target.parentElement;
+        var selectionChanged = Tile.nextTile(target, this);
         if (selectionChanged)
             Tile.sendInput();
     }

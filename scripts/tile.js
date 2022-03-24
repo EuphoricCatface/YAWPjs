@@ -24,7 +24,10 @@ class Tile {
     }
     mousedown_handler(ev) {
         Tile.mousedown_nodrag = true;
-        var selectionChanged = Tile.nextTile(ev.target, this);
+        var target = ev.target;
+        if (target.classList.contains("tileScore"))
+            target = target.parentElement;
+        var selectionChanged = Tile.nextTile(target, this);
         if (selectionChanged)
             Tile.sendInput();
     }

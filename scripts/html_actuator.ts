@@ -51,8 +51,9 @@ class HTMLActuator {
             this.wordConstruct.removeChild(this.wordConstruct.firstChild);
         }
         tiles.forEach((tile) => {
-            var tilecopy = tile.cloneNode(true);
-            tilecopy.removeChild((tilecopy as HTMLElement).firstElementChild)
+            var tilecopy = (tile.cloneNode(true) as HTMLElement);
+            tilecopy.removeChild(tilecopy.firstElementChild);
+            tilecopy.classList.add("construct");
             this.wordConstruct.appendChild(tilecopy);
         });
         while (this.scoreWord.firstChild) {
