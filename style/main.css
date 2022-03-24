@@ -97,24 +97,34 @@ hr {
   width: 225px;
   height: 160px;
 }
-.game-info .score-total {
+.game-info .score-total, .game-info .turns {
   position: relative;
   width: 195px;
   height: 60px;
-  margin-right: 30px;
+  margin-bottom: 10px;
   float: left;
   border-radius: 18px;
   background: rgba(238, 228, 218, 0.35);
-  font-size: 40px;
+  font-size: 30px;
+  line-height: 75px;
   text-align: center;
 }
-.game-info .score-total::before {
+.game-info .score-total:before, .game-info .turns:before {
   position: absolute;
-  top: 0;
+  width: 100%;
+  top: 5px;
   left: 0;
-  font-weight: bold;
-  font-size: 25px;
-  content: "Total Score: ";
+  color: #f9f6f2;
+  text-align: center;
+  font-weight: bolder;
+  font-size: 20px;
+  line-height: 20px;
+}
+.game-info .score-total::before {
+  content: "Score";
+}
+.game-info .turns::before {
+  content: "Turns";
 }
 
 .turn-info {

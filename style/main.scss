@@ -121,29 +121,39 @@ hr {
     width: calc($field-width * 2 / 5  - $grid-spacing / 2);
     height: $intro-height;
 
-    & .score-total/*, & .turns, & .construct-word, & .score-word*/ {
+    & .score-total, & .turns {
         position: relative;
         // width: $tile-size * 2.5;
         // height: $tile-size / 2;
         width: calc($field-width * 2 / 5 - $grid-spacing * 1.5);
         height: $tile-size - $grid-spacing;
-        margin-right: $grid-spacing;
+        margin-bottom: calc(10px);
         float: left;
 
         border-radius: $tile-border-radius;
 
         background: rgba($tile-color, .35);
 
-        font-size: 40px;
+        font-size: 30px;
+        line-height: 75px;
         text-align: center;
+        &:before {
+            position: absolute;
+            width: 100%;
+            top: 5px;
+            left: 0;
+            color: $bright-text-color;
+            text-align: center;
+            font-weight: bolder;
+            font-size: 20px;
+            line-height: 20px;
+        }
     }
-    & .score-total::before {
-        position: absolute;
-        top: 0;
-        left: 0;
-        font-weight: bold;
-        font-size: 25px;
-        content: "Total Score: "
+    & .score-total::before { 
+        content:"Score"
+    }
+    & .turns::before { 
+        content:"Turns"
     }
 }
 
