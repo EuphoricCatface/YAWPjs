@@ -6,6 +6,7 @@ class HTMLActuator {
     wordConstruct;
     scoreWord;
     scoreTotalElem;
+    turns;
     recentScore;
     totalScore;
     constructor() {
@@ -21,6 +22,7 @@ class HTMLActuator {
         this.wordConstruct = document.getElementsByClassName("word-construct")[0];
         this.scoreWord = document.getElementsByClassName("score-word")[0];
         this.scoreTotalElem = document.getElementsByClassName("score-total")[0];
+        this.turns = document.getElementsByClassName("turns")[0];
         this.recentScore = 0;
         this.totalScore = 0;
     }
@@ -105,6 +107,9 @@ class HTMLActuator {
     }
     gameOver() {
         this.gameContainer.classList.add("game-over");
+    }
+    showTurn(turns) {
+        this.turns.textContent = "" + turns + " / 20";
     }
 }
 //# sourceMappingURL=html_actuator.js.map

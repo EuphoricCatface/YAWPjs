@@ -103,6 +103,7 @@ hr {
   height: 60px;
   margin-bottom: 10px;
   float: left;
+  font-weight: bold;
   border-radius: 18px;
   background: rgba(238, 228, 218, 0.35);
   font-size: 30px;
@@ -116,7 +117,6 @@ hr {
   left: 0;
   color: #f9f6f2;
   text-align: center;
-  font-weight: bolder;
   font-size: 20px;
   line-height: 20px;
 }

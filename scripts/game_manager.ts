@@ -136,6 +136,7 @@ class GameManager {
 
         this.actuator.addScore();
         this.prepareNextTurn();
+        this.actuator.showTurn(this.turns);
     }
     verify(word: string) {
         var rtn =  this.validator.validate(word);

@@ -129,6 +129,7 @@ class GameManager {
         });
         this.actuator.addScore();
         this.prepareNextTurn();
+        this.actuator.showTurn(this.turns);
     }
     verify(word) {
         var rtn = this.validator.validate(word);

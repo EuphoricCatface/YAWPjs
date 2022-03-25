@@ -129,6 +129,7 @@ hr {
         height: $tile-size - $grid-spacing;
         margin-bottom: calc(10px);
         float: left;
+        font-weight: bold;
 
         border-radius: $tile-border-radius;
 
@@ -144,7 +145,6 @@ hr {
             left: 0;
             color: $bright-text-color;
             text-align: center;
-            font-weight: bolder;
             font-size: 20px;
             line-height: 20px;
         }
