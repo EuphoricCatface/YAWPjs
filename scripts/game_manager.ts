@@ -89,8 +89,8 @@ class GameManager {
     actuate_grid() {
         this.actuator.actuate_grid(this.grid);
     }
-    actuate_word(word: string, pure_score: number, letter_bonus: number, word_bonus: number) {
-        this.actuator.actuate_word(word, pure_score, letter_bonus, word_bonus);
+    actuate_word(elements: HTMLElement[], pure_score: number, letter_bonus: number, word_bonus: number) {
+        this.actuator.actuate_word(elements, pure_score, letter_bonus, word_bonus);
     }
     squash() {
         this.grid.eliminateEmpty();
@@ -116,7 +116,7 @@ class GameManager {
             pure_word_score += pure_letter_score;
             letter_bonus_score += pure_letter_score * letter_bonus_modifier;
 
-        this.actuate_word(this.recent_input.word, pure_word_score, letter_bonus_score, word_modifier);
+        this.actuate_word(this.recent_input.elements, pure_word_score, letter_bonus_score, word_modifier);
         });
     }
     finishSelect(_: any) {
@@ -136,6 +136,7 @@ class GameManager {
 
         this.actuator.addScore();
         this.prepareNextTurn();
+        this.actuator.showTurn(this.turns);
     }
     verify(word: string) {
         var rtn =  this.validator.validate(word);

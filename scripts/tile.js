@@ -4,6 +4,7 @@ class Tile {
     value;
     prevPos;
     bonus;
+    static mousedown_nodrag;
     static DRAG_DEBUG;
     static word_construct;
     static selected_elements;
@@ -15,10 +16,26 @@ class Tile {
         this.value = value;
         this.prevPos = null;
         this.bonus = "";
+        Tile.mousedown_nodrag = false;
         Tile.word_construct = "";
         Tile.selected_elements = [];
         Tile.selected_tiles = [];
         Tile.events = Tile.events || new Map;
+    }
+    mousedown_handler(ev) {
+        Tile.mousedown_nodrag = true;
+        var target = ev.target;
+        if (target.classList.contains("tileScore"))
+            target = target.parentElement;
+        var selectionChanged = Tile.nextTile(target, this);
+        if (selectionChanged)
+            Tile.sendInput();
+    }
+    mouseup_handler(ev) {
+        if (Tile.mousedown_nodrag) {
+            Tile.selection_clear();
+        }
+        Tile.mousedown_nodrag = false;
     }
     dragstart_handler(ev) {
         // transparent drag object: https://stackoverflow.com/q/27989602/
@@ -26,8 +43,9 @@ class Tile {
         ev.dataTransfer.setDragImage(new Image(0, 0), 0, 0);
         if (Tile.DRAG_DEBUG)
             console.log("dragstart");
-        // Workaround: sometimes first tile does not register
-        Tile.nextTile(ev.target, this);
+        Tile.mousedown_nodrag = false;
+        //// Workaround: sometimes first tile does not register
+        //Tile.nextTile((ev.target as HTMLElement), this);
     }
     dragenter_handler(ev) {
         if (Tile.DRAG_DEBUG) {
