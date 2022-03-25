@@ -3,10 +3,10 @@ class HTMLActuator {
     letter_score;
     tileContainer;
     gameContainer;
-    wordConstruct;
-    scoreWord;
-    scoreTotalElem;
-    turns;
+    wordConstructContainer;
+    calculationContainer;
+    scoreTotalContainer;
+    turnsContainer;
     recentScore;
     totalScore;
     constructor() {
@@ -19,10 +19,10 @@ class HTMLActuator {
         };
         this.tileContainer = document.getElementsByClassName("tile-container")[0];
         this.gameContainer = document.getElementsByClassName("game-container")[0];
-        this.wordConstruct = document.getElementsByClassName("word-construct")[0];
-        this.scoreWord = document.getElementsByClassName("score-word")[0];
-        this.scoreTotalElem = document.getElementsByClassName("score-total")[0];
-        this.turns = document.getElementsByClassName("turns")[0];
+        this.wordConstructContainer = document.getElementsByClassName("word-construct-container")[0];
+        this.calculationContainer = document.getElementsByClassName("calculation-container")[0];
+        this.scoreTotalContainer = document.getElementsByClassName("score-total-container")[0];
+        this.turnsContainer = document.getElementsByClassName("turns-container")[0];
         this.recentScore = 0;
         this.totalScore = 0;
     }
@@ -45,24 +45,24 @@ class HTMLActuator {
         }
     }
     actuate_word(tiles, pure_score, letter_bonus, word_bonus) {
-        while (this.wordConstruct.firstChild) {
-            this.wordConstruct.removeChild(this.wordConstruct.firstChild);
+        while (this.wordConstructContainer.firstChild) {
+            this.wordConstructContainer.removeChild(this.wordConstructContainer.firstChild);
         }
         tiles.forEach((tile) => {
             var tilecopy = tile.cloneNode(true);
             tilecopy.removeChild(tilecopy.firstElementChild);
             tilecopy.classList.add("construct");
-            this.wordConstruct.appendChild(tilecopy);
+            this.wordConstructContainer.appendChild(tilecopy);
         });
-        while (this.scoreWord.firstChild) {
-            this.scoreWord.removeChild(this.scoreWord.firstChild);
+        while (this.calculationContainer.firstChild) {
+            this.calculationContainer.removeChild(this.calculationContainer.firstChild);
         }
-        this.scoreWord.textContent = "(" + pure_score + " + " + letter_bonus + ") * " + word_bonus
+        this.calculationContainer.textContent = "(" + pure_score + " + " + letter_bonus + ") * " + word_bonus
             + " = ";
         var element = document.createElement("strong");
         this.recentScore = (pure_score + letter_bonus) * word_bonus;
         element.textContent = (this.recentScore).toString();
-        this.scoreWord.appendChild(element);
+        this.calculationContainer.appendChild(element);
     }
     addHTMLTile(tile) {
         var element = document.createElement("div");
@@ -98,18 +98,18 @@ class HTMLActuator {
         element.addEventListener("mouseup", tile.mouseup_handler.bind(tile));
     }
     setScore(score) {
-        this.scoreTotalElem.textContent = score.toString();
+        this.scoreTotalContainer.textContent = score.toString();
         this.totalScore = score;
     }
     addScore() {
         this.totalScore = this.totalScore + this.recentScore;
-        this.scoreTotalElem.textContent = this.totalScore.toString();
+        this.scoreTotalContainer.textContent = this.totalScore.toString();
     }
     gameOver() {
         this.gameContainer.classList.add("game-over");
     }
     showTurn(turns) {
-        this.turns.textContent = "" + turns + " / 20";
+        this.turnsContainer.textContent = "" + turns + " / 20";
     }
 }
 //# sourceMappingURL=html_actuator.js.map

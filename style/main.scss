@@ -121,7 +121,7 @@ hr {
     width: calc($field-width * 2 / 5  - $grid-spacing / 2);
     height: $intro-height;
 
-    & .score-total, & .turns {
+    & .score-total-container, & .turns-container {
         position: relative;
         // width: $tile-size * 2.5;
         // height: $tile-size / 2;
@@ -149,10 +149,10 @@ hr {
             line-height: 20px;
         }
     }
-    & .score-total::before { 
+    & .score-total-container::before { 
         content:"Score"
     }
-    & .turns::before { 
+    & .turns-container::before { 
         content:"Turns"
     }
 }
@@ -160,11 +160,11 @@ hr {
 .turn-info {
     width: $field-width;
     height: calc($tile-size / 2 + $grid-spacing);
-    & .word-construct, & .score-word strong {
+    & .word-construct-container, & .calculation-container strong {
         font-size: calc($tile-size / 3);
         line-height: calc($tile-size / 2);
     }
-    & .word-construct {
+    & .word-construct-container {
         padding: 0px 10px;
         background-color: $tile-color;
         font-family: monospace;
@@ -193,7 +193,7 @@ hr {
             color: #ff3b3bbf;
         }
     }
-    & .score-word {
+    & .calculation-container {
         float: right;
         color: $bright-text-color;
     }

@@ -97,7 +97,7 @@ hr {
   width: 225px;
   height: 160px;
 }
-.game-info .score-total, .game-info .turns {
+.game-info .score-total-container, .game-info .turns-container {
   position: relative;
   width: 195px;
   height: 60px;
@@ -110,7 +110,7 @@ hr {
   line-height: 75px;
   text-align: center;
 }
-.game-info .score-total:before, .game-info .turns:before {
+.game-info .score-total-container:before, .game-info .turns-container:before {
   position: absolute;
   width: 100%;
   top: 5px;
@@ -120,10 +120,10 @@ hr {
   font-size: 20px;
   line-height: 20px;
 }
-.game-info .score-total::before {
+.game-info .score-total-container::before {
   content: "Score";
 }
-.game-info .turns::before {
+.game-info .turns-container::before {
   content: "Turns";
 }
 
@@ -131,11 +131,11 @@ hr {
   width: 600px;
   height: 75px;
 }
-.turn-info .word-construct, .turn-info .score-word strong {
+.turn-info .word-construct-container, .turn-info .calculation-container strong {
   font-size: 30px;
   line-height: 45px;
 }
-.turn-info .word-construct {
+.turn-info .word-construct-container {
   padding: 0px 10px;
   background-color: #eee4da;
   font-family: monospace;
@@ -144,27 +144,27 @@ hr {
   float: left;
   padding: 0 10px;
 }
-.turn-info .word-construct .construct {
+.turn-info .word-construct-container .construct {
   display: inline;
 }
-.turn-info .word-construct .tileScore {
+.turn-info .word-construct-container .tileScore {
   visibility: hidden;
 }
-.turn-info .word-construct .double-letter {
+.turn-info .word-construct-container .double-letter {
   background-color: #0000ff3f;
 }
-.turn-info .word-construct .triple-letter {
+.turn-info .word-construct-container .triple-letter {
   background-color: #ff00003f;
 }
-.turn-info .word-construct .double-word {
+.turn-info .word-construct-container .double-word {
   font-weight: bold;
   color: #3b3bffbf;
 }
-.turn-info .word-construct .triple-word {
+.turn-info .word-construct-container .triple-word {
   font-weight: bold;
   color: #ff3b3bbf;
 }
-.turn-info .score-word {
+.turn-info .calculation-container {
   float: right;
   color: #f9f6f2;
 }
