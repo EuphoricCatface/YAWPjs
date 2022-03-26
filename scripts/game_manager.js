@@ -2,6 +2,7 @@
 class GameManager {
     static MAX_TURN = 15;
     static COMPLEMENTARY_RAND_ON_INIT = false;
+    static COUNT_TURNS_ON_INVALID_MOVE = false;
     size;
     actuator;
     grid;
@@ -128,9 +129,10 @@ class GameManager {
     finishSelect() {
         // inputData: tiles, elements, word
         this.actuator.finishSelect();
-        if (!this.validator.validate(this.recent_input.word))
+        var validity = this.validator.validate(this.recent_input.word);
+        this.countTurns(validity);
+        if (!validity)
             return;
-        this.countTurns();
         this.recent_input.elements.forEach(element => { element.remove(); });
         this.recent_input.tiles.forEach(tile => {
             this.grid.coordDelete({ x: tile.pos.x, y: tile.pos.y });
@@ -138,11 +140,13 @@ class GameManager {
         this.actuator.addScore();
         this.prepareNextTurn();
     }
-    countTurns() {
+    countTurns(validity = true) {
         if (this.turns == GameManager.MAX_TURN) {
             this.actuator.gameOver();
             return;
         }
+        if (!(validity || GameManager.COUNT_TURNS_ON_INVALID_MOVE))
+            return;
         this.turns += 1;
         console.log("turns: " + this.turns);
         this.actuator.showTurn(this.turns, GameManager.MAX_TURN);
@@ -191,9 +195,10 @@ class GameManager {
     test_debug(s) {
         var debugMap = {
             "restart": () => { setTimeout(this.gameInit.bind(this), 100); },
-            "initcomp": () => { GameManager.COMPLEMENTARY_RAND_ON_INIT = !GameManager.COMPLEMENTARY_RAND_ON_INIT; },
+            "initcomp-toggle": () => { GameManager.COMPLEMENTARY_RAND_ON_INIT = !GameManager.COMPLEMENTARY_RAND_ON_INIT; },
             "hide-validity": () => { this.actuator.showValidity(false); },
             "show-validity": () => { this.actuator.showValidity(true); },
+            "count-invalid-toggle": () => { GameManager.COUNT_TURNS_ON_INVALID_MOVE = !GameManager.COUNT_TURNS_ON_INVALID_MOVE; }
         };
         if (!debugMap.hasOwnProperty(s)) {
             console.log("Unknown debug command");
