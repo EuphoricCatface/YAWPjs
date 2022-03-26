@@ -193,21 +193,16 @@ class GameManager {
     }
 
     test_debug(s: string) {
-        switch (s) {
-            case "restart":
-                setTimeout(this.gameInit.bind(this), 100); // Running init as async so that devconsole can abbreviate the init messages
-                break;
-            case "initcomp":
-                GameManager.COMPLEMENTARY_RAND_ON_INIT = !GameManager.COMPLEMENTARY_RAND_ON_INIT;
-                break;
-            case "hide-validity":
-                this.actuator.showValidity(false);
-                break;
-            case "show-validity":
-                this.actuator.showValidity(true);
-                break;
-            default:
-                console.log("Unknown debug command");
+        var debugMap: Record<string, CallableFunction> = {
+            "restart": () => {setTimeout(this.gameInit.bind(this), 100);},
+            "initcomp": () => {GameManager.COMPLEMENTARY_RAND_ON_INIT = !GameManager.COMPLEMENTARY_RAND_ON_INIT;},
+            "hide-validity": () => {this.actuator.showValidity(false);},
+            "show-validity": () => {this.actuator.showValidity(true);},
         }
+        if (!debugMap.hasOwnProperty(s)) {
+            console.log("Unknown debug command");
+            return;
+        }
+        debugMap[s]();
     }
 }
