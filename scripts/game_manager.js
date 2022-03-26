@@ -55,12 +55,18 @@ class GameManager {
         this.actuator.actuate_grid(this.grid);
     }
     weightedRandom() {
-        var inverse_frequency_list = [120, 40, 40, 60, 120, 30, 60, 30, 120, 15, 24, 120, 40, 120, 120, 40, 12, 120, 120, 120, 120, 30, 30, 15, 30, 12];
-        var inverse_frequency_sum = 1708;
-        var rand = Math.floor(Math.random() * (inverse_frequency_sum - 1));
+        const INV_FREQ_SUM = 1708;
+        const INV_FREQ_LIST = [
+            120, 40, 40, 60, 120,
+            30, 60, 30, 120, 15,
+            24, 120, 40, 120, 120,
+            40, 12, 120, 120, 120,
+            120, 30, 30, 15, 30, 12 // u-z
+        ];
+        var rand = Math.floor(Math.random() * (INV_FREQ_SUM - 1));
         var result;
-        for (var i = 0; i < inverse_frequency_list.length; i++) {
-            rand -= inverse_frequency_list[i];
+        for (var i = 0; i < INV_FREQ_LIST.length; i++) {
+            rand -= INV_FREQ_LIST[i];
             if (rand < 0) {
                 result = i;
                 break;
@@ -91,7 +97,7 @@ class GameManager {
         var letter_bonus_score = 0;
         this.recent_input.tiles.forEach(tile => {
             var letter_bonus_modifier = 0;
-            var pure_letter_score = this.actuator.letter_score[tile.value];
+            var pure_letter_score = HTMLActuator.LETTER_SCORE[tile.value];
             if (tile.bonus == "double-letter")
                 letter_bonus_modifier = 1;
             if (tile.bonus == "triple-letter")

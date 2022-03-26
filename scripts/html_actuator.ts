@@ -1,7 +1,13 @@
 'use strict';
 
 class HTMLActuator {
-    letter_score: Record<string, number>;
+    static LETTER_SCORE: Record<string, number> = {
+        "a": 1, "b": 3, "c": 3, "d": 2, "e": 1,
+        "f": 4, "g": 2, "h": 4, "i": 1, "j": 8,
+        "k": 5, "l": 1, "m": 3, "n": 1, "o": 1,
+        "p": 3, "qu": 10, "r": 1, "s": 1, "t": 1,
+        "u": 1, "v": 4, "w": 4, "x": 8, "y": 4, "z": 10
+    };
     tileContainer: Element;
     gameContainer: Element;
     wordConstructContainer: Element;
@@ -11,14 +17,6 @@ class HTMLActuator {
     recentScore: number;
     totalScore: number;
     constructor() {
-        this.letter_score = {
-            "a": 1, "b": 3, "c": 3, "d": 2, "e": 1,
-            "f": 4, "g": 2, "h": 4, "i": 1, "j": 8,
-            "k": 5, "l": 1, "m": 3, "n": 1, "o": 1,
-            "p": 3, "qu": 10, "r": 1, "s": 1, "t": 1,
-            "u": 1, "v": 4, "w": 4, "x": 8, "y": 4, "z": 10
-        };
-
         this.tileContainer = document.getElementsByClassName("tile-container")[0];
         this.gameContainer = document.getElementsByClassName("game-container")[0];
         this.wordConstructContainer = document.getElementsByClassName("word-construct-container")[0];
@@ -86,7 +84,7 @@ class HTMLActuator {
 
         var tileScore = document.createElement("div");
         tileScore.classList.add("tileScore");
-        tileScore.textContent = this.letter_score[tile.value].toString();
+        tileScore.textContent = HTMLActuator.LETTER_SCORE[tile.value].toString();
 
         element.appendChild(tileScore);
         this.tileContainer.appendChild(element);
