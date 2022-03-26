@@ -10,6 +10,7 @@ class Tile {
     bonus: string;
     static mousedown_nodrag: boolean;
     static DRAG_DEBUG: Boolean;
+    static BUTTON_DEBUG: Boolean = false;
     static word_construct: string;
     static selected_elements: HTMLElement[];
     static selected_tiles: Tile[];
@@ -46,7 +47,13 @@ class Tile {
         }
     }
 
+    static valid_button(ev: MouseEvent) { return ev.buttons == 1; }
+    static invalid_end_button(ev: MouseEvent) { return ev.buttons & 1 }
     mousedown_handler(ev: MouseEvent) {
+        if (!Tile.valid_button(ev)) {
+            ev.preventDefault();
+            return;
+        }
         Tile.mousedown_nodrag = true;
         var target = ev.target as HTMLElement
         if (target.classList.contains("tileScore"))
@@ -56,12 +63,20 @@ class Tile {
             Tile.sendInput();
     }
     mouseup_handler(ev: MouseEvent) {
+        ev.preventDefault();
+        if (Tile.BUTTON_DEBUG) console.log(ev.buttons);
+        if (Tile.invalid_end_button(ev)) return; // don't end the selection if left button is still present
+
         if (Tile.mousedown_nodrag) {
             Tile.selection_clear();
         }
         Tile.mousedown_nodrag = false;
     }
     dragstart_handler(ev: DragEvent) {
+        if (!Tile.valid_button(ev)) {
+            ev.preventDefault();
+            return;
+        }
         // transparent drag object: https://stackoverflow.com/q/27989602/
         ev.dataTransfer.setData("text", "Tile");
         ev.dataTransfer.setDragImage(new Image(0, 0), 0, 0);
@@ -72,6 +87,9 @@ class Tile {
         //Tile.nextTile((ev.target as HTMLElement), this);
     }
     dragenter_handler(ev: DragEvent) {
+        if (!Tile.valid_button(ev)) return;
+        ev.preventDefault();
+
         if (Tile.DRAG_DEBUG) {
             console.log("dragenter");
             console.log(this);
@@ -90,7 +108,11 @@ class Tile {
         if (selectionChanged)
             Tile.sendInput()
     }
-    dragend_handler(_ev: DragEvent) {
+    dragend_handler(ev: DragEvent) {
+        ev.preventDefault();
+        if (Tile.BUTTON_DEBUG) console.log(ev.buttons);
+        if (Tile.invalid_end_button(ev)) return; // don't end the selection if left button is still present
+
         if (Tile.DRAG_DEBUG) console.log("dragend");
         // "dragEnd" seem to fire after the "drop"
         // "dragEnd" also happens when "drop" fails
@@ -98,11 +120,14 @@ class Tile {
     }
     dragover_handler(ev: DragEvent) {
         // if (DRAG_DEBUG) console.log("dragover");
+        if (!Tile.valid_button(ev)) return;
         ev.preventDefault();
     }
     drop_handler(ev: DragEvent) {
         if (Tile.DRAG_DEBUG) console.log("drop");
         ev.preventDefault();
+        if (Tile.BUTTON_DEBUG) console.log(ev.buttons);
+        if (Tile.invalid_end_button(ev)) return; // don't end the selection if left button is still present
 
         // Workaround: duplicate_check
         if (Tile.selected_tiles.length == 0)
@@ -132,6 +157,9 @@ class Tile {
         // but problem is that the board may fire the drop as well as the tile,
         // making the check duplicate.
         return true;
+    }
+    contextmenu_handler(ev: MouseEvent) {
+        ev.preventDefault();
     }
 
     static selection_clear() {

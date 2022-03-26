@@ -12,16 +12,17 @@ class GameManager {
         this.size = size;
         this.actuator = actuator;
         this.grid = new Grid(this.size);
-        this.allowDropOnGameContainer();
+        this.setupGameContainerMouse();
         this.validator = new Validator();
         this.validator_wait_loop = setInterval(this.initAfterValidatorLoop.bind(this), 50);
     }
-    allowDropOnGameContainer() {
+    setupGameContainerMouse() {
         var gameContainer = document.getElementsByClassName("game-container")[0];
-        // These two are like "static" functions, but changing these to ones cause a problem:
+        // These three are like "static" functions, but changing these to ones cause a problem:
         //      <dragend does not fire if not on an element with proper handlers>
         gameContainer.addEventListener("dragover", Tile.prototype.dragover_handler);
         gameContainer.addEventListener("drop", Tile.prototype.drop_handler);
+        gameContainer.addEventListener("contextmenu", Tile.prototype.contextmenu_handler);
     }
     initAfterValidatorLoop() {
         console.log("init loop");
