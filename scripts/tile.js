@@ -67,13 +67,13 @@ class Tile {
         //Tile.nextTile((ev.target as HTMLElement), this);
     }
     dragenter_handler(ev) {
-        if (!Tile.valid_button(ev))
-            return;
         ev.preventDefault();
         if (Tile.DRAG_DEBUG) {
             console.log("dragenter");
             console.log(this);
         }
+        if (!Tile.valid_button(ev))
+            return;
         var target = ev.target;
         /* // Chrome doesn't seem to like this
         if (ev.dataTransfer.getData("text") != "Tile") {
@@ -97,17 +97,19 @@ class Tile {
         Tile.selection_clear();
     }
     dragover_handler(ev) {
+        ev.preventDefault();
         // if (DRAG_DEBUG) console.log("dragover"); // fires too often even when debugging
         if (!Tile.valid_button(ev))
             return;
-        ev.preventDefault();
     }
     drop_handler(ev) {
-        if (Tile.DRAG_DEBUG)
+        ev.preventDefault();
+        if (Tile.DRAG_DEBUG) {
             console.log("drop");
+            console.log(this);
+        }
         if (Tile.BUTTON_DEBUG)
             console.log(ev.buttons);
-        ev.preventDefault();
         if (Tile.invalid_end_button(ev))
             return; // don't end the selection if left button is still present
         if (Tile.selected_tiles.length == 0)
