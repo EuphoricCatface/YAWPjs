@@ -40,8 +40,6 @@ class Tile {
         }
         Tile.mousedown_nodrag = true;
         var target = ev.target;
-        if (target.classList.contains("tileScore"))
-            target = target.parentElement;
         var selectionChanged = Tile.nextTile(target, this);
         if (selectionChanged)
             Tile.sendInput();
@@ -86,8 +84,6 @@ class Tile {
             return;
         }
         */
-        if (target.className == "tileScore")
-            target = target.parentElement;
         var selectionChanged = Tile.nextTile(target, this);
         if (selectionChanged)
             Tile.sendInput();
@@ -122,16 +118,12 @@ class Tile {
         if (Tile.selected_tiles.length == 0)
             return;
         var target = ev.target;
-        if (target.nodeName == "#text") {
-            console.log("drop: Target is text, replacing with parentElement");
-            target = target.parentElement;
-        }
         // test if it's inside the gamecontainer
         var valid_drop = false;
         while (target) {
-            //console.log(target);
             if (target.className == "game-container") {
                 valid_drop = true;
+                break;
             }
             target = target.parentElement;
         }
@@ -163,15 +155,15 @@ class Tile {
     static nextTile(element, tile) {
         if (Tile.DRAG_DEBUG)
             console.log("nextTile start");
+        if (element.nodeName == "#text" || element.classList.contains("tileScore")) {
+            if (Tile.DRAG_DEBUG)
+                console.log("nextTile: element is likely a child of a Tile - using its parent.");
+            element = element.parentElement;
+        }
         console.assert(Number.isInteger(tile.pos.x) && Number.isInteger(tile.pos.y), "Tile coordinate is not Integer");
         console.assert(Tile.selected_tiles.length == Tile.selected_elements.length, "selected tiles and elements length mismatch");
         console.assert(Tile.selected_elements.length ==
             Tile.word_construct.length - [...Tile.word_construct.matchAll(/Qu/gi)].length, "selected tiles and word length mismatch");
-        if (element.nodeName == "#text") {
-            // unlikely
-            console.warn("nextTile: arg is #text node. Trying parent instead.");
-            element = element.parentElement;
-        }
         do { // do ... while as goto replacement
             if (Tile.selected_elements.length == 0) {
                 if (Tile.DRAG_DEBUG)
