@@ -81,15 +81,13 @@ class GameManager {
     }
     fill_prepare() {
         var columnsEmpty = this.grid.getColumnsEmpty();
+
         for (var x = 0; x < this.size; x++) {
             for (var e = 0; e < columnsEmpty[x]; e++) {
                 this.grid.tileAppend(x, new Tile({x: x, y: this.size + e},
                                                 this.weightedRandom()));
             }
         }
-    }
-    actuate_word(elements: HTMLElement[], pure_score: number, letter_bonus: number, word_bonus: number) {
-        this.actuator.actuate_word(elements, pure_score, letter_bonus, word_bonus);
     }
     input(inputData: SelectionInputType) {
         // inputData: tiles, elements, word
@@ -111,9 +109,8 @@ class GameManager {
                 word_modifier = 3;
             pure_word_score += pure_letter_score;
             letter_bonus_score += pure_letter_score * letter_bonus_modifier;
-
-        this.actuate_word(this.recent_input.elements, pure_word_score, letter_bonus_score, word_modifier);
         });
+        this.actuator.actuate_word(this.recent_input.elements, pure_word_score, letter_bonus_score, word_modifier);
     }
     finishSelect() {
         // inputData: tiles, elements, word

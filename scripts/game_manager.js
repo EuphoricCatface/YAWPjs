@@ -85,9 +85,6 @@ class GameManager {
             }
         }
     }
-    actuate_word(elements, pure_score, letter_bonus, word_bonus) {
-        this.actuator.actuate_word(elements, pure_score, letter_bonus, word_bonus);
-    }
     input(inputData) {
         // inputData: tiles, elements, word
         this.recent_input = inputData;
@@ -108,8 +105,8 @@ class GameManager {
                 word_modifier = 3;
             pure_word_score += pure_letter_score;
             letter_bonus_score += pure_letter_score * letter_bonus_modifier;
-            this.actuate_word(this.recent_input.elements, pure_word_score, letter_bonus_score, word_modifier);
         });
+        this.actuator.actuate_word(this.recent_input.elements, pure_word_score, letter_bonus_score, word_modifier);
     }
     finishSelect() {
         // inputData: tiles, elements, word
