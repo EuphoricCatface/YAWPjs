@@ -150,12 +150,12 @@ class GameManager {
         this.prepareNextTurn();
     }
     countTurns(validity: boolean = true) {
+        if(!(validity || GameManager.COUNT_TURNS_ON_INVALID_MOVE))
+            return;
         if (this.turns == GameManager.MAX_TURN) {
             this.actuator.gameOver();
             return;
         }
-        if(!(validity || GameManager.COUNT_TURNS_ON_INVALID_MOVE))
-            return;
         this.turns += 1;
         this.actuator.showTurn(this.turns, GameManager.MAX_TURN);
     }
