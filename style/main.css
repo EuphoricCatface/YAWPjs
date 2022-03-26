@@ -141,6 +141,7 @@ hr {
   font-family: monospace;
   width: 330px;
   height: 45px;
+  overflow: hidden;
   float: left;
   padding: 0 10px;
 }

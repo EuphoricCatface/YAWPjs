@@ -170,6 +170,7 @@ hr {
         font-family: monospace;
         width: calc($field-width * 3 / 5) - $grid-spacing;
         height: calc($tile-size / 2);
+        overflow: hidden;
         float: left;
         padding: 0 10px;
         & .construct {
