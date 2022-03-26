@@ -109,8 +109,8 @@ class HTMLActuator {
     gameOver() {
         this.gameContainer.classList.add("game-over");
     }
-    showTurn(turns) {
-        this.turnsContainer.textContent = "" + turns + " / 20";
+    showTurn(turns, maxturn) {
+        this.turnsContainer.textContent = "" + turns + " / " + maxturn;
     }
 }
 //# sourceMappingURL=html_actuator.js.map

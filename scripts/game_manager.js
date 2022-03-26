@@ -1,5 +1,6 @@
 'use strict';
 class GameManager {
+    static MAX_TURN = 15;
     size;
     actuator;
     grid;
@@ -39,24 +40,19 @@ class GameManager {
         clearInterval(this.validator_wait_loop);
     }
     gameInit() {
-        this.turns = 0;
         this.prepareNextTurn();
         Tile.on("sendInput", this.input.bind(this));
         Tile.on("finishSelect", this.finishSelect.bind(this));
         this.actuator.setScore(0);
+        this.turns = 0;
+        this.countTurns();
     }
     prepareNextTurn() {
         this.fill_prepare();
         this.calculate_bonus_new();
-        this.squash();
+        this.grid.eliminateEmpty();
         this.calculate_bonus_bottom();
-        this.actuate_grid();
-        if (this.turns == 20) {
-            this.actuator.gameOver();
-            return;
-        }
-        this.turns += 1;
-        console.log("turns: " + this.turns);
+        this.actuator.actuate_grid(this.grid);
     }
     weightedRandom() {
         var inverse_frequency_list = [120, 40, 40, 60, 120, 30, 60, 30, 120, 15, 24, 120, 40, 120, 120, 40, 12, 120, 120, 120, 120, 30, 30, 15, 30, 12];
@@ -83,14 +79,8 @@ class GameManager {
             }
         }
     }
-    actuate_grid() {
-        this.actuator.actuate_grid(this.grid);
-    }
     actuate_word(elements, pure_score, letter_bonus, word_bonus) {
         this.actuator.actuate_word(elements, pure_score, letter_bonus, word_bonus);
-    }
-    squash() {
-        this.grid.eliminateEmpty();
     }
     input(inputData) {
         // inputData: tiles, elements, word
@@ -119,18 +109,22 @@ class GameManager {
         // inputData: tiles, elements, word
         if (!this.verify(this.recent_input.word))
             return;
-        this.recent_input.elements.forEach(element => {
-            element.remove();
-        });
+        this.countTurns();
+        this.recent_input.elements.forEach(element => { element.remove(); });
         this.recent_input.tiles.forEach(tile => {
-            this.grid.coordDelete({
-                x: tile.pos.x,
-                y: tile.pos.y
-            });
+            this.grid.coordDelete({ x: tile.pos.x, y: tile.pos.y });
         });
         this.actuator.addScore();
         this.prepareNextTurn();
-        this.actuator.showTurn(this.turns);
+    }
+    countTurns() {
+        if (this.turns == GameManager.MAX_TURN) {
+            this.actuator.gameOver();
+            return;
+        }
+        this.turns += 1;
+        console.log("turns: " + this.turns);
+        this.actuator.showTurn(this.turns, GameManager.MAX_TURN);
     }
     verify(word) {
         var rtn = this.validator.validate(word);
