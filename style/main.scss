@@ -164,17 +164,29 @@ hr {
         font-size: calc($tile-size / 3);
         line-height: calc($tile-size / 2);
     }
-    & .word-construct-container {
-        padding: 0px 10px;
-        background-color: $tile-color;
-        font-family: monospace;
-        width: calc($field-width * 3 / 5) - $grid-spacing;
-        height: calc($tile-size / 2);
-        float: left;
-        padding: 0 10px;
-        & .construct {
-            display: inline;
-        }
+    & .calculation-container {
+        float: right;
+        color: $bright-text-color;
+    }
+}
+
+
+.word-construct-container {
+    padding: 0px 10px;
+    background-color: $tile-color;
+    font-family: monospace;
+    width: calc($field-width * 3 / 5) - $grid-spacing;
+    height: calc($tile-size / 2);
+    overflow: hidden;
+    float: left;
+    padding: 0 10px;
+    &:after{ float:right; opacity: 0.5; }
+    &.valid::after { content: "✔️" }
+    &.invalid::after { content: "❌" }
+    &.finish-select:after { opacity: 1; }
+    &.hide-validity:after { visibility: hidden; }
+    & .construct {
+        display: inline;
         & .tileScore {
             visibility: hidden;
         }
@@ -193,10 +205,6 @@ hr {
             color: #ff3b3bbf;
         }
     }
-    & .calculation-container {
-        float: right;
-        color: $bright-text-color;
-    }
 }
 
 .game-container {
@@ -205,24 +213,41 @@ hr {
     height: $field-width;
     border-radius: $tile-border-radius * 1.5;
 
-    &.game-over:after {
+    & .loading, &.game-over::after {
         position: absolute;
         top: 0;
         right: 0;
         bottom: 0;
         left: 0;
-        content: "Game over!";
         display: block;
-        background: rgba($tile-color, .5);
         text-align: center;
         height: $field-width;
         line-height: $field-width;
         z-index: 100;
         font-size: 60px;
         font-weight: bold;
+    }
+
+    &.game-over:after {
+        content: "Game over!";
+        background: rgba($tile-color, .75);
+        text-align: center;
 
         @include animation(fade-in 800ms ease $transition-speed);
         @include animation-fill-mode(both);
+    }
+    & .loading {
+        color: $tile-color;
+        background: rgba($text-color, .5);
+
+        &:after{
+            content: "Loading...";
+        }
+        &.loaded {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s .5s, opacity .5s linear;
+        }
     }
 }
 

@@ -1,6 +1,10 @@
 'use strict';
 
 class GameManager {
+    static MAX_TURN: number = 15;
+    static COMPLEMENTARY_RAND_ON_INIT = false;
+    static COUNT_TURNS_ON_INVALID_MOVE = false;
+    static DETERMINISTIC_BOTTOM_BONUS = false;
     size: number;
     actuator: HTMLActuator;
     grid: Grid;
@@ -14,17 +18,18 @@ class GameManager {
         this.actuator = actuator;
 
         this.grid = new Grid(this.size);
-        this.allowDropOnGameContainer();
+        this.setupGameContainerMouse();
 
         this.validator = new Validator();
-        this.validator_wait_loop = setInterval(this.initAfterValidatorLoop.bind(this), 50);
+        this.validator_wait_loop = setInterval(this.initAfterValidatorLoop.bind(this), 100);
     }
-    allowDropOnGameContainer() {
+    setupGameContainerMouse() {
         var gameContainer = document.getElementsByClassName("game-container")[0];
-        // These two are like "static" functions, but changing these to ones cause a problem:
+        // These three are like "static" functions, but changing these to ones cause a problem:
         //      <dragend does not fire if not on an element with proper handlers>
         gameContainer.addEventListener("dragover", Tile.prototype.dragover_handler);
         gameContainer.addEventListener("drop", Tile.prototype.drop_handler);
+        gameContainer.addEventListener("contextmenu", Tile.prototype.contextmenu_handler);
     }
     initAfterValidatorLoop() {
         console.log("init loop");
@@ -35,38 +40,55 @@ class GameManager {
             return;
         }
         // Set up the game
-        this.gameInit()
+        this.actuator.loaded();
+        Tile.on("sendInput", this.input.bind(this));
+        Tile.on("finishSelect", this.finishSelect.bind(this));
+        Tile.on("DEBUG", this.test_debug.bind(this));
+        this.gameInit();
         clearInterval(this.validator_wait_loop)
     }
     gameInit() {
-        this.turns = 0;
-        this.prepareNextTurn();
-        Tile.on("sendInput", this.input.bind(this));
-        Tile.on("finishSelect", this.finishSelect.bind(this));
+        this.grid.build();
+        this.prepareNextTurn(true);
         this.actuator.setScore(0);
+        this.turns = 0;
+        this.countTurns();
+        this.actuator.remove_gameOver();
     }
-    prepareNextTurn() {
-        this.fill_prepare();
-        this.calculate_bonus_new();
-        this.squash();
-        this.calculate_bonus_bottom();
-        this.actuate_grid();
-        if (this.turns == 20) {
-            this.actuator.gameOver();
-            return;
-        }
-        this.turns += 1;
-        console.log("turns: " + this.turns);
+    prepareNextTurn(init: boolean = false) {
+        this.fill_prepare(init);
+        this.randomize_bonus_new();
+        this.grid.eliminateEmpty();
+        if (GameManager.DETERMINISTIC_BOTTOM_BONUS)
+            this.determine_bonus_bottom();
+        else
+            this.randomize_bonus_bottom();
+        this.actuator.actuate_grid(this.grid);
     }
-    weightedRandom() {
-        var inverse_frequency_list = [120, 40, 40, 60, 120, 30, 60, 30, 120, 15, 24, 120, 40, 120, 120, 40, 12, 120, 120, 120, 120, 30, 30, 15, 30, 12];
-        var inverse_frequency_sum = 1708;
-
-        var rand = Math.floor(Math.random() * (inverse_frequency_sum - 1));
+    weightedRandom(init: boolean = false) {
+        const INV_FREQ_SUM: number = 1708;
+        const INV_FREQ_LIST: number[] = [
+            120, 40, 40, 60, 120,       // a-e
+            30, 60, 30, 120, 15,        // f-j
+            24, 120, 40, 120, 120,      // k-o
+            40, 12, 120, 120, 120,      // p-t
+            120, 30, 30, 15, 30, 12     // u-z
+        ];
+        const COMP_FREQ_SUM: number = 199;
+        const COMP_FREQ_LIST: number[] = [
+            10, 8, 8, 9, 10,    // a-e
+            7, 9, 7, 10, 3,     // f-j
+            6, 10, 8, 10, 10,   // k-o
+            8, 1, 10, 10, 10,   // p-t
+            10, 7, 7, 3, 7, 1   // u-z
+        ]
+        var alter = init && GameManager.COMPLEMENTARY_RAND_ON_INIT
+        if (alter) console.log("using alternative random...")
+        var rand = Math.floor(Math.random() * (alter?COMP_FREQ_SUM:INV_FREQ_SUM - 1));
         var result: number;
 
-        for (var i = 0; i < inverse_frequency_list.length; i++) {
-            rand -= inverse_frequency_list[i];
+        for (var i = 0; i < (alter?COMP_FREQ_LIST:INV_FREQ_LIST).length; i++) {
+            rand -= (alter?COMP_FREQ_LIST:INV_FREQ_LIST)[i];
             if (rand < 0) {
                 result = i;
                 break;
@@ -77,23 +99,15 @@ class GameManager {
             char = "qu";
         return char;
     }
-    fill_prepare() {
+    fill_prepare(init: boolean = false) {
         var columnsEmpty = this.grid.getColumnsEmpty();
+
         for (var x = 0; x < this.size; x++) {
             for (var e = 0; e < columnsEmpty[x]; e++) {
                 this.grid.tileAppend(x, new Tile({x: x, y: this.size + e},
-                                                this.weightedRandom()));
+                                                this.weightedRandom(init)));
             }
         }
-    }
-    actuate_grid() {
-        this.actuator.actuate_grid(this.grid);
-    }
-    actuate_word(elements: HTMLElement[], pure_score: number, letter_bonus: number, word_bonus: number) {
-        this.actuator.actuate_word(elements, pure_score, letter_bonus, word_bonus);
-    }
-    squash() {
-        this.grid.eliminateEmpty();
     }
     input(inputData: SelectionInputType) {
         // inputData: tiles, elements, word
@@ -104,7 +118,7 @@ class GameManager {
         var letter_bonus_score = 0;
         this.recent_input.tiles.forEach(tile => {
             var letter_bonus_modifier = 0;
-            var pure_letter_score = this.actuator.letter_score[tile.value];
+            var pure_letter_score = HTMLActuator.LETTER_SCORE[tile.value];
             if (tile.bonus == "double-letter")
                 letter_bonus_modifier = 1;
             if (tile.bonus == "triple-letter")
@@ -115,36 +129,38 @@ class GameManager {
                 word_modifier = 3;
             pure_word_score += pure_letter_score;
             letter_bonus_score += pure_letter_score * letter_bonus_modifier;
-
-        this.actuate_word(this.recent_input.elements, pure_word_score, letter_bonus_score, word_modifier);
         });
+        this.actuator.actuate_calc(pure_word_score, letter_bonus_score, word_modifier);
+        var validity = this.validator.validate(this.recent_input.word);
+        this.actuator.actuate_word(this.recent_input.elements, validity);
     }
-    finishSelect(_: any) {
+    finishSelect() {
         // inputData: tiles, elements, word
-        if (!this.verify(this.recent_input.word))
+        var validity = this.validator.validate(this.recent_input.word);
+        this.actuator.finishSelect(validity);
+        this.countTurns(validity);
+        if (!validity)
             return;
 
-        this.recent_input.elements.forEach(element => {
-            element.remove();
-        });
+        this.recent_input.elements.forEach(
+            element => { element.remove(); });
         this.recent_input.tiles.forEach(tile => {
-            this.grid.coordDelete({
-                x: tile.pos.x,
-                y: tile.pos.y
-            });
+            this.grid.coordDelete({ x: tile.pos.x, y: tile.pos.y });
         });
 
-        this.actuator.addScore();
         this.prepareNextTurn();
-        this.actuator.showTurn(this.turns);
     }
-    verify(word: string) {
-        var rtn =  this.validator.validate(word);
-        console.log("GM.verify: " + word + ", " + rtn);
-
-        return rtn;
+    countTurns(validity: boolean = true) {
+        if(!(validity || GameManager.COUNT_TURNS_ON_INVALID_MOVE))
+            return;
+        if (this.turns == GameManager.MAX_TURN) {
+            this.actuator.gameOver();
+            return;
+        }
+        this.turns += 1;
+        this.actuator.showTurn(this.turns, GameManager.MAX_TURN);
     }
-    calculate_bonus_new() {
+    randomize_bonus_new() {
         // New tiles, letter bonuses: 90% no bonus, 6% double, 4% triple
         var columnsLength = this.grid.getColumnsLength();
         for (var i = 0; i < this.grid.size; i++) {
@@ -162,8 +178,8 @@ class GameManager {
             }
         }
     }
-    calculate_bonus_bottom() {
         // Bottom row, word bonuses: 10% no bonus, 60% double, 30% triple
+    randomize_bonus_bottom() {
         for (var i = 0; i < this.grid.size; i++) {
             var tile = this.grid.getTileRef({x: i, y: 0});
             if (tile.bonus.includes("word"))
@@ -181,5 +197,44 @@ class GameManager {
                     tile.bonus = "double-word";
             }
         }
+    }
+    determine_bonus_bottom() {
+        // triple bonus in the middle, 80% double otherwise
+        for (var i = 0; i < this.grid.size; i++) {
+            var tile = this.grid.getTileRef({x: i, y: 0});
+            if (i == 2) {
+                tile.bonus = "triple-word"
+                continue;
+            }
+            if (tile.bonus.includes("word"))
+                continue;
+
+            var rand = Math.floor(Math.random() * 5);
+            switch (rand) {
+                case 0:
+                    tile.bonus = "word-none"
+                    break;
+                default:
+                    tile.bonus = "double-word";
+            }
+        }
+    }
+
+    test_debug(s: string) {
+        var debugMap: Record<string, CallableFunction> = {
+            "restart": () => {setTimeout(this.gameInit.bind(this), 100);},
+            "initcomp-toggle": () => {GameManager.COMPLEMENTARY_RAND_ON_INIT = !GameManager.COMPLEMENTARY_RAND_ON_INIT;},
+            "hide-validity": () => {this.actuator.showValidity(false);},
+            "show-validity": () => {this.actuator.showValidity(true);},
+            "count-invalid-toggle": () => {GameManager.COUNT_TURNS_ON_INVALID_MOVE = !GameManager.COUNT_TURNS_ON_INVALID_MOVE;},
+            "hide-turns-toggle": () => {HTMLActuator.HIDE_CURRENT_TURN = !HTMLActuator.HIDE_CURRENT_TURN},
+            "punish-blind-toggle": () => {HTMLActuator.PUNISH_BLIND_MOVES = !HTMLActuator.PUNISH_BLIND_MOVES},
+            "deterministic-bottom-bonus-toggle": () => {GameManager.DETERMINISTIC_BOTTOM_BONUS = !GameManager.DETERMINISTIC_BOTTOM_BONUS}
+        }
+        if (!debugMap.hasOwnProperty(s)) {
+            console.log("Unknown debug command");
+            return;
+        }
+        debugMap[s]();
     }
 }

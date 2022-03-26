@@ -1,43 +1,62 @@
 'use strict';
 class Tile {
+    static DRAG_DEBUG = false;
+    static BUTTON_DEBUG = false;
+    static word_construct = "";
+    static selected_elements = [];
+    static selected_tiles = [];
     pos;
     value;
     prevPos;
     bonus;
-    static mousedown_nodrag;
-    static DRAG_DEBUG;
-    static word_construct;
-    static selected_elements;
-    static selected_tiles;
-    static events;
+    static mousedown_nodrag = false;
+    static events = new Map;
     constructor(position, value) {
-        Tile.DRAG_DEBUG = false;
         this.pos = position;
         this.value = value;
         this.prevPos = null;
         this.bonus = "";
-        Tile.mousedown_nodrag = false;
-        Tile.word_construct = "";
-        Tile.selected_elements = [];
-        Tile.selected_tiles = [];
-        Tile.events = Tile.events || new Map;
     }
+    static on(event, callback) {
+        if (!Tile.events[event]) {
+            Tile.events[event] = [];
+        }
+        Tile.events[event].push(callback);
+    }
+    static emit(event, data) {
+        var callbacks = Tile.events[event];
+        if (callbacks) {
+            callbacks.forEach((callback) => { callback(data); });
+        }
+    }
+    static valid_button(ev) { return ev.buttons == 1; }
+    static invalid_end_button(ev) { return ev.buttons & 1; }
     mousedown_handler(ev) {
+        if (!Tile.valid_button(ev)) {
+            ev.preventDefault();
+            return;
+        }
         Tile.mousedown_nodrag = true;
         var target = ev.target;
-        if (target.classList.contains("tileScore"))
-            target = target.parentElement;
         var selectionChanged = Tile.nextTile(target, this);
         if (selectionChanged)
             Tile.sendInput();
     }
     mouseup_handler(ev) {
-        if (Tile.mousedown_nodrag) {
+        ev.preventDefault();
+        if (Tile.BUTTON_DEBUG)
+            console.log(ev.buttons);
+        if (Tile.invalid_end_button(ev))
+            return; // don't end the selection if left button is still present
+        if (Tile.mousedown_nodrag)
             Tile.selection_clear();
-        }
         Tile.mousedown_nodrag = false;
     }
     dragstart_handler(ev) {
+        if (!Tile.valid_button(ev)) {
+            ev.preventDefault();
+            return;
+        }
         // transparent drag object: https://stackoverflow.com/q/27989602/
         ev.dataTransfer.setData("text", "Tile");
         ev.dataTransfer.setDragImage(new Image(0, 0), 0, 0);
@@ -48,10 +67,13 @@ class Tile {
         //Tile.nextTile((ev.target as HTMLElement), this);
     }
     dragenter_handler(ev) {
+        ev.preventDefault();
         if (Tile.DRAG_DEBUG) {
             console.log("dragenter");
             console.log(this);
         }
+        if (!Tile.valid_button(ev))
+            return;
         var target = ev.target;
         /* // Chrome doesn't seem to like this
         if (ev.dataTransfer.getData("text") != "Tile") {
@@ -59,37 +81,46 @@ class Tile {
             return;
         }
         */
-        if (target.className == "tileScore")
-            target = target.parentElement;
         var selectionChanged = Tile.nextTile(target, this);
         if (selectionChanged)
             Tile.sendInput();
     }
-    dragend_handler(_ev) {
+    dragend_handler(ev) {
+        ev.preventDefault();
+        if (Tile.BUTTON_DEBUG)
+            console.log(ev.buttons);
         if (Tile.DRAG_DEBUG)
             console.log("dragend");
-        // "dragEnd" seem to fire after the "drop"
-        // "dragEnd" also happens when "drop" fails
+        if (Tile.invalid_end_button(ev))
+            return; // don't end the selection if left button is still present
+        // backup clear if "drop" fails - it seem to fire after the "drop"
         Tile.selection_clear();
     }
-    drop_handler(ev) {
-        if (Tile.DRAG_DEBUG)
-            console.log("drop");
+    dragover_handler(ev) {
         ev.preventDefault();
-        // Workaround: duplicate_check
-        if (Tile.selected_tiles.length == 0)
+        // if (DRAG_DEBUG) console.log("dragover"); // fires too often even when debugging
+        if (!Tile.valid_button(ev))
             return;
-        var target = ev.target;
-        if (target.nodeName == "#text") {
-            console.log("drop: Target is text, replacing with parentElement");
-            target = target.parentElement;
+    }
+    drop_handler(ev) {
+        ev.preventDefault();
+        if (Tile.DRAG_DEBUG) {
+            console.log("drop");
+            console.log(this);
         }
+        if (Tile.BUTTON_DEBUG)
+            console.log(ev.buttons);
+        if (Tile.invalid_end_button(ev))
+            return; // don't end the selection if left button is still present
+        if (Tile.selected_tiles.length == 0)
+            return; // Workaround: duplicate_check
+        var target = ev.target;
         // test if it's inside the gamecontainer
         var valid_drop = false;
         while (target) {
-            //console.log(target);
             if (target.className == "game-container") {
                 valid_drop = true;
+                break;
             }
             target = target.parentElement;
         }
@@ -97,13 +128,12 @@ class Tile {
             Tile.finishSelect();
         Tile.selection_clear();
         // Workaround: duplicate_check
-        // This probably will happen on dragend_handler eventually,
+        // selection_clear will happen on dragend_handler eventually,
         // but problem is that the board may fire the drop as well as the tile,
         // making the check duplicate.
         return true;
     }
-    dragover_handler(ev) {
-        // if (DRAG_DEBUG) console.log("dragover");
+    contextmenu_handler(ev) {
         ev.preventDefault();
     }
     static selection_clear() {
@@ -111,7 +141,7 @@ class Tile {
             Tile.popTile();
         console.assert(Tile.selected_tiles.length == 0 &&
             Tile.selected_elements.length == 0 &&
-            Tile.word_construct.length == 0, "dragend: internal selection did not clear!");
+            Tile.word_construct.length == 0, "selection_clear: internal selection did not clear!");
     }
     isNeighbor(that) {
         if ((Math.abs(this.pos.x - that.pos.x) <= 1) &&
@@ -122,15 +152,15 @@ class Tile {
     static nextTile(element, tile) {
         if (Tile.DRAG_DEBUG)
             console.log("nextTile start");
+        if (element.nodeName == "#text" || element.classList.contains("tileScore")) {
+            if (Tile.DRAG_DEBUG)
+                console.log("nextTile: element is likely a child of a Tile - using its parent.");
+            element = element.parentElement;
+        }
         console.assert(Number.isInteger(tile.pos.x) && Number.isInteger(tile.pos.y), "Tile coordinate is not Integer");
         console.assert(Tile.selected_tiles.length == Tile.selected_elements.length, "selected tiles and elements length mismatch");
         console.assert(Tile.selected_elements.length ==
             Tile.word_construct.length - [...Tile.word_construct.matchAll(/Qu/gi)].length, "selected tiles and word length mismatch");
-        if (element.nodeName == "#text") {
-            // unlikely
-            console.warn("nextTile: arg is #text node. Trying parent instead.");
-            element = element.parentElement;
-        }
         do { // do ... while as goto replacement
             if (Tile.selected_elements.length == 0) {
                 if (Tile.DRAG_DEBUG)
@@ -204,20 +234,6 @@ class Tile {
             Boolean(Tile.selected_elements.length) &&
             Boolean(Tile.word_construct.length), "finishSelect: internal selection is somehow gone!");
         Tile.emit("finishSelect", {});
-    }
-    static on(event, callback) {
-        if (!Tile.events[event]) {
-            Tile.events[event] = [];
-        }
-        Tile.events[event].push(callback);
-    }
-    static emit(event, data) {
-        var callbacks = Tile.events[event];
-        if (callbacks) {
-            callbacks.forEach(function (callback) {
-                callback(data);
-            });
-        }
     }
 }
 //# sourceMappingURL=tile.js.map

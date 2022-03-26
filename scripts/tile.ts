@@ -4,48 +4,64 @@ type CoordType = {x: number, y: number};
 type SelectionInputType = {tiles: Tile[], elements: HTMLElement[], word: string};
 
 class Tile {
+    static DRAG_DEBUG: Boolean = false;
+    static BUTTON_DEBUG: Boolean = false;
+
+    static word_construct: string = "";
+    static selected_elements: HTMLElement[] = [];
+    static selected_tiles: Tile[] = [];
+
     pos: CoordType;
     value: string;
     prevPos: CoordType;
     bonus: string;
-    static mousedown_nodrag: boolean;
-    static DRAG_DEBUG: Boolean;
-    static word_construct: string;
-    static selected_elements: HTMLElement[];
-    static selected_tiles: Tile[];
-    static events: Map<string, CallableFunction[]>;
-    constructor(position: CoordType, value: string) {
-        Tile.DRAG_DEBUG = false;
 
+    static mousedown_nodrag: boolean = false;
+    static events: Map<string, CallableFunction[]> = new Map;
+
+    constructor(position: CoordType, value: string) {
         this.pos = position;
         this.value = value;
         this.prevPos = null;
         this.bonus = "";
-
-        Tile.mousedown_nodrag = false;
-
-        Tile.word_construct = "";
-        Tile.selected_elements = [];
-        Tile.selected_tiles = [];
-
-        Tile.events = Tile.events || new Map;
     }
+
+    static on(event: string, callback: CallableFunction) {
+        if (!Tile.events[event]) { Tile.events[event] = []; }
+        Tile.events[event].push(callback);
+    }
+    static emit(event: string, data: any) {
+        var callbacks: CallableFunction[] = Tile.events[event];
+        if (callbacks) { callbacks.forEach((callback) => {callback(data);}); }
+    }
+
+    static valid_button(ev: MouseEvent) { return ev.buttons == 1; }
+    static invalid_end_button(ev: MouseEvent) { return ev.buttons & 1 }
     mousedown_handler(ev: MouseEvent) {
+        if (!Tile.valid_button(ev)) {
+            ev.preventDefault();
+            return;
+        }
         Tile.mousedown_nodrag = true;
         var target = ev.target as HTMLElement
-        if (target.classList.contains("tileScore"))
-            target = target.parentElement;
         var selectionChanged = Tile.nextTile(target, this);
         if (selectionChanged)
             Tile.sendInput();
     }
     mouseup_handler(ev: MouseEvent) {
-        if (Tile.mousedown_nodrag) {
+        ev.preventDefault();
+        if (Tile.BUTTON_DEBUG) console.log(ev.buttons);
+        if (Tile.invalid_end_button(ev)) return; // don't end the selection if left button is still present
+
+        if (Tile.mousedown_nodrag)
             Tile.selection_clear();
-        }
         Tile.mousedown_nodrag = false;
     }
     dragstart_handler(ev: DragEvent) {
+        if (!Tile.valid_button(ev)) {
+            ev.preventDefault();
+            return;
+        }
         // transparent drag object: https://stackoverflow.com/q/27989602/
         ev.dataTransfer.setData("text", "Tile");
         ev.dataTransfer.setDragImage(new Image(0, 0), 0, 0);
@@ -56,10 +72,13 @@ class Tile {
         //Tile.nextTile((ev.target as HTMLElement), this);
     }
     dragenter_handler(ev: DragEvent) {
+        ev.preventDefault();
         if (Tile.DRAG_DEBUG) {
             console.log("dragenter");
             console.log(this);
         }
+        if (!Tile.valid_button(ev)) return;
+
         var target = (ev.target as HTMLElement);
         /* // Chrome doesn't seem to like this
         if (ev.dataTransfer.getData("text") != "Tile") {
@@ -67,39 +86,43 @@ class Tile {
             return;
         }
         */
-        if (target.className == "tileScore")
-            target = target.parentElement;
 
         var selectionChanged = Tile.nextTile(target, this);
         if (selectionChanged)
-            Tile.sendInput()
+            Tile.sendInput();
     }
-    dragend_handler(_ev: DragEvent) {
+    dragend_handler(ev: DragEvent) {
+        ev.preventDefault();
+        if (Tile.BUTTON_DEBUG) console.log(ev.buttons);
         if (Tile.DRAG_DEBUG) console.log("dragend");
-        // "dragEnd" seem to fire after the "drop"
-        // "dragEnd" also happens when "drop" fails
+        if (Tile.invalid_end_button(ev)) return; // don't end the selection if left button is still present
+
+        // backup clear if "drop" fails - it seem to fire after the "drop"
         Tile.selection_clear();
     }
-    drop_handler(ev: DragEvent) {
-        if (Tile.DRAG_DEBUG) console.log("drop");
+    dragover_handler(ev: DragEvent) {
         ev.preventDefault();
-
-        // Workaround: duplicate_check
-        if (Tile.selected_tiles.length == 0)
-            return;
+        // if (DRAG_DEBUG) console.log("dragover"); // fires too often even when debugging
+        if (!Tile.valid_button(ev)) return;
+    }
+    drop_handler(ev: DragEvent) {
+        ev.preventDefault();
+        if (Tile.DRAG_DEBUG) {
+            console.log("drop");
+            console.log(this);
+        }
+        if (Tile.BUTTON_DEBUG) console.log(ev.buttons);
+        if (Tile.invalid_end_button(ev)) return; // don't end the selection if left button is still present
+        if (Tile.selected_tiles.length == 0) return; // Workaround: duplicate_check
 
         var target = (ev.target as HTMLElement);
-        if (target.nodeName == "#text") {
-            console.log("drop: Target is text, replacing with parentElement");
-            target = target.parentElement;
-        }
 
         // test if it's inside the gamecontainer
         var valid_drop = false;
-        while (target) {
-            //console.log(target);
+        while (target){
             if (target.className == "game-container") {
-                valid_drop = true
+                valid_drop = true;
+                break;
             }
             target = target.parentElement;
         }
@@ -108,23 +131,23 @@ class Tile {
         
         Tile.selection_clear();
         // Workaround: duplicate_check
-        // This probably will happen on dragend_handler eventually,
+        // selection_clear will happen on dragend_handler eventually,
         // but problem is that the board may fire the drop as well as the tile,
         // making the check duplicate.
         return true;
     }
-    dragover_handler(ev: DragEvent) {
-        // if (DRAG_DEBUG) console.log("dragover");
+    contextmenu_handler(ev: MouseEvent) {
         ev.preventDefault();
     }
+
     static selection_clear() {
         while (Tile.selected_elements.length)
-        Tile.popTile();
+            Tile.popTile();
 
         console.assert(Tile.selected_tiles.length == 0 &&
             Tile.selected_elements.length == 0 &&
             Tile.word_construct.length == 0,
-            "dragend: internal selection did not clear!");
+            "selection_clear: internal selection did not clear!");
     }
     isNeighbor(that: Tile) {
         if ((Math.abs(this.pos.x - that.pos.x) <= 1) &&
@@ -134,6 +157,10 @@ class Tile {
     }
     static nextTile(element: HTMLElement, tile: Tile) {
         if (Tile.DRAG_DEBUG) console.log("nextTile start");
+        if (element.nodeName == "#text" || element.classList.contains("tileScore")) {
+            if (Tile.DRAG_DEBUG) console.log("nextTile: element is likely a child of a Tile - using its parent.");
+            element = element.parentElement;
+        }
         console.assert(
             Number.isInteger(tile.pos.x) && Number.isInteger(tile.pos.y),
             "Tile coordinate is not Integer"
@@ -147,12 +174,6 @@ class Tile {
             Tile.word_construct.length - [...Tile.word_construct.matchAll(/Qu/gi)].length,
             "selected tiles and word length mismatch"
         );
-
-        if (element.nodeName == "#text") {
-            // unlikely
-            console.warn("nextTile: arg is #text node. Trying parent instead.");
-            element = element.parentElement;
-        }
 
         do { // do ... while as goto replacement
             if (Tile.selected_elements.length == 0) {
@@ -236,19 +257,5 @@ class Tile {
             Boolean(Tile.word_construct.length),
             "finishSelect: internal selection is somehow gone!");
         Tile.emit("finishSelect", {});
-    }
-    static on(event: string, callback: CallableFunction) {
-        if (!Tile.events[event]) {
-            Tile.events[event] = [];
-        }
-        Tile.events[event].push(callback);
-    }
-    static emit(event: string, data: any) {
-        var callbacks: CallableFunction[] = Tile.events[event];
-        if (callbacks) {
-            callbacks.forEach(function (callback) {
-                callback(data);
-            });
-        }
     }
 }

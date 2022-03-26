@@ -1,3 +1,4 @@
+@charset "UTF-8";
 html, body {
   margin: 0;
   padding: 0;
@@ -135,38 +136,56 @@ hr {
   font-size: 30px;
   line-height: 45px;
 }
-.turn-info .word-construct-container {
+.turn-info .calculation-container {
+  float: right;
+  color: #f9f6f2;
+}
+
+.word-construct-container {
   padding: 0px 10px;
   background-color: #eee4da;
   font-family: monospace;
   width: 330px;
   height: 45px;
+  overflow: hidden;
   float: left;
   padding: 0 10px;
 }
-.turn-info .word-construct-container .construct {
-  display: inline;
+.word-construct-container:after {
+  float: right;
+  opacity: 0.5;
 }
-.turn-info .word-construct-container .tileScore {
+.word-construct-container.valid::after {
+  content: "✔️";
+}
+.word-construct-container.invalid::after {
+  content: "❌";
+}
+.word-construct-container.finish-select:after {
+  opacity: 1;
+}
+.word-construct-container.hide-validity:after {
   visibility: hidden;
 }
-.turn-info .word-construct-container .double-letter {
+.word-construct-container .construct {
+  display: inline;
+}
+.word-construct-container .construct .tileScore {
+  visibility: hidden;
+}
+.word-construct-container .construct .double-letter {
   background-color: #0000ff3f;
 }
-.turn-info .word-construct-container .triple-letter {
+.word-construct-container .construct .triple-letter {
   background-color: #ff00003f;
 }
-.turn-info .word-construct-container .double-word {
+.word-construct-container .construct .double-word {
   font-weight: bold;
   color: #3b3bffbf;
 }
-.turn-info .word-construct-container .triple-word {
+.word-construct-container .construct .triple-word {
   font-weight: bold;
   color: #ff3b3bbf;
-}
-.turn-info .calculation-container {
-  float: right;
-  color: #f9f6f2;
 }
 
 .game-container {
@@ -175,25 +194,40 @@ hr {
   height: 600px;
   border-radius: 27px;
 }
-.game-container.game-over:after {
+.game-container .loading, .game-container.game-over::after {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  content: "Game over!";
   display: block;
-  background: rgba(238, 228, 218, 0.5);
   text-align: center;
   height: 600px;
   line-height: 600px;
   z-index: 100;
   font-size: 60px;
   font-weight: bold;
+}
+.game-container.game-over:after {
+  content: "Game over!";
+  background: rgba(238, 228, 218, 0.75);
+  text-align: center;
   -webkit-animation: fade-in 800ms ease 800ms;
   animation: fade-in 800ms ease 800ms;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
+}
+.game-container .loading {
+  color: #eee4da;
+  background: rgba(119, 110, 101, 0.5);
+}
+.game-container .loading:after {
+  content: "Loading...";
+}
+.game-container .loading.loaded {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.5s, opacity 0.5s linear;
 }
 
 .grid-container {
