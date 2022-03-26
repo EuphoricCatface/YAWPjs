@@ -1,27 +1,21 @@
 'use strict';
 class Tile {
+    static DRAG_DEBUG = false;
+    static BUTTON_DEBUG = false;
+    static word_construct = "";
+    static selected_elements = [];
+    static selected_tiles = [];
     pos;
     value;
     prevPos;
     bonus;
-    static mousedown_nodrag;
-    static DRAG_DEBUG;
-    static BUTTON_DEBUG = false;
-    static word_construct;
-    static selected_elements;
-    static selected_tiles;
-    static events;
+    static mousedown_nodrag = false;
+    static events = new Map;
     constructor(position, value) {
-        Tile.DRAG_DEBUG = false;
         this.pos = position;
         this.value = value;
         this.prevPos = null;
         this.bonus = "";
-        Tile.mousedown_nodrag = false;
-        Tile.word_construct = "";
-        Tile.selected_elements = [];
-        Tile.selected_tiles = [];
-        Tile.events = Tile.events || new Map;
     }
     static on(event, callback) {
         if (!Tile.events[event]) {

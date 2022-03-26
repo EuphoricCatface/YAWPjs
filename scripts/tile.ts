@@ -4,32 +4,26 @@ type CoordType = {x: number, y: number};
 type SelectionInputType = {tiles: Tile[], elements: HTMLElement[], word: string};
 
 class Tile {
+    static DRAG_DEBUG: Boolean = false;
+    static BUTTON_DEBUG: Boolean = false;
+
+    static word_construct: string = "";
+    static selected_elements: HTMLElement[] = [];
+    static selected_tiles: Tile[] = [];
+
     pos: CoordType;
     value: string;
     prevPos: CoordType;
     bonus: string;
-    static mousedown_nodrag: boolean;
-    static DRAG_DEBUG: Boolean;
-    static BUTTON_DEBUG: Boolean = false;
-    static word_construct: string;
-    static selected_elements: HTMLElement[];
-    static selected_tiles: Tile[];
-    static events: Map<string, CallableFunction[]>;
-    constructor(position: CoordType, value: string) {
-        Tile.DRAG_DEBUG = false;
 
+    static mousedown_nodrag: boolean = false;
+    static events: Map<string, CallableFunction[]> = new Map;
+
+    constructor(position: CoordType, value: string) {
         this.pos = position;
         this.value = value;
         this.prevPos = null;
         this.bonus = "";
-
-        Tile.mousedown_nodrag = false;
-
-        Tile.word_construct = "";
-        Tile.selected_elements = [];
-        Tile.selected_tiles = [];
-
-        Tile.events = Tile.events || new Map;
     }
 
     static on(event: string, callback: CallableFunction) {
