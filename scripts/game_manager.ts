@@ -2,6 +2,7 @@
 
 class GameManager {
     static MAX_TURN: number = 15;
+    static COMPLEMENTARY_RAND_ON_INIT = false;
     size: number;
     actuator: HTMLActuator;
     grid: Grid;
@@ -46,19 +47,19 @@ class GameManager {
     }
     gameInit() {
         this.grid.build();
-        this.prepareNextTurn();
+        this.prepareNextTurn(true);
         this.actuator.setScore(0);
         this.turns = 0;
         this.countTurns();
     }
-    prepareNextTurn() {
-        this.fill_prepare();
+    prepareNextTurn(init: boolean = false) {
+        this.fill_prepare(init);
         this.calculate_bonus_new();
         this.grid.eliminateEmpty();
         this.calculate_bonus_bottom();
         this.actuator.actuate_grid(this.grid);
     }
-    weightedRandom() {
+    weightedRandom(init: boolean = false) {
         const INV_FREQ_SUM: number = 1708;
         const INV_FREQ_LIST: number[] = [
             120, 40, 40, 60, 120,       // a-e
@@ -67,11 +68,21 @@ class GameManager {
             40, 12, 120, 120, 120,      // p-t
             120, 30, 30, 15, 30, 12     // u-z
         ];
-        var rand = Math.floor(Math.random() * (INV_FREQ_SUM - 1));
+        const COMP_FREQ_SUM: number = 199;
+        const COMP_FREQ_LIST: number[] = [
+            10, 8, 8, 9, 10,    // a-e
+            7, 9, 7, 10, 3,     // f-j
+            6, 10, 8, 10, 10,   // k-o
+            8, 1, 10, 10, 10,   // p-t
+            10, 7, 7, 3, 7, 1   // u-z
+        ]
+        var alter = init && GameManager.COMPLEMENTARY_RAND_ON_INIT
+        if (alter) console.log("using alternative random...")
+        var rand = Math.floor(Math.random() * (alter?COMP_FREQ_SUM:INV_FREQ_SUM - 1));
         var result: number;
 
-        for (var i = 0; i < INV_FREQ_LIST.length; i++) {
-            rand -= INV_FREQ_LIST[i];
+        for (var i = 0; i < (alter?COMP_FREQ_LIST:INV_FREQ_LIST).length; i++) {
+            rand -= (alter?COMP_FREQ_LIST:INV_FREQ_LIST)[i];
             if (rand < 0) {
                 result = i;
                 break;
@@ -82,13 +93,13 @@ class GameManager {
             char = "qu";
         return char;
     }
-    fill_prepare() {
+    fill_prepare(init: boolean = false) {
         var columnsEmpty = this.grid.getColumnsEmpty();
 
         for (var x = 0; x < this.size; x++) {
             for (var e = 0; e < columnsEmpty[x]; e++) {
                 this.grid.tileAppend(x, new Tile({x: x, y: this.size + e},
-                                                this.weightedRandom()));
+                                                this.weightedRandom(init)));
             }
         }
     }
@@ -182,8 +193,13 @@ class GameManager {
     test_debug(s: string) {
         switch (s) {
             case "restart":
-                console.log("restart");
-                this.gameInit();
+                setTimeout(this.gameInit.bind(this), 100); // Running init as async so that devconsole can abbreviate the init messages
+                break;
+            case "initcomp":
+                GameManager.COMPLEMENTARY_RAND_ON_INIT = !GameManager.COMPLEMENTARY_RAND_ON_INIT;
+                break;
+            default:
+                console.log("Unknown debug command");
         }
     }
 }
