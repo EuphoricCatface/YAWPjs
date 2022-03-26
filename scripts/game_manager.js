@@ -196,12 +196,24 @@ class GameManager {
         }
     }
     determine_bonus_bottom() {
-        // triple bonus every 5 turns, 90% double otherwise
-        this.grid.getTileRef({ x: 0, y: 0 }).bonus = "triple-word";
-        this.grid.getTileRef({ x: 1, y: 0 }).bonus = "double-word";
-        this.grid.getTileRef({ x: 2, y: 0 }).bonus = "double-word";
-        this.grid.getTileRef({ x: 3, y: 0 }).bonus = "double-word";
-        this.grid.getTileRef({ x: 4, y: 0 }).bonus = "triple-word";
+        // triple bonus in the middle, 80% double otherwise
+        for (var i = 0; i < this.grid.size; i++) {
+            var tile = this.grid.getTileRef({ x: i, y: 0 });
+            if (i == 2) {
+                tile.bonus = "triple-word";
+                continue;
+            }
+            if (tile.bonus.includes("word"))
+                continue;
+            var rand = Math.floor(Math.random() * 5);
+            switch (rand) {
+                case 0:
+                    tile.bonus = "word-none";
+                    break;
+                default:
+                    tile.bonus = "double-word";
+            }
+        }
     }
     test_debug(s) {
         var debugMap = {
