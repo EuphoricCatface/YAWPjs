@@ -37,6 +37,8 @@ class Validator {
         });
     }
     validate(word: string) {
-        return this.wordlist.has(word.toLowerCase());
+        var rtn = this.wordlist.has(word.toLowerCase())
+        console.log("Validate: " + word + ", " + rtn);
+        return rtn;
     }
 }

@@ -105,9 +105,9 @@ class GameManager {
             this.actuate_word(this.recent_input.elements, pure_word_score, letter_bonus_score, word_modifier);
         });
     }
-    finishSelect(_) {
+    finishSelect() {
         // inputData: tiles, elements, word
-        if (!this.verify(this.recent_input.word))
+        if (!this.validator.validate(this.recent_input.word))
             return;
         this.countTurns();
         this.recent_input.elements.forEach(element => { element.remove(); });
@@ -125,11 +125,6 @@ class GameManager {
         this.turns += 1;
         console.log("turns: " + this.turns);
         this.actuator.showTurn(this.turns, GameManager.MAX_TURN);
-    }
-    verify(word) {
-        var rtn = this.validator.validate(word);
-        console.log("GM.verify: " + word + ", " + rtn);
-        return rtn;
     }
     calculate_bonus_new() {
         // New tiles, letter bonuses: 90% no bonus, 6% double, 4% triple

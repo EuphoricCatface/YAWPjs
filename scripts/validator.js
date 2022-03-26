@@ -34,7 +34,9 @@ class Validator {
         });
     }
     validate(word) {
-        return this.wordlist.has(word.toLowerCase());
+        var rtn = this.wordlist.has(word.toLowerCase());
+        console.log("Validate: " + word + ", " + rtn);
+        return rtn;
     }
 }
 //# sourceMappingURL=validator.js.map
