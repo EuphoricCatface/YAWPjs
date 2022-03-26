@@ -131,8 +131,8 @@ class GameManager {
     }
     finishSelect() {
         // inputData: tiles, elements, word
-        this.actuator.finishSelect();
         var validity = this.validator.validate(this.recent_input.word);
+        this.actuator.finishSelect(validity);
         this.countTurns(validity);
         if (!validity)
             return;
@@ -143,7 +143,6 @@ class GameManager {
             this.grid.coordDelete({ x: tile.pos.x, y: tile.pos.y });
         });
 
-        this.actuator.addScore();
         this.prepareNextTurn();
     }
     countTurns(validity: boolean = true) {
@@ -202,7 +201,8 @@ class GameManager {
             "hide-validity": () => {this.actuator.showValidity(false);},
             "show-validity": () => {this.actuator.showValidity(true);},
             "count-invalid-toggle": () => {GameManager.COUNT_TURNS_ON_INVALID_MOVE = !GameManager.COUNT_TURNS_ON_INVALID_MOVE;},
-            "hide-turns-toggle": () => {HTMLActuator.HIDE_CURRENT_TURN = !HTMLActuator.HIDE_CURRENT_TURN}
+            "hide-turns-toggle": () => {HTMLActuator.HIDE_CURRENT_TURN = !HTMLActuator.HIDE_CURRENT_TURN},
+            "punish-blind-toggle": () => {HTMLActuator.PUNISH_BLIND_MOVES = !HTMLActuator.PUNISH_BLIND_MOVES}
         }
         if (!debugMap.hasOwnProperty(s)) {
             console.log("Unknown debug command");

@@ -1,6 +1,7 @@
 'use strict';
 class HTMLActuator {
     static HIDE_CURRENT_TURN = false;
+    static PUNISH_BLIND_MOVES = false;
     static LETTER_SCORE = {
         "a": 1, "b": 3, "c": 3, "d": 2, "e": 1,
         "f": 4, "g": 2, "h": 4, "i": 1, "j": 8,
@@ -15,6 +16,7 @@ class HTMLActuator {
     scoreTotalContainer;
     turnsContainer;
     recentScore;
+    turnMaxScore;
     totalScore;
     constructor() {
         this.tileContainer = document.getElementsByClassName("tile-container")[0];
@@ -24,6 +26,7 @@ class HTMLActuator {
         this.scoreTotalContainer = document.getElementsByClassName("score-total-container")[0];
         this.turnsContainer = document.getElementsByClassName("turns-container")[0];
         this.recentScore = 0;
+        this.turnMaxScore = 0;
         this.totalScore = 0;
     }
     actuate_grid(grid) {
@@ -94,7 +97,8 @@ class HTMLActuator {
             this.wordConstructContainer.appendChild(tilecopy);
         });
     }
-    finishSelect() {
+    finishSelect(validity) {
+        this.applyScore(validity);
         this.wordConstructContainer.classList.add("finish-select");
     }
     actuate_calc(pure_score, letter_bonus, word_bonus) {
@@ -105,6 +109,8 @@ class HTMLActuator {
             + " = ";
         var element = document.createElement("strong");
         this.recentScore = (pure_score + letter_bonus) * word_bonus;
+        if (this.recentScore > this.turnMaxScore)
+            this.turnMaxScore = this.recentScore;
         element.textContent = (this.recentScore).toString();
         this.calculationContainer.appendChild(element);
     }
@@ -112,8 +118,12 @@ class HTMLActuator {
         this.scoreTotalContainer.textContent = score.toString();
         this.totalScore = score;
     }
-    addScore() {
-        this.totalScore = this.totalScore + this.recentScore;
+    applyScore(validity) {
+        if (validity)
+            this.totalScore = this.totalScore + this.recentScore;
+        else if (HTMLActuator.PUNISH_BLIND_MOVES)
+            this.totalScore -= this.turnMaxScore / 2;
+        this.turnMaxScore = 0;
         this.scoreTotalContainer.textContent = this.totalScore.toString();
     }
     gameOver() {
