@@ -38,13 +38,15 @@ class GameManager {
         }
         // Set up the game
         this.actuator.loaded();
-        this.gameInit()
+        Tile.on("sendInput", this.input.bind(this));
+        Tile.on("finishSelect", this.finishSelect.bind(this));
+        Tile.on("DEBUG", this.test_debug.bind(this));
+        this.gameInit();
         clearInterval(this.validator_wait_loop)
     }
     gameInit() {
+        this.grid.build();
         this.prepareNextTurn();
-        Tile.on("sendInput", this.input.bind(this));
-        Tile.on("finishSelect", this.finishSelect.bind(this));
         this.actuator.setScore(0);
         this.turns = 0;
         this.countTurns();
@@ -174,6 +176,14 @@ class GameManager {
                 default:
                     tile.bonus = "double-word";
             }
+        }
+    }
+
+    test_debug(s: string) {
+        switch (s) {
+            case "restart":
+                console.log("restart");
+                this.gameInit();
         }
     }
 }
