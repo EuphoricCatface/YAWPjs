@@ -122,10 +122,12 @@ class GameManager {
             letter_bonus_score += pure_letter_score * letter_bonus_modifier;
         });
         this.actuator.actuate_calc(pure_word_score, letter_bonus_score, word_modifier);
-        this.actuator.actuate_word(this.recent_input.elements);
+        var validity = this.validator.validate(this.recent_input.word);
+        this.actuator.actuate_word(this.recent_input.elements, validity);
     }
     finishSelect() {
         // inputData: tiles, elements, word
+        this.actuator.finishSelect();
         if (!this.validator.validate(this.recent_input.word))
             return;
         this.countTurns();
@@ -193,6 +195,12 @@ class GameManager {
                 break;
             case "initcomp":
                 GameManager.COMPLEMENTARY_RAND_ON_INIT = !GameManager.COMPLEMENTARY_RAND_ON_INIT;
+                break;
+            case "hide-validity":
+                this.actuator.showValidity(false);
+                break;
+            case "show-validity":
+                this.actuator.showValidity(true);
                 break;
             default:
                 console.log("Unknown debug command");

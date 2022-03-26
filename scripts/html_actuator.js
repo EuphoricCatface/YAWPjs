@@ -77,16 +77,24 @@ class HTMLActuator {
         element.addEventListener("mouseup", tile.mouseup_handler.bind(tile));
         element.addEventListener("contextmenu", tile.contextmenu_handler.bind(tile));
     }
-    actuate_word(tiles) {
+    actuate_word(tiles, validity) {
         while (this.wordConstructContainer.firstChild) {
             this.wordConstructContainer.removeChild(this.wordConstructContainer.firstChild);
         }
+        this.wordConstructContainer.classList.remove("finish-select");
+        if (validity)
+            this.wordConstructContainer.classList.replace("invalid", "valid");
+        else
+            this.wordConstructContainer.classList.replace("valid", "invalid");
         tiles.forEach((tile) => {
             var tilecopy = tile.cloneNode(true);
             tilecopy.removeChild(tilecopy.firstElementChild);
             tilecopy.classList.add("construct");
             this.wordConstructContainer.appendChild(tilecopy);
         });
+    }
+    finishSelect() {
+        this.wordConstructContainer.classList.add("finish-select");
     }
     actuate_calc(pure_score, letter_bonus, word_bonus) {
         while (this.calculationContainer.firstChild) {
@@ -116,6 +124,12 @@ class HTMLActuator {
     loaded() {
         var loading = document.getElementsByClassName("loading")[0];
         loading.classList.add("loaded");
+    }
+    showValidity(bool = true) {
+        if (bool)
+            this.wordConstructContainer.classList.remove("hide-validity");
+        else
+            this.wordConstructContainer.classList.add("hide-validity");
     }
 }
 //# sourceMappingURL=html_actuator.js.map

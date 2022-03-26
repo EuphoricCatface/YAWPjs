@@ -87,16 +87,24 @@ class HTMLActuator {
         element.addEventListener("mouseup", tile.mouseup_handler.bind(tile));
         element.addEventListener("contextmenu", tile.contextmenu_handler.bind(tile));
     }
-    actuate_word(tiles: HTMLElement[]) {
+    actuate_word(tiles: HTMLElement[], validity: boolean) {
         while (this.wordConstructContainer.firstChild) {
             this.wordConstructContainer.removeChild(this.wordConstructContainer.firstChild);
         }
+        this.wordConstructContainer.classList.remove("finish-select");
+        if (validity)
+            this.wordConstructContainer.classList.replace("invalid", "valid");
+        else
+            this.wordConstructContainer.classList.replace("valid", "invalid");
         tiles.forEach((tile) => {
             var tilecopy = (tile.cloneNode(true) as HTMLElement);
             tilecopy.removeChild(tilecopy.firstElementChild);
             tilecopy.classList.add("construct");
             this.wordConstructContainer.appendChild(tilecopy);
         });
+    }
+    finishSelect() {
+        this.wordConstructContainer.classList.add("finish-select");
     }
     actuate_calc(pure_score: number, letter_bonus: number, word_bonus: number) {
         while (this.calculationContainer.firstChild) {
@@ -126,6 +134,12 @@ class HTMLActuator {
     loaded() {
         var loading = document.getElementsByClassName("loading")[0];
         loading.classList.add("loaded");
+    }
+    showValidity(bool: boolean = true) {
+        if (bool)
+            this.wordConstructContainer.classList.remove("hide-validity");
+        else
+            this.wordConstructContainer.classList.add("hide-validity");
     }
 }
 
