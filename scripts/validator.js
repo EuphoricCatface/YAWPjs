@@ -21,7 +21,7 @@ class Validator {
             return lines = response_text.split('\n');
         })
             .then((response_lines) => {
-            console.log(response_lines);
+            // console.log(response_lines)
             for (var line of response_lines) {
                 line = line.trim();
                 if (line.startsWith("#"))
