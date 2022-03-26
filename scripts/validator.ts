@@ -38,7 +38,7 @@ class Validator {
     }
     validate(word: string) {
         var rtn = this.wordlist.has(word.toLowerCase())
-        console.log("Validate: " + word + ", " + rtn);
+        //console.log("Validate: " + word + ", " + rtn);
         return rtn;
     }
 }
