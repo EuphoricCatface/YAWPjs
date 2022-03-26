@@ -123,6 +123,10 @@ class HTMLActuator {
     showTurn(turns: number, maxturn: number) {
         this.turnsContainer.textContent = "" + turns + " / " + maxturn;
     }
+    loaded() {
+        var loading = document.getElementsByClassName("loading")[0];
+        loading.classList.add("loaded");
+    }
 }
 
 

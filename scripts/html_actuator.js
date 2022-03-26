@@ -113,5 +113,9 @@ class HTMLActuator {
     showTurn(turns, maxturn) {
         this.turnsContainer.textContent = "" + turns + " / " + maxturn;
     }
+    loaded() {
+        var loading = document.getElementsByClassName("loading")[0];
+        loading.classList.add("loaded");
+    }
 }
 //# sourceMappingURL=html_actuator.js.map

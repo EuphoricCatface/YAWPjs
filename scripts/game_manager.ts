@@ -18,7 +18,7 @@ class GameManager {
         this.setupGameContainerMouse();
 
         this.validator = new Validator();
-        this.validator_wait_loop = setInterval(this.initAfterValidatorLoop.bind(this), 50);
+        this.validator_wait_loop = setInterval(this.initAfterValidatorLoop.bind(this), 100);
     }
     setupGameContainerMouse() {
         var gameContainer = document.getElementsByClassName("game-container")[0];
@@ -37,6 +37,7 @@ class GameManager {
             return;
         }
         // Set up the game
+        this.actuator.loaded();
         this.gameInit()
         clearInterval(this.validator_wait_loop)
     }
