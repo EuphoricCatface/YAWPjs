@@ -3,6 +3,7 @@ class GameManager {
     static MAX_TURN = 15;
     static COMPLEMENTARY_RAND_ON_INIT = false;
     static COUNT_TURNS_ON_INVALID_MOVE = false;
+    static DETERMINISTIC_BOTTOM_BONUS = false;
     size;
     actuator;
     grid;
@@ -54,9 +55,12 @@ class GameManager {
     }
     prepareNextTurn(init = false) {
         this.fill_prepare(init);
-        this.calculate_bonus_new();
+        this.randomize_bonus_new();
         this.grid.eliminateEmpty();
-        this.calculate_bonus_bottom();
+        if (GameManager.DETERMINISTIC_BOTTOM_BONUS)
+            this.determine_bonus_bottom();
+        else
+            this.randomize_bonus_bottom();
         this.actuator.actuate_grid(this.grid);
     }
     weightedRandom(init = false) {
@@ -149,7 +153,7 @@ class GameManager {
         this.turns += 1;
         this.actuator.showTurn(this.turns, GameManager.MAX_TURN);
     }
-    calculate_bonus_new() {
+    randomize_bonus_new() {
         // New tiles, letter bonuses: 90% no bonus, 6% double, 4% triple
         var columnsLength = this.grid.getColumnsLength();
         for (var i = 0; i < this.grid.size; i++) {
@@ -169,8 +173,8 @@ class GameManager {
             }
         }
     }
-    calculate_bonus_bottom() {
-        // Bottom row, word bonuses: 10% no bonus, 60% double, 30% triple
+    // Bottom row, word bonuses: 10% no bonus, 60% double, 30% triple
+    randomize_bonus_bottom() {
         for (var i = 0; i < this.grid.size; i++) {
             var tile = this.grid.getTileRef({ x: i, y: 0 });
             if (tile.bonus.includes("word"))
@@ -190,6 +194,14 @@ class GameManager {
             }
         }
     }
+    determine_bonus_bottom() {
+        // triple bonus every 5 turns, 90% double otherwise
+        this.grid.getTileRef({ x: 0, y: 0 }).bonus = "triple-word";
+        this.grid.getTileRef({ x: 1, y: 0 }).bonus = "double-word";
+        this.grid.getTileRef({ x: 2, y: 0 }).bonus = "double-word";
+        this.grid.getTileRef({ x: 3, y: 0 }).bonus = "double-word";
+        this.grid.getTileRef({ x: 4, y: 0 }).bonus = "triple-word";
+    }
     test_debug(s) {
         var debugMap = {
             "restart": () => { setTimeout(this.gameInit.bind(this), 100); },
@@ -198,7 +210,8 @@ class GameManager {
             "show-validity": () => { this.actuator.showValidity(true); },
             "count-invalid-toggle": () => { GameManager.COUNT_TURNS_ON_INVALID_MOVE = !GameManager.COUNT_TURNS_ON_INVALID_MOVE; },
             "hide-turns-toggle": () => { HTMLActuator.HIDE_CURRENT_TURN = !HTMLActuator.HIDE_CURRENT_TURN; },
-            "punish-blind-toggle": () => { HTMLActuator.PUNISH_BLIND_MOVES = !HTMLActuator.PUNISH_BLIND_MOVES; }
+            "punish-blind-toggle": () => { HTMLActuator.PUNISH_BLIND_MOVES = !HTMLActuator.PUNISH_BLIND_MOVES; },
+            "deterministic-bottom-bonus-toggle": () => { GameManager.DETERMINISTIC_BOTTOM_BONUS = !GameManager.DETERMINISTIC_BOTTOM_BONUS; }
         };
         if (!debugMap.hasOwnProperty(s)) {
             console.log("Unknown debug command");
