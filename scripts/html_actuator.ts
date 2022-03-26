@@ -46,26 +46,6 @@ class HTMLActuator {
             this.tileContainer.removeChild(this.tileContainer.firstChild);
         }
     }
-    actuate_word(tiles: HTMLElement[], pure_score: number, letter_bonus: number, word_bonus: number) {
-        while (this.wordConstructContainer.firstChild) {
-            this.wordConstructContainer.removeChild(this.wordConstructContainer.firstChild);
-        }
-        tiles.forEach((tile) => {
-            var tilecopy = (tile.cloneNode(true) as HTMLElement);
-            tilecopy.removeChild(tilecopy.firstElementChild);
-            tilecopy.classList.add("construct");
-            this.wordConstructContainer.appendChild(tilecopy);
-        });
-        while (this.calculationContainer.firstChild) {
-            this.calculationContainer.removeChild(this.calculationContainer.firstChild);
-        }
-        this.calculationContainer.textContent = "(" + pure_score + " + " + letter_bonus + ") * " + word_bonus
-            + " = ";
-        var element = document.createElement("strong");
-        this.recentScore = (pure_score + letter_bonus) * word_bonus;
-        element.textContent = (this.recentScore).toString();
-        this.calculationContainer.appendChild(element);
-    }
     addHTMLTile(tile: Tile) {
         var element = document.createElement("div");
 
@@ -106,6 +86,28 @@ class HTMLActuator {
         element.addEventListener("mousedown", tile.mousedown_handler.bind(tile));
         element.addEventListener("mouseup", tile.mouseup_handler.bind(tile));
         element.addEventListener("contextmenu", tile.contextmenu_handler.bind(tile));
+    }
+    actuate_word(tiles: HTMLElement[]) {
+        while (this.wordConstructContainer.firstChild) {
+            this.wordConstructContainer.removeChild(this.wordConstructContainer.firstChild);
+        }
+        tiles.forEach((tile) => {
+            var tilecopy = (tile.cloneNode(true) as HTMLElement);
+            tilecopy.removeChild(tilecopy.firstElementChild);
+            tilecopy.classList.add("construct");
+            this.wordConstructContainer.appendChild(tilecopy);
+        });
+    }
+    actuate_calc(pure_score: number, letter_bonus: number, word_bonus: number) {
+        while (this.calculationContainer.firstChild) {
+            this.calculationContainer.removeChild(this.calculationContainer.firstChild);
+        }
+        this.calculationContainer.textContent = "(" + pure_score + " + " + letter_bonus + ") * " + word_bonus
+            + " = ";
+        var element = document.createElement("strong");
+        this.recentScore = (pure_score + letter_bonus) * word_bonus;
+        element.textContent = (this.recentScore).toString();
+        this.calculationContainer.appendChild(element);
     }
     setScore(score: number) {
         this.scoreTotalContainer.textContent = score.toString();

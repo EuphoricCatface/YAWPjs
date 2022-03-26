@@ -110,7 +110,8 @@ class GameManager {
             pure_word_score += pure_letter_score;
             letter_bonus_score += pure_letter_score * letter_bonus_modifier;
         });
-        this.actuator.actuate_word(this.recent_input.elements, pure_word_score, letter_bonus_score, word_modifier);
+        this.actuator.actuate_calc(pure_word_score, letter_bonus_score, word_modifier);
+        this.actuator.actuate_word(this.recent_input.elements);
     }
     finishSelect() {
         // inputData: tiles, elements, word
