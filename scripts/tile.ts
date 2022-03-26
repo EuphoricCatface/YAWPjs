@@ -27,18 +27,12 @@ class Tile {
     }
 
     static on(event: string, callback: CallableFunction) {
-        if (!Tile.events[event]) {
-            Tile.events[event] = [];
-        }
+        if (!Tile.events[event]) { Tile.events[event] = []; }
         Tile.events[event].push(callback);
     }
     static emit(event: string, data: any) {
         var callbacks: CallableFunction[] = Tile.events[event];
-        if (callbacks) {
-            callbacks.forEach(function (callback) {
-                callback(data);
-            });
-        }
+        if (callbacks) { callbacks.forEach((callback) => {callback(data);}); }
     }
 
     static valid_button(ev: MouseEvent) { return ev.buttons == 1; }
@@ -59,9 +53,8 @@ class Tile {
         if (Tile.BUTTON_DEBUG) console.log(ev.buttons);
         if (Tile.invalid_end_button(ev)) return; // don't end the selection if left button is still present
 
-        if (Tile.mousedown_nodrag) {
+        if (Tile.mousedown_nodrag)
             Tile.selection_clear();
-        }
         Tile.mousedown_nodrag = false;
     }
     dragstart_handler(ev: DragEvent) {
@@ -96,32 +89,28 @@ class Tile {
 
         var selectionChanged = Tile.nextTile(target, this);
         if (selectionChanged)
-            Tile.sendInput()
+            Tile.sendInput();
     }
     dragend_handler(ev: DragEvent) {
         ev.preventDefault();
         if (Tile.BUTTON_DEBUG) console.log(ev.buttons);
+        if (Tile.DRAG_DEBUG) console.log("dragend");
         if (Tile.invalid_end_button(ev)) return; // don't end the selection if left button is still present
 
-        if (Tile.DRAG_DEBUG) console.log("dragend");
-        // "dragEnd" seem to fire after the "drop"
-        // "dragEnd" also happens when "drop" fails
+        // backup clear if "drop" fails - it seem to fire after the "drop"
         Tile.selection_clear();
     }
     dragover_handler(ev: DragEvent) {
-        // if (DRAG_DEBUG) console.log("dragover");
+        // if (DRAG_DEBUG) console.log("dragover"); // fires too often even when debugging
         if (!Tile.valid_button(ev)) return;
         ev.preventDefault();
     }
     drop_handler(ev: DragEvent) {
         if (Tile.DRAG_DEBUG) console.log("drop");
-        ev.preventDefault();
         if (Tile.BUTTON_DEBUG) console.log(ev.buttons);
+        ev.preventDefault();
         if (Tile.invalid_end_button(ev)) return; // don't end the selection if left button is still present
-
-        // Workaround: duplicate_check
-        if (Tile.selected_tiles.length == 0)
-            return;
+        if (Tile.selected_tiles.length == 0) return; // Workaround: duplicate_check
 
         var target = (ev.target as HTMLElement);
 
@@ -139,7 +128,7 @@ class Tile {
         
         Tile.selection_clear();
         // Workaround: duplicate_check
-        // This probably will happen on dragend_handler eventually,
+        // selection_clear will happen on dragend_handler eventually,
         // but problem is that the board may fire the drop as well as the tile,
         // making the check duplicate.
         return true;
@@ -150,12 +139,12 @@ class Tile {
 
     static selection_clear() {
         while (Tile.selected_elements.length)
-        Tile.popTile();
+            Tile.popTile();
 
         console.assert(Tile.selected_tiles.length == 0 &&
             Tile.selected_elements.length == 0 &&
             Tile.word_construct.length == 0,
-            "dragend: internal selection did not clear!");
+            "selection_clear: internal selection did not clear!");
     }
     isNeighbor(that: Tile) {
         if ((Math.abs(this.pos.x - that.pos.x) <= 1) &&

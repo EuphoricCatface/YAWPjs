@@ -26,9 +26,7 @@ class Tile {
     static emit(event, data) {
         var callbacks = Tile.events[event];
         if (callbacks) {
-            callbacks.forEach(function (callback) {
-                callback(data);
-            });
+            callbacks.forEach((callback) => { callback(data); });
         }
     }
     static valid_button(ev) { return ev.buttons == 1; }
@@ -50,9 +48,8 @@ class Tile {
             console.log(ev.buttons);
         if (Tile.invalid_end_button(ev))
             return; // don't end the selection if left button is still present
-        if (Tile.mousedown_nodrag) {
+        if (Tile.mousedown_nodrag)
             Tile.selection_clear();
-        }
         Tile.mousedown_nodrag = false;
     }
     dragstart_handler(ev) {
@@ -92,16 +89,15 @@ class Tile {
         ev.preventDefault();
         if (Tile.BUTTON_DEBUG)
             console.log(ev.buttons);
-        if (Tile.invalid_end_button(ev))
-            return; // don't end the selection if left button is still present
         if (Tile.DRAG_DEBUG)
             console.log("dragend");
-        // "dragEnd" seem to fire after the "drop"
-        // "dragEnd" also happens when "drop" fails
+        if (Tile.invalid_end_button(ev))
+            return; // don't end the selection if left button is still present
+        // backup clear if "drop" fails - it seem to fire after the "drop"
         Tile.selection_clear();
     }
     dragover_handler(ev) {
-        // if (DRAG_DEBUG) console.log("dragover");
+        // if (DRAG_DEBUG) console.log("dragover"); // fires too often even when debugging
         if (!Tile.valid_button(ev))
             return;
         ev.preventDefault();
@@ -109,14 +105,13 @@ class Tile {
     drop_handler(ev) {
         if (Tile.DRAG_DEBUG)
             console.log("drop");
-        ev.preventDefault();
         if (Tile.BUTTON_DEBUG)
             console.log(ev.buttons);
+        ev.preventDefault();
         if (Tile.invalid_end_button(ev))
             return; // don't end the selection if left button is still present
-        // Workaround: duplicate_check
         if (Tile.selected_tiles.length == 0)
-            return;
+            return; // Workaround: duplicate_check
         var target = ev.target;
         // test if it's inside the gamecontainer
         var valid_drop = false;
@@ -131,7 +126,7 @@ class Tile {
             Tile.finishSelect();
         Tile.selection_clear();
         // Workaround: duplicate_check
-        // This probably will happen on dragend_handler eventually,
+        // selection_clear will happen on dragend_handler eventually,
         // but problem is that the board may fire the drop as well as the tile,
         // making the check duplicate.
         return true;
@@ -144,7 +139,7 @@ class Tile {
             Tile.popTile();
         console.assert(Tile.selected_tiles.length == 0 &&
             Tile.selected_elements.length == 0 &&
-            Tile.word_construct.length == 0, "dragend: internal selection did not clear!");
+            Tile.word_construct.length == 0, "selection_clear: internal selection did not clear!");
     }
     isNeighbor(that) {
         if ((Math.abs(this.pos.x - that.pos.x) <= 1) &&
