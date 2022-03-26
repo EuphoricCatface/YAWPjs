@@ -154,7 +154,6 @@ class GameManager {
         if(!(validity || GameManager.COUNT_TURNS_ON_INVALID_MOVE))
             return;
         this.turns += 1;
-        console.log("turns: " + this.turns);
         this.actuator.showTurn(this.turns, GameManager.MAX_TURN);
     }
     calculate_bonus_new() {
@@ -202,7 +201,8 @@ class GameManager {
             "initcomp-toggle": () => {GameManager.COMPLEMENTARY_RAND_ON_INIT = !GameManager.COMPLEMENTARY_RAND_ON_INIT;},
             "hide-validity": () => {this.actuator.showValidity(false);},
             "show-validity": () => {this.actuator.showValidity(true);},
-            "count-invalid-toggle": () => {GameManager.COUNT_TURNS_ON_INVALID_MOVE = !GameManager.COUNT_TURNS_ON_INVALID_MOVE;}
+            "count-invalid-toggle": () => {GameManager.COUNT_TURNS_ON_INVALID_MOVE = !GameManager.COUNT_TURNS_ON_INVALID_MOVE;},
+            "hide-turns-toggle": () => {HTMLActuator.HIDE_CURRENT_TURN = !HTMLActuator.HIDE_CURRENT_TURN}
         }
         if (!debugMap.hasOwnProperty(s)) {
             console.log("Unknown debug command");

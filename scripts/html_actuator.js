@@ -1,5 +1,6 @@
 'use strict';
 class HTMLActuator {
+    static HIDE_CURRENT_TURN = false;
     static LETTER_SCORE = {
         "a": 1, "b": 3, "c": 3, "d": 2, "e": 1,
         "f": 4, "g": 2, "h": 4, "i": 1, "j": 8,
@@ -119,6 +120,9 @@ class HTMLActuator {
         this.gameContainer.classList.add("game-over");
     }
     showTurn(turns, maxturn) {
+        if (HTMLActuator.HIDE_CURRENT_TURN)
+            turns = "--";
+        console.log("turns: " + turns);
         this.turnsContainer.textContent = "" + turns + " / " + maxturn;
     }
     loaded() {
