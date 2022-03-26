@@ -22,6 +22,20 @@ class Tile {
         Tile.selected_tiles = [];
         Tile.events = Tile.events || new Map;
     }
+    static on(event, callback) {
+        if (!Tile.events[event]) {
+            Tile.events[event] = [];
+        }
+        Tile.events[event].push(callback);
+    }
+    static emit(event, data) {
+        var callbacks = Tile.events[event];
+        if (callbacks) {
+            callbacks.forEach(function (callback) {
+                callback(data);
+            });
+        }
+    }
     mousedown_handler(ev) {
         Tile.mousedown_nodrag = true;
         var target = ev.target;
@@ -72,6 +86,10 @@ class Tile {
         // "dragEnd" also happens when "drop" fails
         Tile.selection_clear();
     }
+    dragover_handler(ev) {
+        // if (DRAG_DEBUG) console.log("dragover");
+        ev.preventDefault();
+    }
     drop_handler(ev) {
         if (Tile.DRAG_DEBUG)
             console.log("drop");
@@ -101,10 +119,6 @@ class Tile {
         // but problem is that the board may fire the drop as well as the tile,
         // making the check duplicate.
         return true;
-    }
-    dragover_handler(ev) {
-        // if (DRAG_DEBUG) console.log("dragover");
-        ev.preventDefault();
     }
     static selection_clear() {
         while (Tile.selected_elements.length)
@@ -204,20 +218,6 @@ class Tile {
             Boolean(Tile.selected_elements.length) &&
             Boolean(Tile.word_construct.length), "finishSelect: internal selection is somehow gone!");
         Tile.emit("finishSelect", {});
-    }
-    static on(event, callback) {
-        if (!Tile.events[event]) {
-            Tile.events[event] = [];
-        }
-        Tile.events[event].push(callback);
-    }
-    static emit(event, data) {
-        var callbacks = Tile.events[event];
-        if (callbacks) {
-            callbacks.forEach(function (callback) {
-                callback(data);
-            });
-        }
     }
 }
 //# sourceMappingURL=tile.js.map
