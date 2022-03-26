@@ -129,6 +129,9 @@ class HTMLActuator {
     gameOver() {
         this.gameContainer.classList.add("game-over");
     }
+    remove_gameOver() {
+        this.gameContainer.classList.remove("game-over");
+    }
     showTurn(turns, maxturn) {
         if (HTMLActuator.HIDE_CURRENT_TURN)
             turns = "--";

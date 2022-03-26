@@ -53,6 +53,7 @@ class GameManager {
         this.actuator.setScore(0);
         this.turns = 0;
         this.countTurns();
+        this.actuator.remove_gameOver();
     }
     prepareNextTurn(init: boolean = false) {
         this.fill_prepare(init);
