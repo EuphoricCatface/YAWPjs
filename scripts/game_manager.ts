@@ -40,9 +40,10 @@ class GameManager {
         clearInterval(this.validator_wait_loop);
     }
     gameInit() {
+        const init = true;
         this.actuator.loaded();
         this.grid.build();
-        this.prepareNextTurn(true);
+        this.prepareNextTurn(init);
         this.actuator.setScore(0);
         this.turns = 0;
         this.countTurns();
@@ -210,16 +211,14 @@ class GameManager {
         }
     }
     determine_bonus_bottom() {
-        // triple bonus in the middle, 80% double otherwise
+        // 80% double, and triple in a random place
+        let triple_exist = false;
         for (let i = 0; i < this.grid.size; i++) {
             const tile = this.grid.getTileRef({x: i, y: 0});
-            if (i == 2) {
-                tile.bonus = "triple-word";
-                continue;
-            }
+            if (tile.bonus == "triple-word")
+                triple_exist = true;
             if (tile.bonus.includes("word"))
                 continue;
-
             const rand = Math.floor(Math.random() * 5);
             switch (rand) {
                 case 0:
@@ -228,6 +227,10 @@ class GameManager {
                 default:
                     tile.bonus = "double-word";
             }
+        }
+        if (triple_exist == false) {
+            const tile = this.grid.getTileRef({x: Math.floor(Math.random() * 5), y:0});
+            tile.bonus = "triple-word";
         }
     }
 
