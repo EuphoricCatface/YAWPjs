@@ -67,6 +67,11 @@ strong.important {
   text-transform: uppercase;
 }
 
+code {
+  font-size: 15px;
+  background-color: rgba(211, 211, 211, 0.5);
+}
+
 hr {
   border: none;
   border-bottom: 1px solid #d8d4d0;
