@@ -187,20 +187,17 @@ hr {
     &.hide-validity:after { visibility: hidden; }
     & .construct {
         display: inline;
-        & .tileScore {
-            visibility: hidden;
-        }
-        & .double-letter {
+        &.double-letter {
             background-color: #0000ff3f;
         }
-        & .triple-letter {
+        &.triple-letter {
             background-color: #ff00003f;
         }
-        & .double-word {
+        &.double-word {
             font-weight: bold;
             color: #3b3bffbf;
         }
-        & .triple-word {
+        &.triple-word {
             font-weight: bold;
             color: #ff3b3bbf;
         }

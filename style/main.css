@@ -170,20 +170,17 @@ hr {
 .word-construct-container .construct {
   display: inline;
 }
-.word-construct-container .construct .tileScore {
-  visibility: hidden;
-}
-.word-construct-container .construct .double-letter {
+.word-construct-container .construct.double-letter {
   background-color: #0000ff3f;
 }
-.word-construct-container .construct .triple-letter {
+.word-construct-container .construct.triple-letter {
   background-color: #ff00003f;
 }
-.word-construct-container .construct .double-word {
+.word-construct-container .construct.double-word {
   font-weight: bold;
   color: #3b3bffbf;
 }
-.word-construct-container .construct .triple-word {
+.word-construct-container .construct.triple-word {
   font-weight: bold;
   color: #ff3b3bbf;
 }
