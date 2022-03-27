@@ -41,9 +41,9 @@ class GameManager {
         }
         // Set up the game
         this.actuator.loaded();
-        Tile.on("sendInput", this.input.bind(this));
-        Tile.on("finishSelect", this.finishSelect.bind(this));
-        Tile.on("DEBUG", this.test_debug.bind(this));
+        inputManager.on("sendInput", this.input.bind(this));
+        inputManager.on("finishSelect", this.finishSelect.bind(this));
+        inputManager.on("DEBUG", this.test_debug.bind(this));
         this.gameInit();
         clearInterval(this.validator_wait_loop)
     }
