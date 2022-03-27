@@ -1,17 +1,18 @@
 'use strict';
+
 /* global inputManager */
 type CoordType = {x: number, y: number};
 
 class Tile {
-    static DRAG_DEBUG: Boolean = false;
-    static BUTTON_DEBUG: Boolean = false;
+    static DRAG_DEBUG = false;
+    static BUTTON_DEBUG = false;
 
     pos: CoordType;
     value: string;
     prevPos: CoordType;
     bonus: string;
 
-    static mousedown_nodrag: boolean = false;
+    static mousedown_nodrag = false;
 
     constructor(position: CoordType, value: string) {
         this.pos = position;
@@ -27,15 +28,15 @@ class Tile {
     }
 
     static valid_button(ev: MouseEvent) { return ev.buttons == 1; }
-    static invalid_end_button(ev: MouseEvent) { return ev.buttons & 1 }
+    static invalid_end_button(ev: MouseEvent) { return ev.buttons & 1; }
     mousedown_handler(ev: MouseEvent) {
         if (!Tile.valid_button(ev)) {
             ev.preventDefault();
             return;
         }
         Tile.mousedown_nodrag = true;
-        var target = ev.target as HTMLElement
-        var selectionChanged = inputManager.nextTile(target, this);
+        const target = ev.target as HTMLElement;
+        const selectionChanged = inputManager.nextTile(target, this);
         if (selectionChanged)
             inputManager.sendInput();
     }
@@ -70,7 +71,7 @@ class Tile {
         }
         if (!Tile.valid_button(ev)) return;
 
-        var target = (ev.target as HTMLElement);
+        const target = (ev.target as HTMLElement);
         /* // Chrome doesn't seem to like this
         if (ev.dataTransfer.getData("text") != "Tile") {
             if (Tile.DRAG_DEBUG) console.log(ev.dataTransfer.getData("text"));
@@ -78,7 +79,7 @@ class Tile {
         }
         */
 
-        var selectionChanged = inputManager.nextTile(target, this);
+        const selectionChanged = inputManager.nextTile(target, this);
         if (selectionChanged) inputManager.sendInput();
     }
     dragend_handler(ev: DragEvent) {
@@ -105,10 +106,10 @@ class Tile {
         if (Tile.invalid_end_button(ev)) return; // don't end the selection if left button is still present
         if (inputManager.selected_tiles.length == 0) return; // Workaround: duplicate_check
 
-        var target = (ev.target as HTMLElement);
+        let target = (ev.target as HTMLElement);
 
         // test if it's inside the gamecontainer
-        var valid_drop = false;
+        let valid_drop = false;
         while (target){
             if (target.className == "game-container") {
                 valid_drop = true;

@@ -27,8 +27,8 @@ class Tile {
             return;
         }
         Tile.mousedown_nodrag = true;
-        var target = ev.target;
-        var selectionChanged = inputManager.nextTile(target, this);
+        const target = ev.target;
+        const selectionChanged = inputManager.nextTile(target, this);
         if (selectionChanged)
             inputManager.sendInput();
     }
@@ -64,14 +64,14 @@ class Tile {
         }
         if (!Tile.valid_button(ev))
             return;
-        var target = ev.target;
+        const target = ev.target;
         /* // Chrome doesn't seem to like this
         if (ev.dataTransfer.getData("text") != "Tile") {
             if (Tile.DRAG_DEBUG) console.log(ev.dataTransfer.getData("text"));
             return;
         }
         */
-        var selectionChanged = inputManager.nextTile(target, this);
+        const selectionChanged = inputManager.nextTile(target, this);
         if (selectionChanged)
             inputManager.sendInput();
     }
@@ -104,9 +104,9 @@ class Tile {
             return; // don't end the selection if left button is still present
         if (inputManager.selected_tiles.length == 0)
             return; // Workaround: duplicate_check
-        var target = ev.target;
+        let target = ev.target;
         // test if it's inside the gamecontainer
-        var valid_drop = false;
+        let valid_drop = false;
         while (target) {
             if (target.className == "game-container") {
                 valid_drop = true;

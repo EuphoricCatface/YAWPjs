@@ -11,7 +11,7 @@ class inputManager {
         inputManager.events[event].push(callback);
     }
     static emit(event, data) {
-        var callbacks = inputManager.events[event];
+        const callbacks = inputManager.events[event];
         if (callbacks) {
             callbacks.forEach((callback) => { callback(data); });
         }
@@ -86,7 +86,7 @@ class inputManager {
         console.assert(inputManager.selected_tiles.length == inputManager.selected_elements.length, "selected tiles and elements length mismatch");
         console.assert(inputManager.selected_elements.length ==
             inputManager.word_construct.length - [...inputManager.word_construct.matchAll(/Qu/gi)].length, "selected tiles and word length mismatch");
-        var element = inputManager.selected_elements.pop();
+        const element = inputManager.selected_elements.pop();
         inputManager.selected_tiles.pop();
         inputManager.word_construct = inputManager.word_construct.slice(0, inputManager.word_construct.length - 1);
         if (inputManager.word_construct.endsWith("q"))

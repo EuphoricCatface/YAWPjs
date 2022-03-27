@@ -4,7 +4,7 @@ type SelectionInputType = {tiles: Tile[], elements: HTMLElement[], word: string}
 
 class inputManager {
 
-    static word_construct: string = "";
+    static word_construct = "";
     static selected_elements: HTMLElement[] = [];
     static selected_tiles: Tile[] = [];
 
@@ -15,7 +15,7 @@ class inputManager {
         inputManager.events[event].push(callback);
     }
     static emit(event: string, data: any) {
-        var callbacks: CallableFunction[] = inputManager.events[event];
+        const callbacks: CallableFunction[] = inputManager.events[event];
         if (callbacks) { callbacks.forEach((callback) => {callback(data);}); }
     }
 
@@ -104,7 +104,7 @@ class inputManager {
             "selected tiles and word length mismatch"
         );
 
-        var element = inputManager.selected_elements.pop();
+        const element = inputManager.selected_elements.pop();
         inputManager.selected_tiles.pop();
         inputManager.word_construct = inputManager.word_construct.slice(0, inputManager.word_construct.length - 1);
         if (inputManager.word_construct.endsWith("q"))

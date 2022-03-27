@@ -3,8 +3,5 @@
         "target": "ES2022",
         "module": "CommonJS",
         "sourceMap": true
-    },
-    "rules": {
-        "semi": true
     }
 }
