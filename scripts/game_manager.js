@@ -26,6 +26,7 @@ class GameManager {
         //      <dragend does not fire if not on an element with proper handlers>
         gameContainer.addEventListener("pointerup", Tile.prototype.popinterup_handler);
         gameContainer.addEventListener("contextmenu", (e) => { e.preventDefault(); });
+        gameContainer.addEventListener("touchmove", (e) => { e.preventDefault(); });
     }
     initAfterValidatorLoop() {
         console.log("init loop");

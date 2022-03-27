@@ -126,7 +126,7 @@ hr {
         // width: $tile-size * 2.5;
         // height: $tile-size / 2;
         width: calc($field-width * 2 / 5 - $grid-spacing * 1.5);
-        height: $tile-size - $grid-spacing;
+        height: 60px;
         margin-bottom: calc(10px);
         float: left;
         font-weight: bold;
