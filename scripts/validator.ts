@@ -9,7 +9,7 @@ class Validator {
     constructor() {
         const fetch_req = new Request('words_alpha.txt');
         this.wordlist = new Set;
-        var lines: string[];
+        let lines: string[];
         
         fetch(fetch_req)
         .then((response) => {
@@ -24,20 +24,20 @@ class Validator {
         })
         .then((response_lines) =>{
             // console.log(response_lines)
-            for (var line of response_lines) {
+            for (let line of response_lines) {
                 line = line.trim();
                 if (line.startsWith("#"))
                     continue;
                 if (line.length - [...line.matchAll(/Qu/gi)].length < 3)
                     continue;
                 
-                this.wordlist.add(line)
+                this.wordlist.add(line);
             }
             // window.wordlist = this.wordlist  // Debug
         });
     }
     validate(word: string) {
-        var rtn = this.wordlist.has(word.toLowerCase())
+        const rtn = this.wordlist.has(word.toLowerCase());
         //console.log("Validate: " + word + ", " + rtn);
         return rtn;
     }

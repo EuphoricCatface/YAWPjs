@@ -89,6 +89,11 @@ strong {
     }
 }
 
+code {
+    font-size: 15px;
+    background-color: rgba(lightgray, 50%);
+}
+
 hr {
     border: none;
     border-bottom: 1px solid lighten($text-color, 40%);
@@ -126,7 +131,7 @@ hr {
         // width: $tile-size * 2.5;
         // height: $tile-size / 2;
         width: calc($field-width * 2 / 5 - $grid-spacing * 1.5);
-        height: $tile-size - $grid-spacing;
+        height: 60px;
         margin-bottom: calc(10px);
         float: left;
         font-weight: bold;
@@ -187,20 +192,17 @@ hr {
     &.hide-validity:after { visibility: hidden; }
     & .construct {
         display: inline;
-        & .tileScore {
-            visibility: hidden;
-        }
-        & .double-letter {
+        &.double-letter {
             background-color: #0000ff3f;
         }
-        & .triple-letter {
+        &.triple-letter {
             background-color: #ff00003f;
         }
-        & .double-word {
+        &.double-word {
             font-weight: bold;
             color: #3b3bffbf;
         }
-        & .triple-word {
+        &.triple-word {
             font-weight: bold;
             color: #ff3b3bbf;
         }

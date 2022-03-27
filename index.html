@@ -7,11 +7,13 @@
         <link href="style/main.css" rel="stylesheet" type="text/css">
 
         <script src="scripts/html_actuator.js"></script>
+        <script src="scripts/input_manager.js"></script>
         <script src="scripts/grid.js"></script>
         <script src="scripts/tile.js"></script>
         <script src="scripts/validator.js"></script>
         <script src="scripts/game_manager.js"></script>
         <script src="scripts/application.js"></script>
+        <meta name="viewport" content="width=700, initial-scale=1.0">
     </head>
     <body>
         <div class="container">
@@ -93,7 +95,9 @@
                 Initial styling references <a href="https://github.com/gabrielecirulli/2048">gabrielecirulli/2048</a>, because this is my first HTML5 project.
             </p>
             <p>
-                TODO: Polish visuals for score calculations, Make game / word score ranks, Compile debug options into game modes, Optimize for mobile play
+                <strong>TODO</strong>: Polish visuals for score calculations, Make game / word score ranks, Create game mode menu and explanations, Tweak bonus for harder modes<br>
+                Try <code>inputManager.emit("DEBUG", "(level name)")</code> in the dev console!<br>
+                Level names: normal-level, hard-level, expert-level
             </p>
         </div>
     </body>

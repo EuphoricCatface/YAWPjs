@@ -31,15 +31,13 @@ class HTMLActuator {
         this.totalScore = 0;
     }
     actuate_grid(grid: Grid) {
-        var self = this;
+        window.requestAnimationFrame(() => {
+            this.clearContainer();
 
-        window.requestAnimationFrame(function () {
-            self.clearContainer();
-
-            grid.cells.forEach(function (column) {
-                column.forEach(function (cell) {
+            grid.cells.forEach((column) => {
+                column.forEach((cell) => {
                     if (cell) {
-                        self.addHTMLTile(cell);
+                        this.addHTMLTile(cell);
                     }
                 });
             });
@@ -51,12 +49,12 @@ class HTMLActuator {
         }
     }
     addHTMLTile(tile: Tile) {
-        var element = document.createElement("div");
+        const element = document.createElement("div");
 
         function pos_offset(pos:CoordType, offset: number) { return { x: pos.x + offset, y: pos.y + offset }; }
         function tile_pos_attr(pos: CoordType) { return "tile-position-" + pos.x + "-" + pos.y; }
 
-        var pos_jsobj = pos_offset(tile.prevPos || tile.pos, 1);
+        const pos_jsobj = pos_offset(tile.prevPos || tile.pos, 1);
 
         element.classList.add("tile", "tile-" + tile.value, tile_pos_attr(pos_jsobj));
         if (tile.bonus)
@@ -64,9 +62,8 @@ class HTMLActuator {
         element.textContent = tile.value.toUpperCase();
         if (element.textContent == "QU")
             element.textContent = "Qu";
-        element.setAttribute("draggable", "true");
 
-        var tileScore = document.createElement("div");
+        const tileScore = document.createElement("div");
         tileScore.classList.add("tileScore");
         tileScore.textContent = HTMLActuator.LETTER_SCORE[tile.value].toString();
 
@@ -81,15 +78,12 @@ class HTMLActuator {
             element.classList.add("tile-new");
         }
 
-        element.addEventListener("dragstart", tile.dragstart_handler.bind(tile));
-        element.addEventListener("dragenter", tile.dragenter_handler.bind(tile));
-        // element.addEventListener("dragleave",tile.dragleave_handler.bind(tile));
-        element.addEventListener("dragend", tile.dragend_handler.bind(tile));
-        element.addEventListener("dragover", tile.dragover_handler.bind(tile));
-        element.addEventListener("drop", tile.drop_handler.bind(tile));
-        element.addEventListener("mousedown", tile.mousedown_handler.bind(tile));
-        element.addEventListener("mouseup", tile.mouseup_handler.bind(tile));
-        element.addEventListener("contextmenu", tile.contextmenu_handler.bind(tile));
+        element.addEventListener("pointerdown", tile.pointerdown_handler.bind(tile));
+        element.addEventListener("pointerenter", tile.pointerenter_handler.bind(tile));
+        element.addEventListener("pointerup", tile.popinterup_handler.bind(tile));
+
+        element.addEventListener("contextmenu", (e)=>{e.preventDefault();});
+        element.addEventListener("touchmove", (e)=>{e.preventDefault();});
     }
     actuate_word(tiles: HTMLElement[], validity: boolean) {
         while (this.wordConstructContainer.firstChild) {
@@ -101,14 +95,14 @@ class HTMLActuator {
         else
             this.wordConstructContainer.classList.replace("valid", "invalid");
         tiles.forEach((tile) => {
-            var tilecopy = (tile.cloneNode(true) as HTMLElement);
+            const tilecopy = (tile.cloneNode(true) as HTMLElement);
             tilecopy.removeChild(tilecopy.firstElementChild);
             tilecopy.classList.add("construct");
             this.wordConstructContainer.appendChild(tilecopy);
         });
     }
     finishSelect(validity: boolean) {
-        this.applyScore(validity)
+        this.applyScore(validity);
         this.wordConstructContainer.classList.add("finish-select");
     }
     actuate_calc(pure_score: number, letter_bonus: number, word_bonus: number) {
@@ -117,7 +111,7 @@ class HTMLActuator {
         }
         this.calculationContainer.textContent = "(" + pure_score + " + " + letter_bonus + ") * " + word_bonus
             + " = ";
-        var element = document.createElement("strong");
+        const element = document.createElement("strong");
         this.recentScore = (pure_score + letter_bonus) * word_bonus;
         if (this.recentScore > this.turnMaxScore)
             this.turnMaxScore = this.recentScore;
@@ -149,14 +143,23 @@ class HTMLActuator {
         this.turnsContainer.textContent = "" + turns + " / " + maxturn;
     }
     loaded() {
-        var loading = document.getElementsByClassName("loading")[0];
-        loading.classList.add("loaded");
+        const loading = document.getElementsByClassName("loading")[0];
+        window.requestAnimationFrame(()=>{loading.classList.remove("loaded");});
+        // Loading effect for restart
+        setTimeout(()=>{window.requestAnimationFrame(()=>{loading.classList.add("loaded");});}, 50);
     }
-    showValidity(bool: boolean = true) {
+    showValidity(bool = true) {
         if (bool)
             this.wordConstructContainer.classList.remove("hide-validity");
         else
             this.wordConstructContainer.classList.add("hide-validity");
+    }
+    setupGameContainerMouse() {
+        // pointerup is like "static" functions, but changing these to ones cause a problem:
+        //      <dragend does not fire if not on an element with proper handlers>
+        this.gameContainer.addEventListener("pointerup", Tile.prototype.popinterup_handler);
+        this.gameContainer.addEventListener("contextmenu", (e)=>{e.preventDefault();});
+        this.gameContainer.addEventListener("touchmove", (e)=>{e.preventDefault();});
     }
 }
 
