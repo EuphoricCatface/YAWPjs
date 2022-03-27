@@ -144,7 +144,9 @@ class HTMLActuator {
     }
     loaded() {
         const loading = document.getElementsByClassName("loading")[0];
-        loading.classList.add("loaded");
+        window.requestAnimationFrame(()=>{loading.classList.remove("loaded");});
+        // Loading effect for restart
+        setTimeout(()=>{window.requestAnimationFrame(()=>{loading.classList.add("loaded");});}, 50);
     }
     showValidity(bool = true) {
         if (bool)

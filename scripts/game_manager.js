@@ -32,7 +32,6 @@ class GameManager {
             return;
         }
         // Set up the game
-        this.actuator.loaded();
         inputManager.on("sendInput", this.input.bind(this));
         inputManager.on("finishSelect", this.finishSelect.bind(this));
         inputManager.on("DEBUG", this.test_debug.bind(this));
@@ -40,6 +39,7 @@ class GameManager {
         clearInterval(this.validator_wait_loop);
     }
     gameInit() {
+        this.actuator.loaded();
         this.grid.build();
         this.prepareNextTurn(true);
         this.actuator.setScore(0);
