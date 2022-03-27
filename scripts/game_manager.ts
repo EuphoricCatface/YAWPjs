@@ -5,6 +5,7 @@ class GameManager {
     static COMPLEMENTARY_RAND_ON_INIT = false;
     static COUNT_TURNS_ON_INVALID_MOVE = false;
     static DETERMINISTIC_BOTTOM_BONUS = false;
+    static COMPOUND_WORD_BONUS = false;
     size: number;
     actuator: HTMLActuator;
     grid: Grid;
@@ -116,20 +117,36 @@ class GameManager {
         let word_modifier = 1;
         let pure_word_score = 0;
         let letter_bonus_score = 0;
-        this.recent_input.tiles.forEach(tile => {
-            let letter_bonus_modifier = 0;
-            const pure_letter_score = HTMLActuator.LETTER_SCORE[tile.value];
-            if (tile.bonus == "double-letter")
-                letter_bonus_modifier = 1;
-            if (tile.bonus == "triple-letter")
-                letter_bonus_modifier = 2;
-            if (tile.bonus == "double-word" && word_modifier != 3)
-                word_modifier = 2;
-            if (tile.bonus == "triple-word")
-                word_modifier = 3;
-            pure_word_score += pure_letter_score;
-            letter_bonus_score += pure_letter_score * letter_bonus_modifier;
-        });
+        if (GameManager.COMPOUND_WORD_BONUS)
+            this.recent_input.tiles.forEach(tile => {
+                let letter_bonus_modifier = 0;
+                const pure_letter_score = HTMLActuator.LETTER_SCORE[tile.value];
+                if (tile.bonus == "double-letter")
+                    letter_bonus_modifier = 1;
+                if (tile.bonus == "triple-letter")
+                    letter_bonus_modifier = 2;
+                if (tile.bonus == "double-word")
+                    word_modifier *= 2;
+                if (tile.bonus == "triple-word")
+                    word_modifier *= 3;
+                pure_word_score += pure_letter_score;
+                letter_bonus_score += pure_letter_score * letter_bonus_modifier;
+            });
+        else
+            this.recent_input.tiles.forEach(tile => {
+                let letter_bonus_modifier = 0;
+                const pure_letter_score = HTMLActuator.LETTER_SCORE[tile.value];
+                if (tile.bonus == "double-letter")
+                    letter_bonus_modifier = 1;
+                if (tile.bonus == "triple-letter")
+                    letter_bonus_modifier = 2;
+                if (tile.bonus == "double-word" && word_modifier != 3)
+                    word_modifier = 2;
+                if (tile.bonus == "triple-word")
+                    word_modifier = 3;
+                pure_word_score += pure_letter_score;
+                letter_bonus_score += pure_letter_score * letter_bonus_modifier;
+            });
         this.actuator.actuate_calc(pure_word_score, letter_bonus_score, word_modifier);
         const validity = this.validator.validate(this.recent_input.word);
         this.actuator.actuate_word(this.recent_input.elements, validity);
@@ -224,14 +241,15 @@ class GameManager {
 
     test_debug(s: string) {
         const debugMap: Record<string, CallableFunction> = {
-            "restart": () => {setTimeout(this.gameInit.bind(this), 100);},
-            "initcomp-toggle": () => {GameManager.COMPLEMENTARY_RAND_ON_INIT = !GameManager.COMPLEMENTARY_RAND_ON_INIT;},
-            "hide-validity": () => {this.actuator.showValidity(false);},
-            "show-validity": () => {this.actuator.showValidity(true);},
-            "count-invalid-toggle": () => {GameManager.COUNT_TURNS_ON_INVALID_MOVE = !GameManager.COUNT_TURNS_ON_INVALID_MOVE;},
-            "hide-turns-toggle": () => {HTMLActuator.HIDE_CURRENT_TURN = !HTMLActuator.HIDE_CURRENT_TURN;},
-            "punish-blind-toggle": () => {HTMLActuator.PUNISH_BLIND_MOVES = !HTMLActuator.PUNISH_BLIND_MOVES;},
-            "deterministic-bottom-bonus-toggle": () => {GameManager.DETERMINISTIC_BOTTOM_BONUS = !GameManager.DETERMINISTIC_BOTTOM_BONUS;}
+            "restart": () =>                {setTimeout(this.gameInit.bind(this), 100);},
+            "initcomp-toggle": () =>        {GameManager.COMPLEMENTARY_RAND_ON_INIT = !GameManager.COMPLEMENTARY_RAND_ON_INIT;},
+            "hide-validity": () =>          {this.actuator.showValidity(false);},
+            "show-validity": () =>          {this.actuator.showValidity(true);},
+            "count-invalid-toggle": () =>   {GameManager.COUNT_TURNS_ON_INVALID_MOVE = !GameManager.COUNT_TURNS_ON_INVALID_MOVE;},
+            "hide-turns-toggle": () =>      {HTMLActuator.HIDE_CURRENT_TURN = !HTMLActuator.HIDE_CURRENT_TURN;},
+            "punish-blind-toggle": () =>    {HTMLActuator.PUNISH_BLIND_MOVES = !HTMLActuator.PUNISH_BLIND_MOVES;},
+            "deterministic-bottom-bonus-toggle": () => {GameManager.DETERMINISTIC_BOTTOM_BONUS = !GameManager.DETERMINISTIC_BOTTOM_BONUS;},
+            "compount-word-bonus-toggle": () => {GameManager.COMPOUND_WORD_BONUS = !GameManager.COMPOUND_WORD_BONUS;},
         };
         if (!debugMap.hasOwnProperty(s)) {
             console.log("Unknown debug command");
