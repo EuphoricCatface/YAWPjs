@@ -25,11 +25,10 @@ class GameManager {
     }
     setupGameContainerMouse() {
         const gameContainer = document.getElementsByClassName("game-container")[0];
-        // These three are like "static" functions, but changing these to ones cause a problem:
+        // pointerup is like "static" functions, but changing these to ones cause a problem:
         //      <dragend does not fire if not on an element with proper handlers>
-        gameContainer.addEventListener("dragover", Tile.prototype.dragover_handler);
-        gameContainer.addEventListener("drop", Tile.prototype.drop_handler);
-        gameContainer.addEventListener("contextmenu", Tile.prototype.contextmenu_handler);
+        gameContainer.addEventListener("pointerup", Tile.prototype.popinterup_handler);
+        gameContainer.addEventListener("contextmenu", (e)=>{e.preventDefault();});
     }
     initAfterValidatorLoop() {
         console.log("init loop");

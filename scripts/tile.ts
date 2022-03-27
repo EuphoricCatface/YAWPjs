@@ -4,7 +4,7 @@
 type CoordType = {x: number, y: number};
 
 class Tile {
-    static DRAG_DEBUG = false;
+    static POINTER_DEBUG = false;
     static BUTTON_DEBUG = false;
 
     pos: CoordType;
@@ -12,7 +12,7 @@ class Tile {
     prevPos: CoordType;
     bonus: string;
 
-    static mousedown_nodrag = false;
+    static selecting = false;
 
     constructor(position: CoordType, value: string) {
         this.pos = position;
@@ -29,44 +29,24 @@ class Tile {
 
     static valid_button(ev: MouseEvent) { return ev.buttons == 1; }
     static invalid_end_button(ev: MouseEvent) { return ev.buttons & 1; }
-    mousedown_handler(ev: MouseEvent) {
+    pointerdown_handler(ev: PointerEvent) {
         if (!Tile.valid_button(ev)) {
             ev.preventDefault();
             return;
         }
-        Tile.mousedown_nodrag = true;
-        const target = ev.target as HTMLElement;
-        const selectionChanged = inputManager.nextTile(target, this);
-        if (selectionChanged)
-            inputManager.sendInput();
-    }
-    mouseup_handler(ev: MouseEvent) {
-        ev.preventDefault();
-        if (Tile.BUTTON_DEBUG) console.log(ev.buttons);
-        if (Tile.invalid_end_button(ev)) return; // don't end the selection if left button is still present
+        if (Tile.selecting) return;
+        if (Tile.POINTER_DEBUG) console.log("pointerdown");
+        Tile.selecting = true;
+        (ev.target as HTMLElement).releasePointerCapture(ev.pointerId);
 
-        if (Tile.mousedown_nodrag)
-            inputManager.selection_clear();
-        Tile.mousedown_nodrag = false;
+        // Workaround: sometimes first tile does not register
+        inputManager.nextTile((ev.target as HTMLElement), this);
     }
-    dragstart_handler(ev: DragEvent) {
-        if (!Tile.valid_button(ev)) {
-            ev.preventDefault();
-            return;
-        }
-        // transparent drag object: https://stackoverflow.com/q/27989602/
-        ev.dataTransfer.setData("text", "Tile");
-        ev.dataTransfer.setDragImage(new Image(0, 0), 0, 0);
-        if (Tile.DRAG_DEBUG) console.log("dragstart");
-        Tile.mousedown_nodrag = false;
-
-        //// Workaround: sometimes first tile does not register
-        //Tile.nextTile((ev.target as HTMLElement), this);
-    }
-    dragenter_handler(ev: DragEvent) {
+    pointerenter_handler(ev: DragEvent) {
         ev.preventDefault();
-        if (Tile.DRAG_DEBUG) {
-            console.log("dragenter");
+        if (!Tile.selecting) return;
+        if (Tile.POINTER_DEBUG) {
+            console.log("pointerenter");
             console.log(this);
         }
         if (!Tile.valid_button(ev)) return;
@@ -82,26 +62,15 @@ class Tile {
         const selectionChanged = inputManager.nextTile(target, this);
         if (selectionChanged) inputManager.sendInput();
     }
-    dragend_handler(ev: DragEvent) {
+    popinterup_handler(ev: DragEvent) {
         ev.preventDefault();
-        if (Tile.BUTTON_DEBUG) console.log(ev.buttons);
-        if (Tile.DRAG_DEBUG) console.log("dragend");
-        if (Tile.invalid_end_button(ev)) return; // don't end the selection if left button is still present
-
-        // backup clear if "drop" fails - it seem to fire after the "drop"
-        inputManager.selection_clear();
-    }
-    dragover_handler(ev: DragEvent) {
-        ev.preventDefault();
-        // if (DRAG_DEBUG) console.log("dragover"); // fires too often even when debugging
-        if (!Tile.valid_button(ev)) return;
-    }
-    drop_handler(ev: DragEvent) {
-        ev.preventDefault();
-        if (Tile.DRAG_DEBUG) {
-            console.log("drop");
+        if (Tile.POINTER_DEBUG) {
+            console.log("pointerup");
             console.log(this);
         }
+        if (!Tile.selecting) return;
+        Tile.selecting = false;
+
         if (Tile.BUTTON_DEBUG) console.log(ev.buttons);
         if (Tile.invalid_end_button(ev)) return; // don't end the selection if left button is still present
         if (inputManager.selected_tiles.length == 0) return; // Workaround: duplicate_check
@@ -125,8 +94,5 @@ class Tile {
         // but problem is that the board may fire the drop as well as the tile,
         // making the check duplicate.
         return true;
-    }
-    contextmenu_handler(ev: MouseEvent) {
-        ev.preventDefault();
     }
 }

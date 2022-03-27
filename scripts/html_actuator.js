@@ -57,7 +57,6 @@ class HTMLActuator {
         element.textContent = tile.value.toUpperCase();
         if (element.textContent == "QU")
             element.textContent = "Qu";
-        element.setAttribute("draggable", "true");
         const tileScore = document.createElement("div");
         tileScore.classList.add("tileScore");
         tileScore.textContent = HTMLActuator.LETTER_SCORE[tile.value].toString();
@@ -70,15 +69,11 @@ class HTMLActuator {
         if (tile.prevPos.y > 4) {
             element.classList.add("tile-new");
         }
-        element.addEventListener("dragstart", tile.dragstart_handler.bind(tile));
-        element.addEventListener("dragenter", tile.dragenter_handler.bind(tile));
-        // element.addEventListener("dragleave",tile.dragleave_handler.bind(tile));
-        element.addEventListener("dragend", tile.dragend_handler.bind(tile));
-        element.addEventListener("dragover", tile.dragover_handler.bind(tile));
-        element.addEventListener("drop", tile.drop_handler.bind(tile));
-        element.addEventListener("mousedown", tile.mousedown_handler.bind(tile));
-        element.addEventListener("mouseup", tile.mouseup_handler.bind(tile));
-        element.addEventListener("contextmenu", tile.contextmenu_handler.bind(tile));
+        element.addEventListener("pointerdown", tile.pointerdown_handler.bind(tile));
+        element.addEventListener("pointerenter", tile.pointerenter_handler.bind(tile));
+        element.addEventListener("pointerup", tile.popinterup_handler.bind(tile));
+        element.addEventListener("contextmenu", (e) => { e.preventDefault(); });
+        element.addEventListener("touchmove", (e) => { e.preventDefault(); });
     }
     actuate_word(tiles, validity) {
         while (this.wordConstructContainer.firstChild) {

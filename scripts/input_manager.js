@@ -24,10 +24,10 @@ class inputManager {
             inputManager.word_construct.length == 0, "selection_clear: internal selection did not clear!");
     }
     static nextTile(element, tile) {
-        if (Tile.DRAG_DEBUG)
+        if (Tile.POINTER_DEBUG)
             console.log("nextTile start");
         if (element.nodeName == "#text" || element.classList.contains("tileScore")) {
-            if (Tile.DRAG_DEBUG)
+            if (Tile.POINTER_DEBUG)
                 console.log("nextTile: element is likely a child of a Tile - using its parent.");
             element = element.parentElement;
         }
@@ -37,21 +37,21 @@ class inputManager {
             inputManager.word_construct.length - [...inputManager.word_construct.matchAll(/Qu/gi)].length, "selected tiles and word length mismatch");
         do { // do ... while as goto replacement
             if (inputManager.selected_elements.length == 0) {
-                if (Tile.DRAG_DEBUG)
+                if (Tile.POINTER_DEBUG)
                     console.log("nextTile cond 1");
                 // start of selection;
                 // adding unconditionally
                 continue; // goto ADD;
             }
             if (inputManager.selected_elements.at(-1) === element) {
-                if (Tile.DRAG_DEBUG)
+                if (Tile.POINTER_DEBUG)
                     console.log("nextTile cond 2");
                 // current tile is same as the last selected tile;
                 // ignoring
                 return false;
             }
             if (!tile.isNeighbor(inputManager.selected_tiles.at(-1))) {
-                if (Tile.DRAG_DEBUG)
+                if (Tile.POINTER_DEBUG)
                     console.log("nextTile cond 3");
                 // current tile is somehow too far from the last selected tile;
                 // ignoring
@@ -59,7 +59,7 @@ class inputManager {
             }
             if (inputManager.selected_elements.length >= 2 &&
                 inputManager.selected_elements.at(-2) === element) {
-                if (Tile.DRAG_DEBUG)
+                if (Tile.POINTER_DEBUG)
                     console.log("nextTile cond 4");
                 // The user has retreated from the last selection;
                 // pop the last tile
@@ -67,14 +67,14 @@ class inputManager {
                 return true;
             }
             if (inputManager.selected_elements.find(e => e === element)) {
-                if (Tile.DRAG_DEBUG)
+                if (Tile.POINTER_DEBUG)
                     console.log("nextTile cond 5");
                 // element is already in the list;
                 // ignoring
                 return false;
             }
         } while (false); // ADD:
-        if (Tile.DRAG_DEBUG)
+        if (Tile.POINTER_DEBUG)
             console.log("nextTile cond 6");
         inputManager.selected_elements.push(element);
         inputManager.selected_tiles.push(tile);
