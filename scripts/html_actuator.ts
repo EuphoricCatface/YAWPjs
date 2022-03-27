@@ -152,6 +152,13 @@ class HTMLActuator {
         else
             this.wordConstructContainer.classList.add("hide-validity");
     }
+    setupGameContainerMouse() {
+        // pointerup is like "static" functions, but changing these to ones cause a problem:
+        //      <dragend does not fire if not on an element with proper handlers>
+        this.gameContainer.addEventListener("pointerup", Tile.prototype.popinterup_handler);
+        this.gameContainer.addEventListener("contextmenu", (e)=>{e.preventDefault();});
+        this.gameContainer.addEventListener("touchmove", (e)=>{e.preventDefault();});
+    }
 }
 
 

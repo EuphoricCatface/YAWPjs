@@ -19,18 +19,10 @@ class GameManager {
         this.actuator = actuator;
 
         this.grid = new Grid(this.size);
-        this.setupGameContainerMouse();
+        this.actuator.setupGameContainerMouse();
 
         this.validator = new Validator();
         this.validator_wait_loop = setInterval(this.initAfterValidatorLoop.bind(this), 100);
-    }
-    setupGameContainerMouse() {
-        const gameContainer = document.getElementsByClassName("game-container")[0];
-        // pointerup is like "static" functions, but changing these to ones cause a problem:
-        //      <dragend does not fire if not on an element with proper handlers>
-        gameContainer.addEventListener("pointerup", Tile.prototype.popinterup_handler);
-        gameContainer.addEventListener("contextmenu", (e)=>{e.preventDefault();});
-        gameContainer.addEventListener("touchmove", (e)=>{e.preventDefault();});
     }
     initAfterValidatorLoop() {
         console.log("init loop");
