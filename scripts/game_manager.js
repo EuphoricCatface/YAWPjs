@@ -245,6 +245,34 @@ class GameManager {
             "punish-blind-toggle": () => { HTMLActuator.PUNISH_BLIND_MOVES = !HTMLActuator.PUNISH_BLIND_MOVES; },
             "deterministic-bottom-bonus-toggle": () => { GameManager.DETERMINISTIC_BOTTOM_BONUS = !GameManager.DETERMINISTIC_BOTTOM_BONUS; },
             "compount-word-bonus-toggle": () => { GameManager.COMPOUND_WORD_BONUS = !GameManager.COMPOUND_WORD_BONUS; },
+            "level-normal": () => {
+                this.actuator.showValidity(true);
+                GameManager.COUNT_TURNS_ON_INVALID_MOVE = false;
+                HTMLActuator.HIDE_CURRENT_TURN = false;
+                HTMLActuator.PUNISH_BLIND_MOVES = false;
+                GameManager.DETERMINISTIC_BOTTOM_BONUS = false;
+                GameManager.COMPOUND_WORD_BONUS = false;
+                this.test_debug("restart");
+            },
+            "level-hard": () => {
+                this.actuator.showValidity(false);
+                GameManager.COUNT_TURNS_ON_INVALID_MOVE = false;
+                HTMLActuator.HIDE_CURRENT_TURN = false;
+                HTMLActuator.PUNISH_BLIND_MOVES = true;
+                GameManager.DETERMINISTIC_BOTTOM_BONUS = true;
+                GameManager.COMPOUND_WORD_BONUS = false;
+                this.test_debug("restart");
+            },
+            "level-expert": () => {
+                this.actuator.showValidity(false);
+                HTMLActuator.PUNISH_BLIND_MOVES = false;
+                GameManager.COUNT_TURNS_ON_INVALID_MOVE = true;
+                HTMLActuator.HIDE_CURRENT_TURN = true;
+                HTMLActuator.PUNISH_BLIND_MOVES = true;
+                GameManager.DETERMINISTIC_BOTTOM_BONUS = true;
+                GameManager.COMPOUND_WORD_BONUS = true;
+                this.test_debug("restart");
+            }
         };
         if (!debugMap.hasOwnProperty(s)) {
             console.log("Unknown debug command");
