@@ -214,6 +214,8 @@ hr {
     width: $field-width;
     height: $field-width;
     border-radius: $tile-border-radius * 1.5;
+    
+    touch-action: none;
 
     & .loading, &.game-over::after {
         position: absolute;
@@ -302,6 +304,8 @@ hr {
     line-height: $tile-size;
     font-size: $tile-font-size;
     font-weight: bold;
+  
+    touch-action: none;
 
     @include transition($transition-speed $OutCubic);
     @include transition-property(top, left);

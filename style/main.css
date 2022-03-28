@@ -195,6 +195,7 @@ hr {
   width: 600px;
   height: 600px;
   border-radius: 27px;
+  touch-action: none;
 }
 .game-container .loading, .game-container.game-over::after {
   position: absolute;
@@ -276,6 +277,7 @@ hr {
   line-height: 90px;
   font-size: 36px;
   font-weight: bold;
+  touch-action: none;
   transition: 800ms cubic-bezier(0.4, 1, 0.66, 1);
   -webkit-transition: 800ms cubic-bezier(0.4, 1, 0.66, 1);
   -moz-transition: 800ms cubic-bezier(0.4, 1, 0.66, 1);

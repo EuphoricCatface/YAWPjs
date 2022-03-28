@@ -6,6 +6,7 @@ type CoordType = {x: number, y: number};
 class Tile {
     static POINTER_DEBUG = false;
     static BUTTON_DEBUG = false;
+    static POINTERENTER_FIRES: HTMLElement;
 
     pos: CoordType;
     value: string;
@@ -40,9 +41,11 @@ class Tile {
         (ev.target as HTMLElement).releasePointerCapture(ev.pointerId);
 
         // Workaround: sometimes first tile does not register
-        inputManager.nextTile((ev.target as HTMLElement), this);
+        const selectionChanged = inputManager.nextTile((ev.target as HTMLElement), this);
+        if (selectionChanged) inputManager.sendInput();
     }
-    pointerenter_handler(ev: DragEvent) {
+    pointerenter_handler(ev: PointerEvent) {
+        Tile.POINTERENTER_FIRES = (ev.target as HTMLElement);
         ev.preventDefault();
         if (!Tile.selecting) return;
         if (Tile.POINTER_DEBUG) {
@@ -94,5 +97,15 @@ class Tile {
         // but problem is that the board may fire the drop as well as the tile,
         // making the check duplicate.
         return true;
+    }
+
+    touchmove_handler(ev: TouchEvent) {
+        if (Tile.POINTER_DEBUG) console.log(ev.touches[0].clientX, ev.touches[0].clientY);
+        const elem = document.elementFromPoint(ev.touches[0].clientX, ev.touches[0].clientY);
+        if (!elem.classList.contains("tile")) return;
+        if (Tile.POINTERENTER_FIRES === elem) return;
+        if (Tile.POINTER_DEBUG) 
+            console.log(elem);
+        elem.dispatchEvent(new PointerEvent("pointerenter", {"buttons": 1}));
     }
 }
