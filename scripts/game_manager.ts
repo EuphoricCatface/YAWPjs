@@ -163,6 +163,9 @@ class GameManager {
     countTurns(validity = true) {
         if(!(validity || GameManager.COUNT_TURNS_ON_INVALID_MOVE))
             return;
+        // Do not count a turn if input is only one letter
+        if (GameManager.COUNT_TURNS_ON_INVALID_MOVE && this.recent_input.tiles.length == 1)
+            return;
         if (this.turns == GameManager.MAX_TURN) {
             this.actuator.gameOver();
             return;
