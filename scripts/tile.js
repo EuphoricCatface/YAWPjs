@@ -33,7 +33,9 @@ class Tile {
         Tile.selecting = true;
         ev.target.releasePointerCapture(ev.pointerId);
         // Workaround: sometimes first tile does not register
-        inputManager.nextTile(ev.target, this);
+        const selectionChanged = inputManager.nextTile(ev.target, this);
+        if (selectionChanged)
+            inputManager.sendInput();
     }
     pointerenter_handler(ev) {
         ev.preventDefault();

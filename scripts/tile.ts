@@ -40,7 +40,8 @@ class Tile {
         (ev.target as HTMLElement).releasePointerCapture(ev.pointerId);
 
         // Workaround: sometimes first tile does not register
-        inputManager.nextTile((ev.target as HTMLElement), this);
+        const selectionChanged = inputManager.nextTile((ev.target as HTMLElement), this);
+        if (selectionChanged) inputManager.sendInput();
     }
     pointerenter_handler(ev: DragEvent) {
         ev.preventDefault();
