@@ -168,11 +168,11 @@ class GameManager {
         this.actuator.showTurn(this.turns, GameManager.MAX_TURN);
     }
     randomize_bonus_new() {
-        // New tiles, letter bonuses: 90% no bonus, 6% double, 4% triple
+        // New tiles, letter bonuses: 86.6% no bonus, 10% double, 3.3% triple
         const columnsLength = this.grid.getColumnsLength();
         for (let i = 0; i < this.grid.size; i++) {
             for (let j = this.grid.size; j < columnsLength[i]; j++) {
-                const rand = Math.floor(Math.random() * 50);
+                const rand = Math.floor(Math.random() * 30);
                 const tile = this.grid.getTileRef({ x: i, y: j });
                 switch (rand) {
                     case 0:
@@ -189,8 +189,8 @@ class GameManager {
             }
         }
     }
-    // Bottom row, word bonuses: 10% no bonus, 60% double, 30% triple
     randomize_bonus_bottom() {
+        // Bottom row, word bonuses: 10% no bonus, 60% double, 30% triple
         for (let i = 0; i < this.grid.size; i++) {
             const tile = this.grid.getTileRef({ x: i, y: 0 });
             if (tile.bonus.includes("word"))
