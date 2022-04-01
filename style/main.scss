@@ -191,7 +191,12 @@ hr {
     &.finish-select:after { opacity: 1; }
     &.hide-validity:after { visibility: hidden; }
     & .construct {
-        display: inline;
+        display: inline-block;
+        border-radius: 3px;
+        width: 1ch;
+        height: 1.6ch;
+        line-height: 1.5ch;
+        margin-right: 1px;
         &.double-letter {
             background-color: #0000ff3f;
         }

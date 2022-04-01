@@ -173,7 +173,12 @@ hr {
   visibility: hidden;
 }
 .word-construct-container .construct {
-  display: inline;
+  display: inline-block;
+  border-radius: 3px;
+  width: 1ch;
+  height: 1.6ch;
+  line-height: 1.5ch;
+  margin-right: 1px;
 }
 .word-construct-container .construct.double-letter {
   background-color: #0000ff3f;
