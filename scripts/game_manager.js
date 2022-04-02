@@ -243,7 +243,7 @@ class GameManager {
             "hide-turns-toggle": () => { HTMLActuator.HIDE_CURRENT_TURN = !HTMLActuator.HIDE_CURRENT_TURN; },
             "punish-blind-toggle": () => { HTMLActuator.PUNISH_BLIND_MOVES = !HTMLActuator.PUNISH_BLIND_MOVES; },
             "deterministic-bottom-bonus-toggle": () => { GameManager.DETERMINISTIC_BOTTOM_BONUS = !GameManager.DETERMINISTIC_BOTTOM_BONUS; },
-            "compount-word-bonus-toggle": () => { GameManager.COMPOUND_WORD_BONUS = !GameManager.COMPOUND_WORD_BONUS; },
+            "compound-word-bonus-toggle": () => { GameManager.COMPOUND_WORD_BONUS = !GameManager.COMPOUND_WORD_BONUS; },
             "level-normal": () => {
                 this.actuator.showValidity(true);
                 GameManager.COUNT_TURNS_ON_INVALID_MOVE = false;
