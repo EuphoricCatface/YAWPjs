@@ -2,7 +2,7 @@
 class GameManager {
     static MAX_TURN = 15;
     static COMPLEMENTARY_RAND_ON_INIT = false;
-    static COUNT_TURNS_ON_INVALID_MOVE = false;
+    static TURNS_COUNTED_ON_INVALID_MOVE = false;
     static DETERMINISTIC_BOTTOM_BONUS = false;
     static COMPOUND_WORD_BONUS = false;
     size;
@@ -155,10 +155,10 @@ class GameManager {
         this.prepareNextTurn();
     }
     countTurns(validity = true) {
-        if (!(validity || GameManager.COUNT_TURNS_ON_INVALID_MOVE))
+        if (!(validity || GameManager.TURNS_COUNTED_ON_INVALID_MOVE))
             return;
         // Do not count a turn if input is only one letter
-        if (GameManager.COUNT_TURNS_ON_INVALID_MOVE && this.recent_input.tiles.length == 1)
+        if (GameManager.TURNS_COUNTED_ON_INVALID_MOVE && this.recent_input.tiles.length == 1)
             return;
         if (this.turns == GameManager.MAX_TURN) {
             this.actuator.gameOver();
@@ -239,14 +239,14 @@ class GameManager {
             "initcomp-toggle": () => { GameManager.COMPLEMENTARY_RAND_ON_INIT = !GameManager.COMPLEMENTARY_RAND_ON_INIT; },
             "hide-validity": () => { this.actuator.showValidity(false); },
             "show-validity": () => { this.actuator.showValidity(true); },
-            "count-invalid-toggle": () => { GameManager.COUNT_TURNS_ON_INVALID_MOVE = !GameManager.COUNT_TURNS_ON_INVALID_MOVE; },
+            "count-invalid-toggle": () => { GameManager.TURNS_COUNTED_ON_INVALID_MOVE = !GameManager.TURNS_COUNTED_ON_INVALID_MOVE; },
             "hide-turns-toggle": () => { HTMLActuator.HIDE_CURRENT_TURN = !HTMLActuator.HIDE_CURRENT_TURN; },
             "punish-blind-toggle": () => { HTMLActuator.PUNISH_BLIND_MOVES = !HTMLActuator.PUNISH_BLIND_MOVES; },
             "deterministic-bottom-bonus-toggle": () => { GameManager.DETERMINISTIC_BOTTOM_BONUS = !GameManager.DETERMINISTIC_BOTTOM_BONUS; },
             "compound-word-bonus-toggle": () => { GameManager.COMPOUND_WORD_BONUS = !GameManager.COMPOUND_WORD_BONUS; },
             "level-normal": () => {
                 this.actuator.showValidity(true);
-                GameManager.COUNT_TURNS_ON_INVALID_MOVE = false;
+                GameManager.TURNS_COUNTED_ON_INVALID_MOVE = false;
                 HTMLActuator.HIDE_CURRENT_TURN = false;
                 HTMLActuator.PUNISH_BLIND_MOVES = false;
                 GameManager.DETERMINISTIC_BOTTOM_BONUS = false;
@@ -255,7 +255,7 @@ class GameManager {
             },
             "level-hard": () => {
                 this.actuator.showValidity(false);
-                GameManager.COUNT_TURNS_ON_INVALID_MOVE = false;
+                GameManager.TURNS_COUNTED_ON_INVALID_MOVE = false;
                 HTMLActuator.HIDE_CURRENT_TURN = false;
                 HTMLActuator.PUNISH_BLIND_MOVES = true;
                 GameManager.DETERMINISTIC_BOTTOM_BONUS = true;
@@ -265,7 +265,7 @@ class GameManager {
             "level-expert": () => {
                 this.actuator.showValidity(false);
                 HTMLActuator.PUNISH_BLIND_MOVES = false;
-                GameManager.COUNT_TURNS_ON_INVALID_MOVE = true;
+                GameManager.TURNS_COUNTED_ON_INVALID_MOVE = false;
                 HTMLActuator.HIDE_CURRENT_TURN = true;
                 HTMLActuator.PUNISH_BLIND_MOVES = true;
                 GameManager.DETERMINISTIC_BOTTOM_BONUS = true;
