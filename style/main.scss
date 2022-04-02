@@ -242,7 +242,7 @@ hr {
         background: rgba($tile-color, .75);
         text-align: center;
 
-        @include animation(fade-in 800ms ease $transition-speed);
+        @include animation(fade-in $transition-speed ease calc($transition-speed / 2));
         @include animation-fill-mode(both);
     }
     & .loading {

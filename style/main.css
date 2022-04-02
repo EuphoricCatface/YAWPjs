@@ -220,8 +220,8 @@ hr {
   content: "Game over!";
   background: rgba(238, 228, 218, 0.75);
   text-align: center;
-  -webkit-animation: fade-in 800ms ease 800ms;
-  animation: fade-in 800ms ease 800ms;
+  -webkit-animation: fade-in 800ms ease 400ms;
+  animation: fade-in 800ms ease 400ms;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
