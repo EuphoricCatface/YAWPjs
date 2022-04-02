@@ -419,30 +419,34 @@ hr {
 
     &.double-word::after {
         content: "DW";
-        background-color: rgba(0, 0, 255, 0.500);
+        font-weight: bold;
+        color: blue;
+        background-color: rgba($field-color, 0.5);
         bottom: 0;
-        border-radius: $tile-border-sub-radius $tile-border-sub-radius $tile-border-radius $tile-border-sub-radius;
+        border-radius: $tile-border-sub-radius 0 $tile-border-radius 0;
     }
 
     &.triple-word::after {
         content: "TW";
-        background-color: rgba(255, 0, 0, 0.500);
+        font-weight: bold;
+        color: red;
+        background-color: rgba($field-color, 0.5);
         bottom: 0;
-        border-radius: $tile-border-sub-radius $tile-border-sub-radius $tile-border-radius $tile-border-sub-radius;
+        border-radius: $tile-border-sub-radius 0 $tile-border-radius 0;
     }
 
     &.double-letter::after {
         content: "DL";
         background-color: rgba(0, 0, 255, 0.500);
         top: 0;
-        border-radius: $tile-border-sub-radius $tile-border-radius $tile-border-sub-radius $tile-border-sub-radius;
+        border-radius: 0 $tile-border-radius 0 $tile-border-sub-radius;
     }
 
     &.triple-letter::after {
         content: "TL";
         background-color: rgba(255, 0, 0, 0.500);
         top: 0;
-        border-radius: $tile-border-sub-radius $tile-border-radius $tile-border-sub-radius $tile-border-sub-radius;
+        border-radius: 0 $tile-border-radius 0 $tile-border-sub-radius;
     }
 
     &:after {

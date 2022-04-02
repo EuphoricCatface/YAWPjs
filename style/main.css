@@ -630,27 +630,31 @@ hr {
 }
 .tile-container .tile.double-word::after {
   content: "DW";
-  background-color: rgba(0, 0, 255, 0.5);
+  font-weight: bold;
+  color: blue;
+  background-color: rgba(187, 173, 160, 0.5);
   bottom: 0;
-  border-radius: 3px 3px 18px 3px;
+  border-radius: 3px 0 18px 0;
 }
 .tile-container .tile.triple-word::after {
   content: "TW";
-  background-color: rgba(255, 0, 0, 0.5);
+  font-weight: bold;
+  color: red;
+  background-color: rgba(187, 173, 160, 0.5);
   bottom: 0;
-  border-radius: 3px 3px 18px 3px;
+  border-radius: 3px 0 18px 0;
 }
 .tile-container .tile.double-letter::after {
   content: "DL";
   background-color: rgba(0, 0, 255, 0.5);
   top: 0;
-  border-radius: 3px 18px 3px 3px;
+  border-radius: 0 18px 0 3px;
 }
 .tile-container .tile.triple-letter::after {
   content: "TL";
   background-color: rgba(255, 0, 0, 0.5);
   top: 0;
-  border-radius: 3px 18px 3px 3px;
+  border-radius: 0 18px 0 3px;
 }
 .tile-container .tile:after {
   line-height: initial;
