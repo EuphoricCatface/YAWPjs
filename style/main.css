@@ -191,7 +191,8 @@ hr {
 .turn-info .word-construct-container.hide-validity:after {
   visibility: hidden;
 }
-.turn-info .word-construct-container .construct {
+
+.tile.construct {
   display: inline-block;
   border-radius: 3px;
   width: 1ch;
@@ -199,17 +200,17 @@ hr {
   line-height: 1.5ch;
   margin-right: 1px;
 }
-.turn-info .word-construct-container .construct.double-letter {
+.tile.construct.double-letter {
   background-color: rgba(0, 0, 255, 0.2470588235);
 }
-.turn-info .word-construct-container .construct.triple-letter {
+.tile.construct.triple-letter {
   background-color: rgba(255, 0, 0, 0.2470588235);
 }
-.turn-info .word-construct-container .construct.double-word {
+.tile.construct.double-word {
   font-weight: bold;
   color: rgba(59, 59, 255, 0.7490196078);
 }
-.turn-info .word-construct-container .construct.triple-word {
+.tile.construct.triple-word {
   font-weight: bold;
   color: rgba(255, 59, 59, 0.7490196078);
 }
@@ -221,7 +222,7 @@ hr {
   border-radius: 27px;
   touch-action: none;
 }
-.game-container .loading, .game-container.game-over::after {
+.game-container .loading, .game-container .game-over {
   position: absolute;
   top: 0;
   right: 0;
@@ -235,10 +236,13 @@ hr {
   font-size: 60px;
   font-weight: bold;
 }
-.game-container.game-over:after {
-  content: "Game over!";
+.game-container .game-over {
   background: rgba(238, 228, 218, 0.75);
   text-align: center;
+  visibility: hidden;
+}
+.game-container .game-over.show {
+  visibility: visible;
   -webkit-animation: fade-in 800ms ease 400ms;
   animation: fade-in 800ms ease 400ms;
   -webkit-animation-fill-mode: both;
@@ -247,9 +251,6 @@ hr {
 .game-container .loading {
   color: #eee4da;
   background: rgba(119, 110, 101, 0.5);
-}
-.game-container .loading:after {
-  content: "Loading...";
 }
 .game-container .loading.loaded {
   visibility: hidden;

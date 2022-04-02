@@ -205,28 +205,29 @@ hr {
         &.invalid::after { content: "❌" }
         &.finish-select:after { opacity: 1; }
         &.hide-validity:after { visibility: hidden; }
-        & .construct {
-            display: inline-block;
-            border-radius: 3px;
-            width: 1ch;
-            height: 1.6ch;
-            line-height: 1.5ch;
-            margin-right: 1px;
-            &.double-letter {
-                background-color: #0000ff3f;
-            }
-            &.triple-letter {
-                background-color: #ff00003f;
-            }
-            &.double-word {
-                font-weight: bold;
-                color: #3b3bffbf;
-            }
-            &.triple-word {
-                font-weight: bold;
-                color: #ff3b3bbf;
-            }
-        }
+    }
+}
+
+.tile.construct {
+    display: inline-block;
+    border-radius: 3px;
+    width: 1ch;
+    height: 1.6ch;
+    line-height: 1.5ch;
+    margin-right: 1px;
+    &.double-letter {
+        background-color: #0000ff3f;
+    }
+    &.triple-letter {
+        background-color: #ff00003f;
+    }
+    &.double-word {
+        font-weight: bold;
+        color: #3b3bffbf;
+    }
+    &.triple-word {
+        font-weight: bold;
+        color: #ff3b3bbf;
     }
 }
 
@@ -238,7 +239,7 @@ hr {
     
     touch-action: none;
 
-    & .loading, &.game-over::after {
+    & .loading, & .game-over {
         position: absolute;
         top: 0;
         right: 0;
@@ -253,21 +254,21 @@ hr {
         font-weight: bold;
     }
 
-    &.game-over:after {
-        content: "Game over!";
+    & .game-over {
         background: rgba($tile-color, .75);
         text-align: center;
-
-        @include animation(fade-in $transition-speed ease calc($transition-speed / 2));
-        @include animation-fill-mode(both);
+        visibility: hidden;
+        
+        &.show {
+            visibility: visible;
+            @include animation(fade-in $transition-speed ease calc($transition-speed / 2));
+            @include animation-fill-mode(both);
+        }
     }
     & .loading {
         color: $tile-color;
         background: rgba($text-color, .5);
 
-        &:after{
-            content: "Loading...";
-        }
         &.loaded {
             visibility: hidden;
             opacity: 0;

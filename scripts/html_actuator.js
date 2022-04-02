@@ -121,10 +121,12 @@ class HTMLActuator {
         this.scoreTotalContainer.textContent = this.totalScore.toString();
     }
     gameOver() {
-        this.gameContainer.classList.add("game-over");
+        const gameOver = document.getElementsByClassName("game-over")[0];
+        gameOver.classList.add("show");
     }
     remove_gameOver() {
-        this.gameContainer.classList.remove("game-over");
+        const gameOver = document.getElementsByClassName("game-over")[0];
+        gameOver.classList.remove("show");
     }
     showTurn(turns, maxturn) {
         if (HTMLActuator.HIDE_CURRENT_TURN)
