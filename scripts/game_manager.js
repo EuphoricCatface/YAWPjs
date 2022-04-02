@@ -1,6 +1,6 @@
 'use strict';
 class GameManager {
-    static MAX_TURN = 15;
+    static MAX_TURN = 5;
     static COMPLEMENTARY_RAND_ON_INIT = false;
     static COUNT_TURNS_ON_INVALID_MOVE = false;
     static DETERMINISTIC_BOTTOM_BONUS = false;

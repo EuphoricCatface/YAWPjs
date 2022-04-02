@@ -165,7 +165,8 @@ hr {
   float: right;
   color: #f9f6f2;
 }
-.turn-info .word-construct-container {
+
+.word-construct-container {
   padding: 0px 10px;
   background-color: #eee4da;
   font-family: monospace;
@@ -175,24 +176,23 @@ hr {
   float: left;
   padding: 0 10px;
 }
-.turn-info .word-construct-container:after {
+.word-construct-container:after {
   float: right;
   opacity: 0.5;
 }
-.turn-info .word-construct-container.valid::after {
+.word-construct-container.valid::after {
   content: "✔️";
 }
-.turn-info .word-construct-container.invalid::after {
+.word-construct-container.invalid::after {
   content: "❌";
 }
-.turn-info .word-construct-container.finish-select:after {
+.word-construct-container.finish-select:after {
   opacity: 1;
 }
-.turn-info .word-construct-container.hide-validity:after {
+.word-construct-container.hide-validity:after {
   visibility: hidden;
 }
-
-.tile.construct {
+.word-construct-container .tile.construct {
   display: inline-block;
   border-radius: 3px;
   width: 1ch;
@@ -200,17 +200,17 @@ hr {
   line-height: 1.5ch;
   margin-right: 1px;
 }
-.tile.construct.double-letter {
+.word-construct-container .tile.construct.double-letter {
   background-color: rgba(0, 0, 255, 0.2470588235);
 }
-.tile.construct.triple-letter {
+.word-construct-container .tile.construct.triple-letter {
   background-color: rgba(255, 0, 0, 0.2470588235);
 }
-.tile.construct.double-word {
+.word-construct-container .tile.construct.double-word {
   font-weight: bold;
   color: rgba(59, 59, 255, 0.7490196078);
 }
-.tile.construct.triple-word {
+.word-construct-container .tile.construct.triple-word {
   font-weight: bold;
   color: rgba(255, 59, 59, 0.7490196078);
 }
@@ -230,9 +230,13 @@ hr {
   left: 0;
   display: block;
   text-align: center;
+  z-index: 100;
+}
+.game-container .loading {
   height: 600px;
   line-height: 600px;
-  z-index: 100;
+}
+.game-container .loading, .game-container .game-over .game-over-main {
   font-size: 60px;
   font-weight: bold;
 }
@@ -240,6 +244,10 @@ hr {
   background: rgba(238, 228, 218, 0.75);
   text-align: center;
   visibility: hidden;
+  height: 600px;
+}
+.game-container .game-over .game-over-main {
+  margin-top: 120px;
 }
 .game-container .game-over.show {
   visibility: visible;
@@ -247,6 +255,27 @@ hr {
   animation: fade-in 800ms ease 400ms;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
+}
+.game-container .game-over .tip-container::before {
+  content: "TIP: ";
+  font-weight: bold;
+}
+.game-container .game-over .ranks {
+  padding-top: 50px;
+}
+.game-container .game-over .ranks div {
+  display: inline-block;
+  width: 270px;
+}
+.game-container .game-over .ranks div:before {
+  font-size: 25px;
+  font-weight: bold;
+}
+.game-container .game-over .word-rank-container::before {
+  content: "Top Words";
+}
+.game-container .game-over .game-rank-container::before {
+  content: "High Scores";
 }
 .game-container .loading {
   color: #eee4da;

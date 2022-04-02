@@ -190,44 +190,44 @@ hr {
         float: right;
         color: $bright-text-color;
     }
-
-    .word-construct-container {
-        padding: 0px 10px;
-        background-color: $tile-color;
-        font-family: monospace;
-        width: calc($field-width * 3 / 5) - $grid-spacing;
-        height: calc($tile-size / 2);
-        overflow: hidden;
-        float: left;
-        padding: 0 10px;
-        &:after{ float:right; opacity: 0.5; }
-        &.valid::after { content: "✔️" }
-        &.invalid::after { content: "❌" }
-        &.finish-select:after { opacity: 1; }
-        &.hide-validity:after { visibility: hidden; }
-    }
 }
 
-.tile.construct {
-    display: inline-block;
-    border-radius: 3px;
-    width: 1ch;
-    height: 1.6ch;
-    line-height: 1.5ch;
-    margin-right: 1px;
-    &.double-letter {
-        background-color: #0000ff3f;
-    }
-    &.triple-letter {
-        background-color: #ff00003f;
-    }
-    &.double-word {
-        font-weight: bold;
-        color: #3b3bffbf;
-    }
-    &.triple-word {
-        font-weight: bold;
-        color: #ff3b3bbf;
+.word-construct-container {
+    padding: 0px 10px;
+    background-color: $tile-color;
+    font-family: monospace;
+    width: calc($field-width * 3 / 5) - $grid-spacing;
+    height: calc($tile-size / 2);
+    overflow: hidden;
+    float: left;
+    padding: 0 10px;
+    &:after{ float:right; opacity: 0.5; }
+    &.valid::after { content: "✔️" }
+    &.invalid::after { content: "❌" }
+    &.finish-select:after { opacity: 1; }
+    &.hide-validity:after { visibility: hidden; }
+
+    .tile.construct {
+        display: inline-block;
+        border-radius: 3px;
+        width: 1ch;
+        height: 1.6ch;
+        line-height: 1.5ch;
+        margin-right: 1px;
+        &.double-letter {
+            background-color: #0000ff3f;
+        }
+        &.triple-letter {
+            background-color: #ff00003f;
+        }
+        &.double-word {
+            font-weight: bold;
+            color: #3b3bffbf;
+        }
+        &.triple-word {
+            font-weight: bold;
+            color: #ff3b3bbf;
+        }
     }
 }
 
@@ -247,9 +247,15 @@ hr {
         left: 0;
         display: block;
         text-align: center;
+        z-index: 100;
+    }
+
+    .loading {
         height: $field-width;
         line-height: $field-width;
-        z-index: 100;
+    }
+
+    .loading, .game-over .game-over-main {
         font-size: 60px;
         font-weight: bold;
     }
@@ -258,11 +264,40 @@ hr {
         background: rgba($tile-color, .75);
         text-align: center;
         visibility: hidden;
+        height: $field-width;
+
+        .game-over-main {
+            margin-top: 120px;
+        }
         
         &.show {
             visibility: visible;
             @include animation(fade-in $transition-speed ease calc($transition-speed / 2));
             @include animation-fill-mode(both);
+        }
+        .tip-container::before {
+            content: "TIP: ";
+            font-weight: bold;
+        }
+
+        .ranks {
+            padding-top: 50px;
+
+            div {
+                display: inline-block;
+                width: calc($field-width / 2 - $grid-spacing);
+                &:before{
+                    font-size: 25px;
+                    font-weight: bold;
+                }
+            }
+        }
+        
+        .word-rank-container::before {
+            content: "Top Words";
+        }
+        .game-rank-container::before {
+            content: "High Scores";
         }
     }
     .loading {
