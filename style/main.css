@@ -107,7 +107,7 @@ hr {
   height: 65px;
   margin-bottom: 10px;
   font-weight: bold;
-  border-radius: 18px;
+  border-radius: 9px;
   background: rgba(238, 228, 218, 0.35);
   text-align: center;
 }
@@ -157,7 +157,7 @@ hr {
   width: 600px;
   height: 75px;
 }
-.turn-info .word-construct-container, .turn-info .calculation-container strong {
+.turn-info .calculation-container strong {
   font-size: 30px;
   line-height: 45px;
 }
@@ -175,6 +175,8 @@ hr {
   overflow: hidden;
   float: left;
   padding: 0 10px;
+  font-size: 30px;
+  line-height: 45px;
 }
 .word-construct-container:after {
   float: right;
@@ -222,7 +224,7 @@ hr {
   border-radius: 27px;
   touch-action: none;
 }
-.game-container .loading, .game-container .game-over {
+.game-container > .loading, .game-container > .game-over {
   position: absolute;
   top: 0;
   right: 0;
@@ -263,16 +265,38 @@ hr {
 .game-container .game-over .ranks {
   padding-top: 50px;
 }
-.game-container .game-over .ranks div {
+.game-container .game-over .ranks > div {
   display: inline-block;
   width: 270px;
+  height: 80px;
+  margin: 10px;
+  padding: 5px;
+  background-color: rgba(187, 173, 160, 0.75);
+  border-radius: 18px;
 }
-.game-container .game-over .ranks div:before {
+.game-container .game-over .ranks > div::before {
   font-size: 25px;
   font-weight: bold;
 }
+.game-container .game-over .word-rank-container {
+  float: left;
+}
 .game-container .game-over .word-rank-container::before {
-  content: "Top Words";
+  content: "Top Word";
+  display: block;
+}
+.game-container .game-over .word-rank-container .word-construct-container {
+  width: 150px;
+  transform: scale(0.8);
+}
+.game-container .game-over .word-rank-container .score {
+  line-height: 45px;
+  font-size: 30px;
+  color: #f9f6f2;
+  font-weight: bold;
+}
+.game-container .game-over .game-rank-container {
+  float: right;
 }
 .game-container .game-over .game-rank-container::before {
   content: "High Scores";

@@ -41,7 +41,7 @@ class GameManager {
     }
     gameInit() {
         const init = true;
-        this.actuator.loaded();
+        this.actuator.init();
         this.grid.build();
         this.prepareNextTurn(init);
         this.actuator.setScore(0);

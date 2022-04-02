@@ -10,15 +10,19 @@ class HTMLActuator {
         "p": 3, "qu": 10, "r": 1, "s": 1, "t": 1,
         "u": 1, "v": 4, "w": 4, "x": 8, "y": 4, "z": 10
     };
+    static TOPWORD_INIT = Object.freeze({score: 0, construct: null});
     tileContainer: Element;
     gameContainer: Element;
     wordConstructContainer: Element;
     calculationContainer: Element;
     scoreTotalContainer: Element;
     turnsContainer: Element;
+    wordRankContainer: Element;
+
     recentScore: number;
     turnMaxScore: number;
     totalScore: number;
+    topWord: any;
     constructor() {
         this.tileContainer = document.getElementsByClassName("tile-container")[0];
         this.gameContainer = document.getElementsByClassName("game-container")[0];
@@ -26,9 +30,12 @@ class HTMLActuator {
         this.calculationContainer = document.getElementsByClassName("calculation-container")[0];
         this.scoreTotalContainer = document.getElementsByClassName("score-total-container")[0];
         this.turnsContainer = document.getElementsByClassName("turns-container")[0];
+        this.wordRankContainer = document.getElementsByClassName("word-rank-container")[0];
+
         this.recentScore = 0;
         this.turnMaxScore = 0;
         this.totalScore = 0;
+        this.topWord = HTMLActuator.TOPWORD_INIT;
     }
     actuate_grid(grid: Grid) {
         window.requestAnimationFrame(() => {
@@ -123,8 +130,21 @@ class HTMLActuator {
         this.totalScore = score;
     }
     applyScore(validity: boolean) {
-        if (validity)
+        if (validity) {
             this.totalScore = this.totalScore + this.recentScore;
+            if (this.recentScore > this.topWord.score) {
+                const construct = this.wordConstructContainer.cloneNode(true) as HTMLElement;
+                construct.classList.remove("valid");
+                while(this.wordRankContainer.firstChild)
+                    this.wordRankContainer.removeChild(this.wordRankContainer.firstChild);
+                this.topWord = Object.freeze({score: this.recentScore, construct: construct});
+                this.wordRankContainer.appendChild(construct);
+                const score = document.createElement("div");
+                score.classList.add("score");
+                score.textContent = this.recentScore.toString();
+                this.wordRankContainer.appendChild(score);
+            }
+        }
         else if (HTMLActuator.PUNISH_BLIND_MOVES)
             this.totalScore -= this.turnMaxScore / 2;
         this.turnMaxScore = 0;
@@ -144,11 +164,12 @@ class HTMLActuator {
         console.log("turns: " + turns);
         this.turnsContainer.textContent = "" + turns + " / " + maxturn;
     }
-    loaded() {
+    init() {
         const loading = document.getElementsByClassName("loading")[0];
         window.requestAnimationFrame(()=>{loading.classList.remove("loaded");});
         // Loading effect for restart
         setTimeout(()=>{window.requestAnimationFrame(()=>{loading.classList.add("loaded");});}, 50);
+        this.topWord = HTMLActuator.TOPWORD_INIT;
     }
     showValidity(bool = true) {
         if (bool)
@@ -164,8 +185,3 @@ class HTMLActuator {
         this.gameContainer.addEventListener("touchmove", (e)=>{e.preventDefault();});
     }
 }
-
-
-
-
-

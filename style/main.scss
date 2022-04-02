@@ -16,6 +16,7 @@ $text-color: #776e65;
 $bright-text-color: #f9f6f2;
 $tile-color: #eee4da;
 $tile-color-selected: #c0b9b1;
+$field-color: #bbada0;
 
 $intro-height: 160px;
 
@@ -115,7 +116,7 @@ hr {
     -moz-user-select: none;
     user-select: none;
 
-    background: #bbada0;
+    background: $field-color;
     box-sizing: border-box;
 }
 
@@ -130,7 +131,7 @@ hr {
         height: 65px;
         margin-bottom: calc(10px);
         font-weight: bold;
-        border-radius: $tile-border-radius;
+        border-radius: calc($tile-border-radius / 2);
         background: rgba($tile-color, .35);
         text-align: center;
     }
@@ -182,7 +183,7 @@ hr {
 .turn-info {
     width: $field-width;
     height: calc($tile-size / 2 + $grid-spacing);
-    .word-construct-container, & .calculation-container strong {
+    .calculation-container strong {
         font-size: calc($tile-size / 3);
         line-height: calc($tile-size / 2);
     }
@@ -206,6 +207,9 @@ hr {
     &.invalid::after { content: "❌" }
     &.finish-select:after { opacity: 1; }
     &.hide-validity:after { visibility: hidden; }
+
+    font-size: calc($tile-size / 3);
+    line-height: calc($tile-size / 2);
 
     .tile.construct {
         display: inline-block;
@@ -239,7 +243,7 @@ hr {
     
     touch-action: none;
 
-    .loading, .game-over {
+    >.loading, >.game-over {
         position: absolute;
         top: 0;
         right: 0;
@@ -283,21 +287,43 @@ hr {
         .ranks {
             padding-top: 50px;
 
-            div {
+            &>div {
                 display: inline-block;
                 width: calc($field-width / 2 - $grid-spacing);
-                &:before{
+                height: 80px;
+                margin: 10px;
+                padding: 5px;
+                background-color: rgba($field-color, .75);
+                border-radius: $tile-border-radius;
+                &::before{
                     font-size: 25px;
                     font-weight: bold;
                 }
             }
         }
         
-        .word-rank-container::before {
-            content: "Top Words";
+        .word-rank-container{
+            &::before {
+                content: "Top Word";
+                display: block;
+            }
+            .word-construct-container {
+                width: 150px;
+                transform: scale(0.8);
+            }
+            .score {
+                line-height: 45px;
+                font-size: 30px;
+                color:$bright-text-color;
+                font-weight: bold;
+            }
+            float: left;
         }
-        .game-rank-container::before {
-            content: "High Scores";
+        .game-rank-container{
+            &::before {
+                content: "High Scores";
+            }
+            float: right;
         }
     }
     .loading {
