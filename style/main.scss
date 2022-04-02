@@ -171,10 +171,10 @@ hr {
             line-height: 20px;
         }
     }
-    & .score-total-container::before { 
+    .score-total-container::before { 
         content:"Score"
     }
-    & .turns-container::before { 
+    .turns-container::before { 
         content:"Turns"
     }
 }
@@ -239,7 +239,7 @@ hr {
     
     touch-action: none;
 
-    & .loading, & .game-over {
+    .loading, .game-over {
         position: absolute;
         top: 0;
         right: 0;
@@ -254,7 +254,7 @@ hr {
         font-weight: bold;
     }
 
-    & .game-over {
+    .game-over {
         background: rgba($tile-color, .75);
         text-align: center;
         visibility: hidden;
@@ -265,7 +265,7 @@ hr {
             @include animation-fill-mode(both);
         }
     }
-    & .loading {
+    .loading {
         color: $tile-color;
         background: rgba($text-color, .5);
 
