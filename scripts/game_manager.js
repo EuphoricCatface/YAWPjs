@@ -265,9 +265,9 @@ class GameManager {
             "level-expert": () => {
                 this.actuator.showValidity(false);
                 HTMLActuator.PUNISH_BLIND_MOVES = false;
-                GameManager.TURNS_COUNTED_ON_INVALID_MOVE = false;
+                GameManager.TURNS_COUNTED_ON_INVALID_MOVE = true;
                 HTMLActuator.HIDE_CURRENT_TURN = true;
-                HTMLActuator.PUNISH_BLIND_MOVES = true;
+                HTMLActuator.PUNISH_BLIND_MOVES = false;
                 GameManager.DETERMINISTIC_BOTTOM_BONUS = true;
                 GameManager.COMPOUND_WORD_BONUS = true;
                 this.test_debug("restart");
