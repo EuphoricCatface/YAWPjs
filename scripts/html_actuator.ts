@@ -81,9 +81,9 @@ class HTMLActuator {
         element.addEventListener("pointerdown", tile.pointerdown_handler.bind(tile));
         element.addEventListener("pointerenter", tile.pointerenter_handler.bind(tile));
         element.addEventListener("pointerup", tile.popinterup_handler.bind(tile));
+        element.addEventListener("touchmove", tile.touchmove_handler.bind(tile));
 
         element.addEventListener("contextmenu", (e)=>{e.preventDefault();});
-        element.addEventListener("touchmove", (e)=>{e.preventDefault();});
     }
     actuate_word(tiles: HTMLElement[], validity: boolean) {
         while (this.wordConstructContainer.firstChild) {

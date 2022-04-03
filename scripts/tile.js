@@ -2,6 +2,7 @@
 class Tile {
     static POINTER_DEBUG = false;
     static BUTTON_DEBUG = false;
+    static POINTERENTER_FIRES;
     pos;
     value;
     prevPos;
@@ -38,6 +39,7 @@ class Tile {
             inputManager.sendInput();
     }
     pointerenter_handler(ev) {
+        Tile.POINTERENTER_FIRES = ev.target;
         ev.preventDefault();
         if (!Tile.selecting)
             return;
@@ -91,6 +93,18 @@ class Tile {
         // but problem is that the board may fire the drop as well as the tile,
         // making the check duplicate.
         return true;
+    }
+    touchmove_handler(ev) {
+        if (Tile.POINTER_DEBUG)
+            console.log(ev.touches[0].clientX, ev.touches[0].clientY);
+        const elem = document.elementFromPoint(ev.touches[0].clientX, ev.touches[0].clientY);
+        if (!elem.classList.contains("tile"))
+            return;
+        if (Tile.POINTERENTER_FIRES === elem)
+            return;
+        if (Tile.POINTER_DEBUG)
+            console.log(elem);
+        elem.dispatchEvent(new PointerEvent("pointerenter", { "buttons": 1 }));
     }
 }
 //# sourceMappingURL=tile.js.map
