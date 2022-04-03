@@ -5,6 +5,7 @@ class GameManager {
     static TURNS_COUNTED_ON_INVALID_MOVE = false;
     static DETERMINISTIC_BOTTOM_BONUS = false;
     static COMPOUND_WORD_BONUS = false;
+    static TRIPLE_WORD_DETERMINE_COUNT = null;
     size;
     actuator;
     grid;
@@ -212,11 +213,11 @@ class GameManager {
     }
     determine_bonus_bottom() {
         // 80% double, and triple in a random place
-        let triple_exist = false;
+        let triple_count = 0;
         for (let i = 0; i < this.grid.size; i++) {
             const tile = this.grid.getTileRef({ x: i, y: 0 });
             if (tile.bonus == "triple-word")
-                triple_exist = true;
+                triple_count++;
             if (tile.bonus.includes("word"))
                 continue;
             const rand = Math.floor(Math.random() * 5);
@@ -228,9 +229,12 @@ class GameManager {
                     tile.bonus = "double-word";
             }
         }
-        if (triple_exist == false) {
+        while (triple_count < GameManager.TRIPLE_WORD_DETERMINE_COUNT) {
             const tile = this.grid.getTileRef({ x: Math.floor(Math.random() * 5), y: 0 });
+            if (tile.bonus == "triple-word")
+                continue;
             tile.bonus = "triple-word";
+            triple_count++;
         }
     }
     test_debug(s) {
@@ -251,6 +255,7 @@ class GameManager {
                 HTMLActuator.PUNISH_BLIND_MOVES = false;
                 GameManager.DETERMINISTIC_BOTTOM_BONUS = false;
                 GameManager.COMPOUND_WORD_BONUS = false;
+                GameManager.TRIPLE_WORD_DETERMINE_COUNT = null;
                 this.test_debug("restart");
             },
             "level-hard": () => {
@@ -260,6 +265,7 @@ class GameManager {
                 HTMLActuator.PUNISH_BLIND_MOVES = true;
                 GameManager.DETERMINISTIC_BOTTOM_BONUS = true;
                 GameManager.COMPOUND_WORD_BONUS = false;
+                GameManager.TRIPLE_WORD_DETERMINE_COUNT = 2;
                 this.test_debug("restart");
             },
             "level-expert": () => {
@@ -270,6 +276,7 @@ class GameManager {
                 HTMLActuator.PUNISH_BLIND_MOVES = false;
                 GameManager.DETERMINISTIC_BOTTOM_BONUS = true;
                 GameManager.COMPOUND_WORD_BONUS = true;
+                GameManager.TRIPLE_WORD_DETERMINE_COUNT = 1;
                 this.test_debug("restart");
             }
         };
