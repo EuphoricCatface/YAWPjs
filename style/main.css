@@ -197,7 +197,6 @@ hr {
 .word-construct-container .tile.construct {
   display: inline-block;
   border-radius: 3px;
-  width: 1ch;
   height: 1.6ch;
   line-height: 1.5ch;
   margin-right: 1px;
