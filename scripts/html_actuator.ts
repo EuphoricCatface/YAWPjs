@@ -20,7 +20,7 @@ class HTMLActuator {
     wordRankContainer: Element;
 
     recentScore: number;
-    turnMaxScore: number;
+    turnMaxPureScore: number;
     totalScore: number;
     topWord: any;
     constructor() {
@@ -33,7 +33,7 @@ class HTMLActuator {
         this.wordRankContainer = document.getElementsByClassName("word-rank-container")[0];
 
         this.recentScore = 0;
-        this.turnMaxScore = 0;
+        this.turnMaxPureScore = 0;
         this.totalScore = 0;
         this.topWord = HTMLActuator.TOPWORD_INIT;
     }
@@ -120,8 +120,8 @@ class HTMLActuator {
             + " = ";
         const element = document.createElement("strong");
         this.recentScore = (pure_score + letter_bonus) * word_bonus;
-        if (this.recentScore > this.turnMaxScore)
-            this.turnMaxScore = this.recentScore;
+        if (pure_score > this.turnMaxPureScore)
+            this.turnMaxPureScore = this.recentScore;
         element.textContent = (this.recentScore).toString();
         this.calculationContainer.appendChild(element);
     }
@@ -146,8 +146,8 @@ class HTMLActuator {
             }
         }
         else if (HTMLActuator.PUNISH_BLIND_MOVES)
-            this.totalScore -= this.turnMaxScore / 2;
-        this.turnMaxScore = 0;
+            this.totalScore -= this.turnMaxPureScore / 2;
+        this.turnMaxPureScore = 0;
         this.scoreTotalContainer.textContent = this.totalScore.toString();
     }
     gameOver() {
