@@ -21,16 +21,32 @@
                 <h1>Yet Another<br>Word Puzzle (.js)</h1>
                 <p class="game-intro-explanation">Connect the letters into a word to score.<br>Get as high a score as possible in 20 turns!</p>
             </div>
-            <div class="game-info">
-                <div class="score-total-container">--</div>
-                <div class="turns-container">-- / --</div>
+            <div class="game-intro-side">
+                <div class="game-meta">
+                    <div class="help">❓</div>
+                    <div class="new">🗋</div>
+                </div>
+                <div class="game-info">
+                    <div class="score-total-container">--</div>
+                    <div class="turns-container">-- / --</div>
+                </div>
             </div>
             <div class="turn-info">
                 <div class="word-construct-container invalid">--</div>
                 <div class="calculation-container">(? + ?) * ? = <strong>??</strong></div>
             </div>
             <div class="game-container">
-                <div class="loading"></div>
+                <div class="loading">Loading...</div>
+                <div class="game-over">
+                    <div class="game-over-main">Game Over!</div>
+                    <div class="tip-container">The developer was lazy enough to not implement tips yet.<br>Stay tuned for real tips!</div>
+                    <div class="ranks">
+                        <div class="word-rank-container"></div>
+                        <div class="game-rank-container">
+                            <div>(Not Implemented!)</div>
+                        </div>
+                    </div>
+                </div>
                 <div class="grid-container">
                     <div class="grid-row">
                         <div class="grid-cell"></div>
@@ -95,7 +111,7 @@
                 Initial styling references <a href="https://github.com/gabrielecirulli/2048">gabrielecirulli/2048</a>, because this is my first HTML5 project.
             </p>
             <p>
-                <strong>TODO</strong>: Polish visuals for score calculations, Make game / word score ranks, Create game mode menu and explanations, Tweak bonus for harder modes<br>
+                <strong>TODO</strong>: Polish visuals for score/turn calculations, Make game score gradings, Create game mode menu and explanations<br>
                 <span onclick="inputManager.emit('DEBUG','level-normal')">level-normal</span>, <span onclick="inputManager.emit('DEBUG','level-hard')">level-hard</span>, <span onclick="inputManager.emit('DEBUG','level-expert')">level-expert</span>
             </p>
         </div>
