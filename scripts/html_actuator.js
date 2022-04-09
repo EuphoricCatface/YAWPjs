@@ -175,5 +175,10 @@ class HTMLActuator {
     setDebug() {
         this.scoreTotalContainer.classList.add("debug");
     }
+    showLevel(level) {
+        this.scoreTotalContainer.classList.remove("normal", "hard", "expert");
+        const levelClass = { 0: "normal", 1: "hard", 2: "expert" }[level];
+        this.scoreTotalContainer.classList.add(levelClass);
+    }
 }
 //# sourceMappingURL=html_actuator.js.map

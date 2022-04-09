@@ -175,6 +175,15 @@ hr {
     .score-total-container::before { 
         content:"Score"
     }
+    .score-total-container.normal::before { 
+        content:"Normal"
+    }
+    .score-total-container.hard::before { 
+        content:"Hard"
+    }
+    .score-total-container.expert::before { 
+        content:"Expert"
+    }
     .score-total-container.debug::after { 
         content:"DEBUG";
         font-size: 10px;

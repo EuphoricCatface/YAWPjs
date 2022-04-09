@@ -149,6 +149,15 @@ hr {
 .game-intro-side .score-total-container::before {
   content: "Score";
 }
+.game-intro-side .score-total-container.normal::before {
+  content: "Normal";
+}
+.game-intro-side .score-total-container.hard::before {
+  content: "Hard";
+}
+.game-intro-side .score-total-container.expert::before {
+  content: "Expert";
+}
 .game-intro-side .score-total-container.debug::after {
   content: "DEBUG";
   font-size: 10px;
