@@ -409,13 +409,19 @@ hr {
             color:$bright-text-color;
             font-weight: bold;
         }
-        float: left;
-    }
-    .game-rank-container{
-        &::before {
-            content: "High Scores";
-        }
         float: right;
+    }
+    .game-rating-container{
+        &::before {
+            content: "Rating";
+        }
+        .rating {
+            line-height: 45px;
+            font-size: 30px;
+            color:$bright-text-color;
+            font-weight: bold;
+        }
+        float: left;
     }
 }
 

@@ -11,6 +11,16 @@ class HTMLActuator {
         "u": 1, "v": 4, "w": 4, "x": 8, "y": 4, "z": 10
     };
     static TOPWORD_INIT = Object.freeze({score: 0, construct: null});
+    static RATING = new Map([
+        [0, "Try Harder..."],
+        [5, "Unlucky"], // * 15 = 75
+        [8.3, "Nice"], // * 15 = 125
+        [10, "Great!"], // * 15 = 150
+        [13.3, "Wonderful!"], // * 15 = 200
+        [20, "Impressive!"], // * 15 = 300
+        [30, "Incredible!"], // * 15 = 450
+        [40, "True Expert!"] // * 15 = 600
+    ]);
     tileContainer: Element;
     gameContainer: Element;
     wordConstructContainer: Element;
@@ -18,6 +28,7 @@ class HTMLActuator {
     scoreTotalContainer: Element;
     turnsContainer: Element;
     wordRankContainer: Element;
+    gameRatingContainer: Element;
 
     recentScore: number;
     turnMaxPureScore: number;
@@ -31,6 +42,7 @@ class HTMLActuator {
         this.scoreTotalContainer = document.querySelector(".score-total-container");
         this.turnsContainer = document.querySelector(".turns-container");
         this.wordRankContainer = document.querySelector(".word-rank-container");
+        this.gameRatingContainer = document.querySelector(".game-rating-container");
         
         this.recentScore = 0;
         this.turnMaxPureScore = 0;
@@ -140,6 +152,7 @@ class HTMLActuator {
         this.totalScore = score;
     }
     applyScore(validity: boolean) {
+        // Top word
         if (validity) {
             this.totalScore = this.totalScore + this.recentScore;
             if (this.recentScore > this.topWord.score) {
@@ -161,10 +174,28 @@ class HTMLActuator {
         this.scoreTotalContainer.textContent = this.totalScore.toString();
     }
     gameOver() {
+        this.scoreRating();
         setTimeout(() => 
             {this.screen_setShow(document.querySelector(".game-over"), true);},
             400
         );
+    }
+    scoreRating() {
+        let rating_res = "";
+        const avg_score = this.totalScore / GameManager.MAX_TURN;
+        for (const pair of HTMLActuator.RATING) {
+            if (pair[0] >= avg_score)
+                break;
+            rating_res = pair[1];
+        }
+        const rating = document.createElement("div");
+        rating.classList.add("rating");
+        rating.textContent = rating_res;
+
+        while(this.gameRatingContainer.firstChild) {
+            this.gameRatingContainer.removeChild(this.gameRatingContainer.firstChild);
+        }
+        this.gameRatingContainer.appendChild(rating);
     }
     remove_gameOver() {
         this.screen_setShow(document.querySelector(".game-over"), false);
@@ -184,7 +215,6 @@ class HTMLActuator {
         setTimeout(()=>{window.requestAnimationFrame(()=>{
             this.screen_setShow(loading, false);
         });}, 50);
-        this.topWord = HTMLActuator.TOPWORD_INIT;
     }
     showValidity(bool = true) {
         if (bool)

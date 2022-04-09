@@ -368,7 +368,7 @@ hr {
   font-weight: bold;
 }
 .game-container > .game-over .word-rank-container {
-  float: left;
+  float: right;
 }
 .game-container > .game-over .word-rank-container::before {
   content: "Top Word";
@@ -384,11 +384,17 @@ hr {
   color: #f9f6f2;
   font-weight: bold;
 }
-.game-container > .game-over .game-rank-container {
-  float: right;
+.game-container > .game-over .game-rating-container {
+  float: left;
 }
-.game-container > .game-over .game-rank-container::before {
-  content: "High Scores";
+.game-container > .game-over .game-rating-container::before {
+  content: "Rating";
+}
+.game-container > .game-over .game-rating-container .rating {
+  line-height: 45px;
+  font-size: 30px;
+  color: #f9f6f2;
+  font-weight: bold;
 }
 
 .grid-container {
