@@ -195,9 +195,15 @@ class HTMLActuator {
         this.scoreTotalContainer.classList.add(levelClass);
     }
     howto_show(b) {
+        if (b) {
+            this.newgame_show(false);
+        }
         this.screen_setShow(document.querySelector(".game-howto"), b);
     }
     newgame_show(b) {
+        if (b) {
+            this.howto_show(false);
+        }
         this.screen_setShow(document.querySelector(".game-new"), b);
     }
 }

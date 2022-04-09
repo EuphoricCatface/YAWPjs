@@ -207,10 +207,16 @@ class HTMLActuator {
         const levelClass = {0: "normal", 1: "hard", 2: "expert"}[level];
         this.scoreTotalContainer.classList.add(levelClass);
     }
-    howto_show(b) {
+    howto_show(b: boolean) {
+        if (b) {
+            this.newgame_show(false);
+        }
         this.screen_setShow(document.querySelector(".game-howto"), b);
     }
-    newgame_show(b) {
+    newgame_show(b: boolean) {
+        if (b) {
+            this.howto_show(false);
+        }
         this.screen_setShow(document.querySelector(".game-new"), b);
     }
 }
