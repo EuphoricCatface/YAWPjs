@@ -236,7 +236,7 @@ hr {
   border-radius: 27px;
   touch-action: none;
 }
-.game-container > .loading, .game-container > .game-over {
+.game-container > .game-loading, .game-container > .game-over {
   position: absolute;
   top: 0;
   right: 0;
@@ -245,39 +245,51 @@ hr {
   display: block;
   text-align: center;
   z-index: 100;
-}
-.game-container .loading {
-  height: 600px;
-  line-height: 600px;
-}
-.game-container .loading, .game-container .game-over .game-over-main {
-  font-size: 60px;
-  font-weight: bold;
-}
-.game-container .game-over {
-  background: rgba(238, 228, 218, 0.75);
-  text-align: center;
-  visibility: hidden;
   height: 600px;
 }
-.game-container .game-over .game-over-main {
-  margin-top: 120px;
-}
-.game-container .game-over.show {
+.game-container > .game-loading.show, .game-container > .game-over.show {
   visibility: visible;
-  -webkit-animation: fade-in 800ms ease 400ms;
-  animation: fade-in 800ms ease 400ms;
+  -webkit-animation: fade-in 0.1s ease 0.1s;
+  animation: fade-in 0.1s ease 0.1s;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
-.game-container .game-over .tip-container::before {
+.game-container > .game-loading.hide, .game-container > .game-over.hide {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.5s, opacity 0.5s linear;
+}
+.game-container .game-loading, .game-container .game-over .game-over-main {
+  font-size: 60px;
+  font-weight: bold;
+}
+.game-container .game-loading {
+  color: #eee4da;
+  background: rgba(119, 110, 101, 0.5);
+  line-height: 600px;
+}
+.game-container .game-loading.show {
+  visibility: unset;
+  -webkit-animation: unset;
+          animation: unset;
+}
+
+.game-container > .game-over {
+  background: rgba(238, 228, 218, 0.75);
+  text-align: center;
+  visibility: hidden;
+}
+.game-container > .game-over .game-over-main {
+  margin-top: 120px;
+}
+.game-container > .game-over .tip-container::before {
   content: "TIP: ";
   font-weight: bold;
 }
-.game-container .game-over .ranks {
+.game-container > .game-over .ranks {
   padding-top: 50px;
 }
-.game-container .game-over .ranks > div {
+.game-container > .game-over .ranks > div {
   display: inline-block;
   width: 270px;
   height: 80px;
@@ -286,41 +298,32 @@ hr {
   background-color: rgba(187, 173, 160, 0.75);
   border-radius: 18px;
 }
-.game-container .game-over .ranks > div::before {
+.game-container > .game-over .ranks > div::before {
   font-size: 25px;
   font-weight: bold;
 }
-.game-container .game-over .word-rank-container {
+.game-container > .game-over .word-rank-container {
   float: left;
 }
-.game-container .game-over .word-rank-container::before {
+.game-container > .game-over .word-rank-container::before {
   content: "Top Word";
   display: block;
 }
-.game-container .game-over .word-rank-container .word-construct-container {
+.game-container > .game-over .word-rank-container .word-construct-container {
   width: 150px;
   transform: scale(0.8);
 }
-.game-container .game-over .word-rank-container .score {
+.game-container > .game-over .word-rank-container .score {
   line-height: 45px;
   font-size: 30px;
   color: #f9f6f2;
   font-weight: bold;
 }
-.game-container .game-over .game-rank-container {
+.game-container > .game-over .game-rank-container {
   float: right;
 }
-.game-container .game-over .game-rank-container::before {
+.game-container > .game-over .game-rank-container::before {
   content: "High Scores";
-}
-.game-container .loading {
-  color: #eee4da;
-  background: rgba(119, 110, 101, 0.5);
-}
-.game-container .loading.loaded {
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0s 0.5s, opacity 0.5s linear;
 }
 
 .grid-container {

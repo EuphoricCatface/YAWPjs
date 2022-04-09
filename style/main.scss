@@ -256,7 +256,7 @@ hr {
     
     touch-action: none;
 
-    >.loading, >.game-over {
+    >.game-loading, >.game-over {
         position: absolute;
         top: 0;
         right: 0;
@@ -265,89 +265,89 @@ hr {
         display: block;
         text-align: center;
         z-index: 100;
-    }
-
-    .loading {
         height: $field-width;
-        line-height: $field-width;
-    }
-
-    .loading, .game-over .game-over-main {
-        font-size: 60px;
-        font-weight: bold;
-    }
-
-    .game-over {
-        background: rgba($tile-color, .75);
-        text-align: center;
-        visibility: hidden;
-        height: $field-width;
-
-        .game-over-main {
-            margin-top: 120px;
-        }
-        
+    
         &.show {
             visibility: visible;
-            @include animation(fade-in $transition-speed ease calc($transition-speed / 2));
+            @include animation(fade-in 0.1s ease 0.1s);
             @include animation-fill-mode(both);
         }
-        .tip-container::before {
-            content: "TIP: ";
-            font-weight: bold;
-        }
 
-        .ranks {
-            padding-top: 50px;
-
-            &>div {
-                display: inline-block;
-                width: calc($field-width / 2 - $grid-spacing);
-                height: 80px;
-                margin: 10px;
-                padding: 5px;
-                background-color: rgba($field-color, .75);
-                border-radius: $tile-border-radius;
-                &::before{
-                    font-size: 25px;
-                    font-weight: bold;
-                }
-            }
-        }
-        
-        .word-rank-container{
-            &::before {
-                content: "Top Word";
-                display: block;
-            }
-            .word-construct-container {
-                width: 150px;
-                transform: scale(0.8);
-            }
-            .score {
-                line-height: 45px;
-                font-size: 30px;
-                color:$bright-text-color;
-                font-weight: bold;
-            }
-            float: left;
-        }
-        .game-rank-container{
-            &::before {
-                content: "High Scores";
-            }
-            float: right;
-        }
-    }
-    .loading {
-        color: $tile-color;
-        background: rgba($text-color, .5);
-
-        &.loaded {
+        &.hide {
             visibility: hidden;
             opacity: 0;
             transition: visibility 0s .5s, opacity .5s linear;
         }
+    }
+
+    .game-loading, .game-over .game-over-main {
+        font-size: 60px;
+        font-weight: bold;
+    }
+
+    .game-loading {
+        color: $tile-color;
+        background: rgba($text-color, .5);
+        line-height: $field-width;
+        &.show {
+            visibility: unset;
+            animation: unset;
+        }
+    }
+}
+.game-container>.game-over {
+    background: rgba($tile-color, .75);
+    text-align: center;
+    visibility: hidden;
+
+    .game-over-main {
+        margin-top: 120px;
+    }
+    .tip-container::before {
+        content: "TIP: ";
+        font-weight: bold;
+    }
+
+    .ranks {
+        padding-top: 50px;
+
+        &>div {
+            display: inline-block;
+            width: calc($field-width / 2 - $grid-spacing);
+            height: 80px;
+            margin: 10px;
+            padding: 5px;
+            background-color: rgba($field-color, .75);
+            border-radius: $tile-border-radius;
+            &::before{
+                font-size: 25px;
+                font-weight: bold;
+            }
+        }
+    }
+    
+    .word-rank-container{
+        &::before {
+            content: "Top Word";
+            display: block;
+        }
+        .word-construct-container {
+            width: 150px;
+            transform: scale(0.8);
+        }
+        .score {
+            line-height: 45px;
+            font-size: 30px;
+            color:$bright-text-color;
+            font-weight: bold;
+        }
+        float: left;
+    }
+    .game-rank-container{
+        &::before {
+            content: "High Scores";
+        }
+        float: right;
     }
 }
 

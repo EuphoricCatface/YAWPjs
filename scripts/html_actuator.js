@@ -140,11 +140,13 @@ class HTMLActuator {
     }
     gameOver() {
         const gameOver = document.getElementsByClassName("game-over")[0];
+        gameOver.classList.remove("hide");
         gameOver.classList.add("show");
     }
     remove_gameOver() {
         const gameOver = document.getElementsByClassName("game-over")[0];
         gameOver.classList.remove("show");
+        gameOver.classList.add("hide");
     }
     showTurn(turns, maxturn) {
         if (HTMLActuator.HIDE_CURRENT_TURN)
@@ -153,10 +155,18 @@ class HTMLActuator {
         this.turnsContainer.textContent = "" + turns + " / " + maxturn;
     }
     init() {
-        const loading = document.getElementsByClassName("loading")[0];
-        window.requestAnimationFrame(() => { loading.classList.remove("loaded"); });
+        const loading = document.getElementsByClassName("game-loading")[0];
+        window.requestAnimationFrame(() => {
+            loading.classList.remove("hide");
+            loading.classList.add("show");
+        });
         // Loading effect for restart
-        setTimeout(() => { window.requestAnimationFrame(() => { loading.classList.add("loaded"); }); }, 50);
+        setTimeout(() => {
+            window.requestAnimationFrame(() => {
+                loading.classList.remove("show");
+                loading.classList.add("hide");
+            });
+        }, 50);
         this.topWord = HTMLActuator.TOPWORD_INIT;
     }
     showValidity(bool = true) {
