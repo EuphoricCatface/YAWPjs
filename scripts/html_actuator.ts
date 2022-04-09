@@ -37,6 +37,16 @@ class HTMLActuator {
         this.totalScore = 0;
         this.topWord = HTMLActuator.TOPWORD_INIT;
     }
+    screen_setShow(e: Element, b: boolean) {
+        if (b) {
+            e.classList.remove("hide");
+            e.classList.add("show");
+        }
+        else {
+            e.classList.remove("show");
+            setTimeout(() => {e.classList.add("hide");}, 10);
+        }
+    }
     actuate_grid(grid: Grid) {
         window.requestAnimationFrame(() => {
             this.clearContainer();
@@ -152,13 +162,11 @@ class HTMLActuator {
     }
     gameOver() {
         const gameOver = document.getElementsByClassName("game-over")[0];
-        gameOver.classList.remove("hide");
-        gameOver.classList.add("show");
+        setTimeout( () => {this.screen_setShow(gameOver, true);}, 400);
     }
     remove_gameOver() {
         const gameOver = document.getElementsByClassName("game-over")[0];
-        gameOver.classList.remove("show");
-        gameOver.classList.add("hide");
+        this.screen_setShow(gameOver, false);
     }
     showTurn(turns: number, maxturn: number) {
         if (HTMLActuator.HIDE_CURRENT_TURN)
@@ -169,13 +177,11 @@ class HTMLActuator {
     init() {
         const loading = document.getElementsByClassName("game-loading")[0];
         window.requestAnimationFrame(()=>{
-            loading.classList.remove("hide");
-            loading.classList.add("show");
+            this.screen_setShow(loading, true);
         });
         // Loading effect for restart
         setTimeout(()=>{window.requestAnimationFrame(()=>{
-            loading.classList.remove("show");
-            loading.classList.add("hide");
+            this.screen_setShow(loading, false);
         });}, 50);
         this.topWord = HTMLActuator.TOPWORD_INIT;
     }
