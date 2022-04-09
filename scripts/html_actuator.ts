@@ -210,4 +210,8 @@ class HTMLActuator {
         const howto = document.getElementsByClassName("game-howto")[0];
         this.screen_setShow(howto, b);
     }
+    newgame_show(b: boolean) {
+        const newgame = document.getElementsByClassName("game-new")[0];
+        this.screen_setShow(newgame, b);
+    }
 }

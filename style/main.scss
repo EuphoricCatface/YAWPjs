@@ -266,7 +266,8 @@ hr {
         text-align: center;
         z-index: 100;
         height: $field-width;
-        background: rgba($tile-color, .75);
+        background-color: rgba($text-color, .75);
+        color: $tile-color;
     
         &.show {
             visibility: visible;
@@ -315,8 +316,51 @@ hr {
             margin-bottom: 10px;
         }
     }
+
+    .game-new {
+        &::before {
+            content: "Select Difficulty";
+            margin-top: 50px;
+            margin-bottom: 10px;
+            font-size: 50px;
+            font-weight: bold;
+            display: block;
+        }
+        &.hide {
+            visibility: hidden;
+            transition: unset;
+        }
+        .difficulty {
+            width: 170px;
+            padding-left: 20px;
+            display: block;
+            float: left;
+            &:first-child {
+                padding-left: 40px;
+            }
+        }
+        .button {
+            font-size: 30px;
+            font-weight: bold;
+            line-height: 65px;
+            color: $text-color;
+            height: 65px;
+            width: 150px;
+            border-radius: calc($tile-border-radius / 2);
+            background-color: $tile-color;
+        }
+        .explanation {
+            text-align: left;
+        }
+        ul {
+            padding: 0;
+        }
+    }
 }
 .game-container>.game-over {
+    background: rgba($tile-color, .75);
+    color: $text-color;
+
     .game-over-main {
         margin-top: 120px;
     }

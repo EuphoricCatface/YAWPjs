@@ -39,7 +39,9 @@ class GameManager {
         inputManager.on("DEBUG", this.test_debug.bind(this));
         inputManager.on("level", this.level.bind(this));
         inputManager.on("howto_show", this.actuator.howto_show.bind(this.actuator));
-        this.gameInit();
+        inputManager.on("newgame_show", this.actuator.newgame_show.bind(this.actuator));
+        // this.gameInit();
+        this.actuator.newgame_show(true);
         clearInterval(this.validator_wait_loop);
     }
     gameInit() {

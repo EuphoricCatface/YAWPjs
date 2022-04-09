@@ -24,7 +24,7 @@
             <div class="game-intro-side">
                 <div class="game-meta">
                     <div class="help" onclick="inputManager.emit('howto_show', true)">❓</div>
-                    <div class="new">🗋</div>
+                    <div class="new" onclick="inputManager.emit('newgame_show', true)">🗋</div>
                 </div>
                 <div class="game-info">
                     <div class="score-total-container">--</div>
@@ -47,6 +47,44 @@
                         </div>
                     </div>
                 </div>
+                <div class="game-new hide" onclick="inputManager.emit('newgame_show', false)">
+                    <div class="difficulty">
+                        <div class="button" onclick="inputManager.emit('level',0)">Normal</div>
+                        <div class="explanation">
+                            <ul>
+                                <li>Word validity: Shown</li>
+                                <li>Turn count: Shown</li>
+                                <li>Wrong move penalty: No</li>
+                                <li>Triple Word: Random</li>
+                                <li>Word Bonus compounding: No</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="difficulty">
+                        <div class="button" onclick="inputManager.emit('level',1)">Hard</div>
+                        <div class="explanation">
+                            <ul>
+                                <li>Word validity: <strong>Hidden</strong></li>
+                                <li>Turn count: Shown</li>
+                                <li>Wrong move penalty: <strong>Score</strong></li>
+                                <li>Triple Word: 2</li>
+                                <li>Word Bonus compounding: No</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="difficulty">
+                        <div class="button" onclick="inputManager.emit('level',2)">Expert</div>
+                        <div class="explanation">
+                            <ul>
+                                <li>Word validity: <strong>Hidden</strong></li>
+                                <li>Turn count: <strong>Hidden</strong></li>
+                                <li>Wrong move penalty: <strong>Turn</strong></li>
+                                <li>Triple Word: 1</li>
+                                <li>Word Bonus compounding: <strong>Yes</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 <div class="game-howto hide">
                     <div class="game-howto-content" onclick="inputManager.emit('howto_show', false)">
                         <strong class="important">How to play:</strong>
@@ -56,7 +94,7 @@
                         </ul>
                         <strong>Tips:</strong>
                         <ol>
-                            <li>It only counts when you connect <strong>three or more tiles.</strong></li>
+                            <li>Words are only valid when you connect <strong>three or more tiles.</strong></li>
                             <li><strong>TL</strong> and <strong>DL</strong> mean <strong>Triple-Letter</strong> and <strong>Double-Letter</strong> bonus each.<br>
                                 They spawn on new tiles with lower chance.</li>
                             <li><strong>TW</strong> and <strong>DW</strong> mean <strong>Triple-word</strong> and <strong>Double-word</strong> bonus each.<br>
