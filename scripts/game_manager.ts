@@ -49,11 +49,9 @@ class GameManager {
         const init = true;
         this.grid.build();
         this.prepareNextTurn(init);
-        this.actuator.setScore(0);
-        this.turns = 0;
-        this.countTurns(true);
+        this.turns = 1;
         this.actuator.showTurn(this.turns, GameManager.MAX_TURN);
-        this.actuator.remove_gameOver();
+        this.actuator.gameInit();
     }
     prepareNextTurn(init = false) {
         this.fill_prepare(init);

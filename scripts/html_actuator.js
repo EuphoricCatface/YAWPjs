@@ -56,6 +56,11 @@ class HTMLActuator {
             setTimeout(() => { e.classList.add("hide"); }, 10);
         }
     }
+    gameInit() {
+        this.setScore(0);
+        this.topWord = HTMLActuator.TOPWORD_INIT;
+        this.remove_gameOver();
+    }
     actuate_grid(grid) {
         window.requestAnimationFrame(() => {
             this.clearContainer();
