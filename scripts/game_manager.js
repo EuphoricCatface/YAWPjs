@@ -41,11 +41,11 @@ class GameManager {
         inputManager.on("newgame_show", this.actuator.newgame_show.bind(this.actuator));
         // this.gameInit();
         this.actuator.newgame_show(true);
+        this.actuator.init();
         clearInterval(this.validator_wait_loop);
     }
     gameInit() {
         const init = true;
-        this.actuator.init();
         this.grid.build();
         this.prepareNextTurn(init);
         this.actuator.setScore(0);

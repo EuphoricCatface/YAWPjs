@@ -301,10 +301,6 @@ hr {
   font-weight: bold;
   display: block;
 }
-.game-container .game-new.hide {
-  visibility: hidden;
-  transition: unset;
-}
 .game-container .game-new .difficulty {
   width: 170px;
   padding-left: 20px;
