@@ -38,6 +38,7 @@ class GameManager {
         inputManager.on("finishSelect", this.finishSelect.bind(this));
         inputManager.on("DEBUG", this.test_debug.bind(this));
         inputManager.on("level", this.level.bind(this));
+        inputManager.on("howto_show", this.actuator.howto_show.bind(this.actuator));
         this.gameInit();
         clearInterval(this.validator_wait_loop);
     }

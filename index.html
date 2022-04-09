@@ -23,7 +23,7 @@
             </div>
             <div class="game-intro-side">
                 <div class="game-meta">
-                    <div class="help">❓</div>
+                    <div class="help" onclick="inputManager.emit('howto_show', true)">❓</div>
                     <div class="new">🗋</div>
                 </div>
                 <div class="game-info">
@@ -45,6 +45,25 @@
                         <div class="game-rank-container">
                             <div>(Not Implemented!)</div>
                         </div>
+                    </div>
+                </div>
+                <div class="game-howto hide">
+                    <div class="game-howto-content" onclick="inputManager.emit('howto_show', false)">
+                        <strong class="important">How to play:</strong>
+                        <ul>
+                            <li>Drag your <strong>mouse cursor</strong> to thread the tiles.</li>
+                            <li>When the threaded tiles make a word, they <strong>get squashed!</strong></li>
+                        </ul>
+                        <strong>Tips:</strong>
+                        <ol>
+                            <li>It only counts when you connect <strong>three or more tiles.</strong></li>
+                            <li><strong>TL</strong> and <strong>DL</strong> mean <strong>Triple-Letter</strong> and <strong>Double-Letter</strong> bonus each.<br>
+                                They spawn on new tiles with lower chance.</li>
+                            <li><strong>TW</strong> and <strong>DW</strong> mean <strong>Triple-word</strong> and <strong>Double-word</strong> bonus each.<br>
+                                They usually happen on blocks reaching the bottom, but not always.</li>
+                            <li><strong>Try to utilize word bonuses as much as possible.</strong><br>
+                                They will help you achieve much higher score!</li>
+                        </ol>
                     </div>
                 </div>
                 <div class="grid-container">

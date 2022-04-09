@@ -256,7 +256,7 @@ hr {
     
     touch-action: none;
 
-    >.game-loading, >.game-over {
+    >.game-loading, >.game-over, >.game-new, >.game-howto {
         position: absolute;
         top: 0;
         right: 0;
@@ -266,10 +266,11 @@ hr {
         text-align: center;
         z-index: 100;
         height: $field-width;
+        background: rgba($tile-color, .75);
     
         &.show {
             visibility: visible;
-            @include animation(fade-in 0.1s ease 0.1s);
+            @include animation(fade-in ease 0.5s);
             @include animation-fill-mode(both);
         }
 
@@ -294,12 +295,28 @@ hr {
             animation: unset;
         }
     }
+
+    .game-howto {
+        text-align: left;
+        .game-howto-content {
+            margin: 100px 40px;
+            .important {
+                font-size: 35px;
+            }
+        }
+        ul {
+            font-size: 20px;
+        }
+        ol {
+            font-size: 15px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+    }
 }
 .game-container>.game-over {
-    background: rgba($tile-color, .75);
-    text-align: center;
-    visibility: hidden;
-
     .game-over-main {
         margin-top: 120px;
     }
@@ -505,12 +522,4 @@ hr {
 .game-explanation {
     //margin-top: 50px;
     margin-top: 0;
-}
-
-ol {
-    margin: 0;
-}
-
-li {
-    margin-bottom: 10px;
 }
