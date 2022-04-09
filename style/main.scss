@@ -175,6 +175,10 @@ hr {
     .score-total-container::before { 
         content:"Score"
     }
+    .score-total-container.debug::after { 
+        content:"DEBUG";
+        font-size: 10px;
+    }
     .turns-container::before { 
         content:"Turns"
     }

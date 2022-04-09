@@ -172,5 +172,8 @@ class HTMLActuator {
         this.gameContainer.addEventListener("contextmenu", (e) => { e.preventDefault(); });
         this.gameContainer.addEventListener("touchmove", (e) => { e.preventDefault(); });
     }
+    setDebug() {
+        this.scoreTotalContainer.classList.add("debug");
+    }
 }
 //# sourceMappingURL=html_actuator.js.map

@@ -149,6 +149,10 @@ hr {
 .game-intro-side .score-total-container::before {
   content: "Score";
 }
+.game-intro-side .score-total-container.debug::after {
+  content: "DEBUG";
+  font-size: 10px;
+}
 .game-intro-side .turns-container::before {
   content: "Turns";
 }

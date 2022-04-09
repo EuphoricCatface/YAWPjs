@@ -242,6 +242,7 @@ class GameManager {
     }
 
     test_debug(s: string) {
+        this.actuator.setDebug();
         const debugMap: Record<string, CallableFunction> = {
             "restart": () =>                {setTimeout(this.gameInit.bind(this), 100);},
             "initcomp-toggle": () =>        {GameManager.COMPLEMENTARY_RAND_ON_INIT = !GameManager.COMPLEMENTARY_RAND_ON_INIT;},
