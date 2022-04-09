@@ -34,6 +34,16 @@ class HTMLActuator {
         this.totalScore = 0;
         this.topWord = HTMLActuator.TOPWORD_INIT;
     }
+    screen_setShow(e, b) {
+        if (b) {
+            e.classList.remove("hide");
+            e.classList.add("show");
+        }
+        else {
+            e.classList.remove("show");
+            setTimeout(() => { e.classList.add("hide"); }, 10);
+        }
+    }
     actuate_grid(grid) {
         window.requestAnimationFrame(() => {
             this.clearContainer();
@@ -140,11 +150,11 @@ class HTMLActuator {
     }
     gameOver() {
         const gameOver = document.getElementsByClassName("game-over")[0];
-        gameOver.classList.add("show");
+        setTimeout(() => { this.screen_setShow(gameOver, true); }, 400);
     }
     remove_gameOver() {
         const gameOver = document.getElementsByClassName("game-over")[0];
-        gameOver.classList.remove("show");
+        this.screen_setShow(gameOver, false);
     }
     showTurn(turns, maxturn) {
         if (HTMLActuator.HIDE_CURRENT_TURN)
@@ -153,10 +163,16 @@ class HTMLActuator {
         this.turnsContainer.textContent = "" + turns + " / " + maxturn;
     }
     init() {
-        const loading = document.getElementsByClassName("loading")[0];
-        window.requestAnimationFrame(() => { loading.classList.remove("loaded"); });
+        const loading = document.getElementsByClassName("game-loading")[0];
+        window.requestAnimationFrame(() => {
+            this.screen_setShow(loading, true);
+        });
         // Loading effect for restart
-        setTimeout(() => { window.requestAnimationFrame(() => { loading.classList.add("loaded"); }); }, 50);
+        setTimeout(() => {
+            window.requestAnimationFrame(() => {
+                this.screen_setShow(loading, false);
+            });
+        }, 50);
         this.topWord = HTMLActuator.TOPWORD_INIT;
     }
     showValidity(bool = true) {
@@ -171,6 +187,22 @@ class HTMLActuator {
         this.gameContainer.addEventListener("pointerup", Tile.prototype.popinterup_handler);
         this.gameContainer.addEventListener("contextmenu", (e) => { e.preventDefault(); });
         this.gameContainer.addEventListener("touchmove", (e) => { e.preventDefault(); });
+    }
+    setDebug() {
+        this.scoreTotalContainer.classList.add("debug");
+    }
+    showLevel(level) {
+        this.scoreTotalContainer.classList.remove("normal", "hard", "expert");
+        const levelClass = { 0: "normal", 1: "hard", 2: "expert" }[level];
+        this.scoreTotalContainer.classList.add(levelClass);
+    }
+    howto_show(b) {
+        const howto = document.getElementsByClassName("game-howto")[0];
+        this.screen_setShow(howto, b);
+    }
+    newgame_show(b) {
+        const newgame = document.getElementsByClassName("game-new")[0];
+        this.screen_setShow(newgame, b);
     }
 }
 //# sourceMappingURL=html_actuator.js.map

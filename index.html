@@ -13,7 +13,7 @@
         <script src="scripts/validator.js"></script>
         <script src="scripts/game_manager.js"></script>
         <script src="scripts/application.js"></script>
-        <meta name="viewport" content="width=700, initial-scale=1.0">
+        <meta name="viewport" content="width=700"/>
     </head>
     <body>
         <div class="container">
@@ -23,8 +23,8 @@
             </div>
             <div class="game-intro-side">
                 <div class="game-meta">
-                    <div class="help">❓</div>
-                    <div class="new">🗋</div>
+                    <div class="help" onclick="inputManager.emit('howto_show', true)">❓</div>
+                    <div class="new" onclick="inputManager.emit('newgame_show', true)">🗋</div>
                 </div>
                 <div class="game-info">
                     <div class="score-total-container">--</div>
@@ -36,8 +36,8 @@
                 <div class="calculation-container">(? + ?) * ? = <strong>??</strong></div>
             </div>
             <div class="game-container">
-                <div class="loading">Loading...</div>
-                <div class="game-over">
+                <div class="game-loading show">Loading...</div>
+                <div class="game-over hide">
                     <div class="game-over-main">Game Over!</div>
                     <div class="tip-container">The developer was lazy enough to not implement tips yet.<br>Stay tuned for real tips!</div>
                     <div class="ranks">
@@ -45,6 +45,63 @@
                         <div class="game-rank-container">
                             <div>(Not Implemented!)</div>
                         </div>
+                    </div>
+                </div>
+                <div class="game-new hide" onclick="inputManager.emit('newgame_show', false)">
+                    <div class="difficulty">
+                        <div class="button" onclick="inputManager.emit('level',0)">Normal</div>
+                        <div class="explanation">
+                            <ul>
+                                <li>Word validity: Shown</li>
+                                <li>Turn count: Shown</li>
+                                <li>Wrong move penalty: No</li>
+                                <li>Triple Word: Random</li>
+                                <li>Word Bonus compounding: No</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="difficulty">
+                        <div class="button" onclick="inputManager.emit('level',1)">Hard</div>
+                        <div class="explanation">
+                            <ul>
+                                <li>Word validity: <strong>Hidden</strong></li>
+                                <li>Turn count: Shown</li>
+                                <li>Wrong move penalty: <strong>Score</strong></li>
+                                <li>Triple Word: 2</li>
+                                <li>Word Bonus compounding: No</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="difficulty">
+                        <div class="button" onclick="inputManager.emit('level',2)">Expert</div>
+                        <div class="explanation">
+                            <ul>
+                                <li>Word validity: <strong>Hidden</strong></li>
+                                <li>Turn count: <strong>Hidden</strong></li>
+                                <li>Wrong move penalty: <strong>Turn</strong></li>
+                                <li>Triple Word: 1</li>
+                                <li>Word Bonus compounding: <strong>Yes</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="game-howto hide">
+                    <div class="game-howto-content" onclick="inputManager.emit('howto_show', false)">
+                        <strong class="important">How to play:</strong>
+                        <ul>
+                            <li>Drag your <strong>mouse cursor</strong> to thread the tiles.</li>
+                            <li>When the threaded tiles make a word, they <strong>get squashed!</strong></li>
+                        </ul>
+                        <strong>Tips:</strong>
+                        <ol>
+                            <li>Words are only valid when you connect <strong>three or more tiles.</strong></li>
+                            <li><strong>TL</strong> and <strong>DL</strong> mean <strong>Triple-Letter</strong> and <strong>Double-Letter</strong> bonus each.<br>
+                                They spawn on new tiles with lower chance.</li>
+                            <li><strong>TW</strong> and <strong>DW</strong> mean <strong>Triple-word</strong> and <strong>Double-word</strong> bonus each.<br>
+                                They usually happen on blocks reaching the bottom, but not always.</li>
+                            <li><strong>Try to utilize word bonuses as much as possible.</strong><br>
+                                They will help you achieve much higher score!</li>
+                        </ol>
                     </div>
                 </div>
                 <div class="grid-container">
@@ -89,30 +146,13 @@
                 </div>
             </div>
             <p>
-                <strong class="important">Attention!</strong> This game is <strong>not completed</strong>. TODO is written at the bottom of the page. Stay tuned!
-            </p>
-            <p class="game-explanation">
-                <strong class="important">How to play:</strong> Drag your <strong>mouse cursor</strong> to thread the tiles. When the threaded tiles make a word, they <strong>get squashed!</strong>
-                <ol>
-                    <li>It only counts when you connect three or more tiles.</li>
-                    <li><strong>TL</strong> and <strong>DL</strong> mean <strong>Triple-Letter</strong> and <strong>Double-Letter</strong> bonus each.<br>
-                        They spawn on new tiles with lower chance.</li>
-                    <li><strong>TW</strong> and <strong>DW</strong> mean <strong>Triple-word</strong> and <strong>Double-word</strong> bonus each.<br>
-                        They usually happen on blocks reaching the bottom, but not always.</li>
-                    <li><strong>Try to utilize word bonuses as much as possible.</strong><br>
-                        They will help you achieve much higher score!</li>
-                </ol>
-            </p>
-            <hr>
-            <p>
                 Created by EuphCat. Based on <a href="https://play.google.com/store/apps/details?id=com.FatCatStudios.Wordle&hl=en&gl=US" target="_blank">Wordle by FatCat Studios Ltd</a> (No, not *the* <a href="https://www.nytimes.com/games/wordle/index.html" target="_blank">Wordle by Josh Wardle</a>).
             </p>
             <p>
                 Initial styling references <a href="https://github.com/gabrielecirulli/2048">gabrielecirulli/2048</a>, because this is my first HTML5 project.
             </p>
             <p>
-                <strong>TODO</strong>: Polish visuals for score/turn calculations, Make game score gradings, Create game mode menu and explanations<br>
-                <span onclick="inputManager.emit('DEBUG','level-normal')">level-normal</span>, <span onclick="inputManager.emit('DEBUG','level-hard')">level-hard</span>, <span onclick="inputManager.emit('DEBUG','level-expert')">level-expert</span>
+                <strong>TODO</strong>: Compatibility for Apple mobile devices, Polish visuals?
             </p>
         </div>
     </body>

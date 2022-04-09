@@ -37,7 +37,11 @@ class GameManager {
         inputManager.on("sendInput", this.input.bind(this));
         inputManager.on("finishSelect", this.finishSelect.bind(this));
         inputManager.on("DEBUG", this.test_debug.bind(this));
-        this.gameInit();
+        inputManager.on("level", this.level.bind(this));
+        inputManager.on("howto_show", this.actuator.howto_show.bind(this.actuator));
+        inputManager.on("newgame_show", this.actuator.newgame_show.bind(this.actuator));
+        // this.gameInit();
+        this.actuator.newgame_show(true);
         clearInterval(this.validator_wait_loop);
     }
     gameInit() {
@@ -242,6 +246,7 @@ class GameManager {
     }
 
     test_debug(s: string) {
+        this.actuator.setDebug();
         const debugMap: Record<string, CallableFunction> = {
             "restart": () =>                {setTimeout(this.gameInit.bind(this), 100);},
             "initcomp-toggle": () =>        {GameManager.COMPLEMENTARY_RAND_ON_INIT = !GameManager.COMPLEMENTARY_RAND_ON_INIT;},
@@ -252,42 +257,53 @@ class GameManager {
             "punish-blind-toggle": () =>    {HTMLActuator.PUNISH_BLIND_MOVES = !HTMLActuator.PUNISH_BLIND_MOVES;},
             "deterministic-bottom-bonus-toggle": () => {GameManager.DETERMINISTIC_BOTTOM_BONUS = !GameManager.DETERMINISTIC_BOTTOM_BONUS;},
             "compound-word-bonus-toggle": () => {GameManager.COMPOUND_WORD_BONUS = !GameManager.COMPOUND_WORD_BONUS;},
-            "level-normal": () => {
-                this.actuator.showValidity(true);
-                GameManager.TURNS_COUNTED_ON_INVALID_MOVE = false;
-                HTMLActuator.HIDE_CURRENT_TURN = false;
-                HTMLActuator.PUNISH_BLIND_MOVES = false;
-                GameManager.DETERMINISTIC_BOTTOM_BONUS = false;
-                GameManager.COMPOUND_WORD_BONUS = false;
-                GameManager.TRIPLE_WORD_DETERMINE_COUNT = null;
-                this.test_debug("restart");
-            },
-            "level-hard": () => {
-                this.actuator.showValidity(false);
-                GameManager.TURNS_COUNTED_ON_INVALID_MOVE = false;
-                HTMLActuator.HIDE_CURRENT_TURN = false;
-                HTMLActuator.PUNISH_BLIND_MOVES = true;
-                GameManager.DETERMINISTIC_BOTTOM_BONUS = true;
-                GameManager.COMPOUND_WORD_BONUS = false;
-                GameManager.TRIPLE_WORD_DETERMINE_COUNT = 2;
-                this.test_debug("restart");
-            },
-            "level-expert": () => {
-                this.actuator.showValidity(false);
-                HTMLActuator.PUNISH_BLIND_MOVES = false;
-                GameManager.TURNS_COUNTED_ON_INVALID_MOVE = true;
-                HTMLActuator.HIDE_CURRENT_TURN = true;
-                HTMLActuator.PUNISH_BLIND_MOVES = false;
-                GameManager.DETERMINISTIC_BOTTOM_BONUS = true;
-                GameManager.COMPOUND_WORD_BONUS = true;
-                GameManager.TRIPLE_WORD_DETERMINE_COUNT = 1;
-                this.test_debug("restart");
-            }
+            "level-normal": () => {this.level(0);},
+            "level-hard": () => {this.level(1);},
+            "level-expert": () => {this.level(2);}
         };
         if (!debugMap.hasOwnProperty(s)) {
             console.log("Unknown debug command");
             return;
         }
         debugMap[s]();
+    }
+
+    level(level: number) {
+        if (level == 0) {
+            this.actuator.showValidity(true);
+            GameManager.TURNS_COUNTED_ON_INVALID_MOVE = false;
+            HTMLActuator.HIDE_CURRENT_TURN = false;
+            HTMLActuator.PUNISH_BLIND_MOVES = false;
+            GameManager.DETERMINISTIC_BOTTOM_BONUS = false;
+            GameManager.COMPOUND_WORD_BONUS = false;
+            GameManager.TRIPLE_WORD_DETERMINE_COUNT = null;
+            setTimeout(this.gameInit.bind(this), 100);
+        }
+        else if (level == 1) {
+            this.actuator.showValidity(false);
+            GameManager.TURNS_COUNTED_ON_INVALID_MOVE = false;
+            HTMLActuator.HIDE_CURRENT_TURN = false;
+            HTMLActuator.PUNISH_BLIND_MOVES = true;
+            GameManager.DETERMINISTIC_BOTTOM_BONUS = true;
+            GameManager.COMPOUND_WORD_BONUS = false;
+            GameManager.TRIPLE_WORD_DETERMINE_COUNT = 2;
+            setTimeout(this.gameInit.bind(this), 100);
+        }
+        else if (level == 2) {
+            this.actuator.showValidity(false);
+            HTMLActuator.PUNISH_BLIND_MOVES = false;
+            GameManager.TURNS_COUNTED_ON_INVALID_MOVE = true;
+            HTMLActuator.HIDE_CURRENT_TURN = true;
+            HTMLActuator.PUNISH_BLIND_MOVES = false;
+            GameManager.DETERMINISTIC_BOTTOM_BONUS = true;
+            GameManager.COMPOUND_WORD_BONUS = true;
+            GameManager.TRIPLE_WORD_DETERMINE_COUNT = 1;
+            setTimeout(this.gameInit.bind(this), 100);
+        }
+        else {
+            this.test_debug("");
+            return;
+        }
+        this.actuator.showLevel(level);
     }
 }

@@ -175,6 +175,19 @@ hr {
     .score-total-container::before { 
         content:"Score"
     }
+    .score-total-container.normal::before { 
+        content:"Normal"
+    }
+    .score-total-container.hard::before { 
+        content:"Hard"
+    }
+    .score-total-container.expert::before { 
+        content:"Expert"
+    }
+    .score-total-container.debug::after { 
+        content:"DEBUG";
+        font-size: 10px;
+    }
     .turns-container::before { 
         content:"Turns"
     }
@@ -243,7 +256,7 @@ hr {
     
     touch-action: none;
 
-    >.loading, >.game-over {
+    >.game-loading, >.game-over, >.game-new, >.game-howto {
         position: absolute;
         top: 0;
         right: 0;
@@ -252,89 +265,150 @@ hr {
         display: block;
         text-align: center;
         z-index: 100;
-    }
-
-    .loading {
         height: $field-width;
-        line-height: $field-width;
-    }
-
-    .loading, .game-over .game-over-main {
-        font-size: 60px;
-        font-weight: bold;
-    }
-
-    .game-over {
-        background: rgba($tile-color, .75);
-        text-align: center;
-        visibility: hidden;
-        height: $field-width;
-
-        .game-over-main {
-            margin-top: 120px;
-        }
-        
+        background-color: rgba($text-color, .75);
+        color: $tile-color;
+    
         &.show {
             visibility: visible;
-            @include animation(fade-in $transition-speed ease calc($transition-speed / 2));
+            @include animation(fade-in ease 0.5s);
             @include animation-fill-mode(both);
         }
-        .tip-container::before {
-            content: "TIP: ";
-            font-weight: bold;
-        }
 
-        .ranks {
-            padding-top: 50px;
-
-            &>div {
-                display: inline-block;
-                width: calc($field-width / 2 - $grid-spacing);
-                height: 80px;
-                margin: 10px;
-                padding: 5px;
-                background-color: rgba($field-color, .75);
-                border-radius: $tile-border-radius;
-                &::before{
-                    font-size: 25px;
-                    font-weight: bold;
-                }
-            }
-        }
-        
-        .word-rank-container{
-            &::before {
-                content: "Top Word";
-                display: block;
-            }
-            .word-construct-container {
-                width: 150px;
-                transform: scale(0.8);
-            }
-            .score {
-                line-height: 45px;
-                font-size: 30px;
-                color:$bright-text-color;
-                font-weight: bold;
-            }
-            float: left;
-        }
-        .game-rank-container{
-            &::before {
-                content: "High Scores";
-            }
-            float: right;
-        }
-    }
-    .loading {
-        color: $tile-color;
-        background: rgba($text-color, .5);
-
-        &.loaded {
+        &.hide {
             visibility: hidden;
             opacity: 0;
             transition: visibility 0s .5s, opacity .5s linear;
         }
+    }
+
+    .game-loading, .game-over .game-over-main {
+        font-size: 60px;
+        font-weight: bold;
+    }
+
+    .game-loading {
+        color: $tile-color;
+        background: rgba($text-color, .5);
+        line-height: $field-width;
+        &.show {
+            visibility: unset;
+            animation: unset;
+        }
+    }
+
+    .game-howto {
+        text-align: left;
+        .game-howto-content {
+            margin: 100px 40px;
+            .important {
+                font-size: 35px;
+            }
+        }
+        ul {
+            font-size: 20px;
+        }
+        ol {
+            font-size: 15px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+    }
+
+    .game-new {
+        &::before {
+            content: "Select Difficulty";
+            margin-top: 50px;
+            margin-bottom: 10px;
+            font-size: 50px;
+            font-weight: bold;
+            display: block;
+        }
+        &.hide {
+            visibility: hidden;
+            transition: unset;
+        }
+        .difficulty {
+            width: 170px;
+            padding-left: 20px;
+            display: block;
+            float: left;
+            &:first-child {
+                padding-left: 40px;
+            }
+        }
+        .button {
+            font-size: 30px;
+            font-weight: bold;
+            line-height: 65px;
+            color: $text-color;
+            height: 65px;
+            width: 150px;
+            border-radius: calc($tile-border-radius / 2);
+            background-color: $tile-color;
+        }
+        .explanation {
+            text-align: left;
+        }
+        ul {
+            padding: 0;
+        }
+    }
+}
+.game-container>.game-over {
+    background: rgba($tile-color, .75);
+    color: $text-color;
+
+    .game-over-main {
+        margin-top: 120px;
+    }
+    .tip-container::before {
+        content: "TIP: ";
+        font-weight: bold;
+    }
+
+    .ranks {
+        padding-top: 50px;
+
+        &>div {
+            display: inline-block;
+            width: calc($field-width / 2 - $grid-spacing);
+            height: 80px;
+            margin: 10px;
+            padding: 5px;
+            background-color: rgba($field-color, .75);
+            border-radius: $tile-border-radius;
+            &::before{
+                font-size: 25px;
+                font-weight: bold;
+            }
+        }
+    }
+    
+    .word-rank-container{
+        &::before {
+            content: "Top Word";
+            display: block;
+        }
+        .word-construct-container {
+            width: 150px;
+            transform: scale(0.8);
+        }
+        .score {
+            line-height: 45px;
+            font-size: 30px;
+            color:$bright-text-color;
+            font-weight: bold;
+        }
+        float: left;
+    }
+    .game-rank-container{
+        &::before {
+            content: "High Scores";
+        }
+        float: right;
     }
 }
 
@@ -492,12 +566,4 @@ hr {
 .game-explanation {
     //margin-top: 50px;
     margin-top: 0;
-}
-
-ol {
-    margin: 0;
-}
-
-li {
-    margin-bottom: 10px;
 }
