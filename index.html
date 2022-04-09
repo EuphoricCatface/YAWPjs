@@ -39,12 +39,10 @@
                 <div class="game-loading show">Loading...</div>
                 <div class="game-over hide">
                     <div class="game-over-main">Game Over!</div>
-                    <div class="tip-container">The developer was lazy enough to not implement tips yet.<br>Stay tuned for real tips!</div>
+                    <div class="tip-container" hidden>The developer was lazy enough to not implement tips yet.<br>Stay tuned for real tips!</div>
                     <div class="ranks">
+                        <div class="game-rating-container"></div>
                         <div class="word-rank-container"></div>
-                        <div class="game-rank-container">
-                            <div>(Not Implemented!)</div>
-                        </div>
                     </div>
                 </div>
                 <div class="game-new hide" onclick="inputManager.emit('newgame_show', false)">
@@ -102,6 +100,7 @@
                             <li><strong>Try to utilize word bonuses as much as possible.</strong><br>
                                 They will help you achieve much higher score!</li>
                         </ol>
+                        Click anywhere to dismiss.
                     </div>
                 </div>
                 <div class="grid-container">
@@ -152,7 +151,7 @@
                 Initial styling references <a href="https://github.com/gabrielecirulli/2048">gabrielecirulli/2048</a>, because this is my first HTML5 project.
             </p>
             <p>
-                <strong>TODO</strong>: Compatibility for Apple mobile devices, Polish visuals?
+                <strong>TODO</strong>: Compatibility for Apple mobile devices
             </p>
         </div>
     </body>

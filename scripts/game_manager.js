@@ -41,17 +41,16 @@ class GameManager {
         inputManager.on("newgame_show", this.actuator.newgame_show.bind(this.actuator));
         // this.gameInit();
         this.actuator.newgame_show(true);
+        this.actuator.init();
         clearInterval(this.validator_wait_loop);
     }
     gameInit() {
         const init = true;
-        this.actuator.init();
         this.grid.build();
         this.prepareNextTurn(init);
-        this.actuator.setScore(0);
-        this.turns = 0;
-        this.countTurns();
-        this.actuator.remove_gameOver();
+        this.turns = 1;
+        this.actuator.showTurn(this.turns, GameManager.MAX_TURN);
+        this.actuator.gameInit();
     }
     prepareNextTurn(init = false) {
         this.fill_prepare(init);
@@ -151,6 +150,7 @@ class GameManager {
         const validity = this.validator.validate(this.recent_input.word);
         this.actuator.finishSelect(validity);
         this.countTurns(validity);
+        this.actuator.showTurn(this.turns, GameManager.MAX_TURN);
         if (!validity)
             return;
         this.recent_input.elements.forEach(element => { element.remove(); });
@@ -159,18 +159,19 @@ class GameManager {
         });
         this.prepareNextTurn();
     }
-    countTurns(validity = true) {
+    countTurns(validity) {
         if (!(validity || GameManager.TURNS_COUNTED_ON_INVALID_MOVE))
             return;
         // Do not count a turn if input is only one letter
-        if (GameManager.TURNS_COUNTED_ON_INVALID_MOVE && this.recent_input.tiles.length == 1)
+        if (GameManager.TURNS_COUNTED_ON_INVALID_MOVE
+            && this.recent_input // Expert mode raises an exception here
+            && this.recent_input.tiles.length == 1)
             return;
         if (this.turns == GameManager.MAX_TURN) {
             this.actuator.gameOver();
             return;
         }
         this.turns += 1;
-        this.actuator.showTurn(this.turns, GameManager.MAX_TURN);
     }
     randomize_bonus_new() {
         // New tiles, letter bonuses: 86.6% no bonus, 10% double, 3.3% triple

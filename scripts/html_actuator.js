@@ -10,6 +10,16 @@ class HTMLActuator {
         "u": 1, "v": 4, "w": 4, "x": 8, "y": 4, "z": 10
     };
     static TOPWORD_INIT = Object.freeze({ score: 0, construct: null });
+    static RATING = new Map([
+        [0, "Try Harder..."],
+        [5, "Unlucky"],
+        [8.3, "Nice"],
+        [10, "Great!"],
+        [13.3, "Wonderful!"],
+        [20, "Impressive!"],
+        [30, "Incredible!"],
+        [40, "True Expert!"] // * 15 = 600
+    ]);
     tileContainer;
     gameContainer;
     wordConstructContainer;
@@ -17,18 +27,20 @@ class HTMLActuator {
     scoreTotalContainer;
     turnsContainer;
     wordRankContainer;
+    gameRatingContainer;
     recentScore;
     turnMaxPureScore;
     totalScore;
     topWord;
     constructor() {
-        this.tileContainer = document.getElementsByClassName("tile-container")[0];
-        this.gameContainer = document.getElementsByClassName("game-container")[0];
-        this.wordConstructContainer = document.getElementsByClassName("word-construct-container")[0];
-        this.calculationContainer = document.getElementsByClassName("calculation-container")[0];
-        this.scoreTotalContainer = document.getElementsByClassName("score-total-container")[0];
-        this.turnsContainer = document.getElementsByClassName("turns-container")[0];
-        this.wordRankContainer = document.getElementsByClassName("word-rank-container")[0];
+        this.tileContainer = document.querySelector(".tile-container");
+        this.gameContainer = document.querySelector(".game-container");
+        this.wordConstructContainer = document.querySelector(".word-construct-container");
+        this.calculationContainer = document.querySelector(".calculation-container");
+        this.scoreTotalContainer = document.querySelector(".score-total-container");
+        this.turnsContainer = document.querySelector(".turns-container");
+        this.wordRankContainer = document.querySelector(".word-rank-container");
+        this.gameRatingContainer = document.querySelector(".game-rating-container");
         this.recentScore = 0;
         this.turnMaxPureScore = 0;
         this.totalScore = 0;
@@ -43,6 +55,11 @@ class HTMLActuator {
             e.classList.remove("show");
             setTimeout(() => { e.classList.add("hide"); }, 10);
         }
+    }
+    gameInit() {
+        this.setScore(0);
+        this.topWord = HTMLActuator.TOPWORD_INIT;
+        this.remove_gameOver();
     }
     actuate_grid(grid) {
         window.requestAnimationFrame(() => {
@@ -128,6 +145,7 @@ class HTMLActuator {
         this.totalScore = score;
     }
     applyScore(validity) {
+        // Top word
         if (validity) {
             this.totalScore = this.totalScore + this.recentScore;
             if (this.recentScore > this.topWord.score) {
@@ -149,12 +167,27 @@ class HTMLActuator {
         this.scoreTotalContainer.textContent = this.totalScore.toString();
     }
     gameOver() {
-        const gameOver = document.getElementsByClassName("game-over")[0];
-        setTimeout(() => { this.screen_setShow(gameOver, true); }, 400);
+        this.scoreRating();
+        setTimeout(() => { this.screen_setShow(document.querySelector(".game-over"), true); }, 400);
+    }
+    scoreRating() {
+        let rating_res = "";
+        const avg_score = this.totalScore / GameManager.MAX_TURN;
+        for (const pair of HTMLActuator.RATING) {
+            if (pair[0] >= avg_score)
+                break;
+            rating_res = pair[1];
+        }
+        const rating = document.createElement("div");
+        rating.classList.add("rating");
+        rating.textContent = rating_res;
+        while (this.gameRatingContainer.firstChild) {
+            this.gameRatingContainer.removeChild(this.gameRatingContainer.firstChild);
+        }
+        this.gameRatingContainer.appendChild(rating);
     }
     remove_gameOver() {
-        const gameOver = document.getElementsByClassName("game-over")[0];
-        this.screen_setShow(gameOver, false);
+        this.screen_setShow(document.querySelector(".game-over"), false);
     }
     showTurn(turns, maxturn) {
         if (HTMLActuator.HIDE_CURRENT_TURN)
@@ -163,7 +196,7 @@ class HTMLActuator {
         this.turnsContainer.textContent = "" + turns + " / " + maxturn;
     }
     init() {
-        const loading = document.getElementsByClassName("game-loading")[0];
+        const loading = document.querySelector(".game-loading");
         window.requestAnimationFrame(() => {
             this.screen_setShow(loading, true);
         });
@@ -173,7 +206,6 @@ class HTMLActuator {
                 this.screen_setShow(loading, false);
             });
         }, 50);
-        this.topWord = HTMLActuator.TOPWORD_INIT;
     }
     showValidity(bool = true) {
         if (bool)
@@ -197,12 +229,16 @@ class HTMLActuator {
         this.scoreTotalContainer.classList.add(levelClass);
     }
     howto_show(b) {
-        const howto = document.getElementsByClassName("game-howto")[0];
-        this.screen_setShow(howto, b);
+        if (b) {
+            this.newgame_show(false);
+        }
+        this.screen_setShow(document.querySelector(".game-howto"), b);
     }
     newgame_show(b) {
-        const newgame = document.getElementsByClassName("game-new")[0];
-        this.screen_setShow(newgame, b);
+        if (b) {
+            this.howto_show(false);
+        }
+        this.screen_setShow(document.querySelector(".game-new"), b);
     }
 }
 //# sourceMappingURL=html_actuator.js.map
