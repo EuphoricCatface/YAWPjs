@@ -51,7 +51,8 @@ class GameManager {
         this.prepareNextTurn(init);
         this.actuator.setScore(0);
         this.turns = 0;
-        this.countTurns();
+        this.countTurns(true);
+        this.actuator.showTurn(this.turns, GameManager.MAX_TURN);
         this.actuator.remove_gameOver();
     }
     prepareNextTurn(init = false) {
@@ -154,6 +155,7 @@ class GameManager {
         const validity = this.validator.validate(this.recent_input.word);
         this.actuator.finishSelect(validity);
         this.countTurns(validity);
+        this.actuator.showTurn(this.turns, GameManager.MAX_TURN);
         if (!validity)
             return;
 
@@ -165,18 +167,19 @@ class GameManager {
 
         this.prepareNextTurn();
     }
-    countTurns(validity = true) {
-        if(!(validity || GameManager.TURNS_COUNTED_ON_INVALID_MOVE))
+    countTurns(validity: boolean) {
+        if (!(validity || GameManager.TURNS_COUNTED_ON_INVALID_MOVE))
             return;
         // Do not count a turn if input is only one letter
-        if (GameManager.TURNS_COUNTED_ON_INVALID_MOVE && this.recent_input.tiles.length == 1)
+        if (GameManager.TURNS_COUNTED_ON_INVALID_MOVE 
+            && this.recent_input // Expert mode raises an exception here
+            && this.recent_input.tiles.length == 1)
             return;
         if (this.turns == GameManager.MAX_TURN) {
             this.actuator.gameOver();
             return;
         }
         this.turns += 1;
-        this.actuator.showTurn(this.turns, GameManager.MAX_TURN);
     }
     randomize_bonus_new() {
         // New tiles, letter bonuses: 86.6% no bonus, 10% double, 3.3% triple
