@@ -24,14 +24,14 @@ class HTMLActuator {
     totalScore: number;
     topWord: any;
     constructor() {
-        this.tileContainer = document.getElementsByClassName("tile-container")[0];
-        this.gameContainer = document.getElementsByClassName("game-container")[0];
-        this.wordConstructContainer = document.getElementsByClassName("word-construct-container")[0];
-        this.calculationContainer = document.getElementsByClassName("calculation-container")[0];
-        this.scoreTotalContainer = document.getElementsByClassName("score-total-container")[0];
-        this.turnsContainer = document.getElementsByClassName("turns-container")[0];
-        this.wordRankContainer = document.getElementsByClassName("word-rank-container")[0];
-
+        this.tileContainer = document.querySelector(".tile-container");
+        this.gameContainer = document.querySelector(".game-container");
+        this.wordConstructContainer = document.querySelector(".word-construct-container");
+        this.calculationContainer = document.querySelector(".calculation-container");
+        this.scoreTotalContainer = document.querySelector(".score-total-container");
+        this.turnsContainer = document.querySelector(".turns-container");
+        this.wordRankContainer = document.querySelector(".word-rank-container");
+        
         this.recentScore = 0;
         this.turnMaxPureScore = 0;
         this.totalScore = 0;
@@ -161,12 +161,13 @@ class HTMLActuator {
         this.scoreTotalContainer.textContent = this.totalScore.toString();
     }
     gameOver() {
-        const gameOver = document.getElementsByClassName("game-over")[0];
-        setTimeout( () => {this.screen_setShow(gameOver, true);}, 400);
+        setTimeout(() => 
+            {this.screen_setShow(document.querySelector(".game-over"), true);},
+            400
+        );
     }
     remove_gameOver() {
-        const gameOver = document.getElementsByClassName("game-over")[0];
-        this.screen_setShow(gameOver, false);
+        this.screen_setShow(document.querySelector(".game-over"), false);
     }
     showTurn(turns: number, maxturn: number) {
         if (HTMLActuator.HIDE_CURRENT_TURN)
@@ -175,7 +176,7 @@ class HTMLActuator {
         this.turnsContainer.textContent = "" + turns + " / " + maxturn;
     }
     init() {
-        const loading = document.getElementsByClassName("game-loading")[0];
+        const loading = document.querySelector(".game-loading");
         window.requestAnimationFrame(()=>{
             this.screen_setShow(loading, true);
         });
@@ -206,12 +207,10 @@ class HTMLActuator {
         const levelClass = {0: "normal", 1: "hard", 2: "expert"}[level];
         this.scoreTotalContainer.classList.add(levelClass);
     }
-    howto_show(b: boolean) {
-        const howto = document.getElementsByClassName("game-howto")[0];
-        this.screen_setShow(howto, b);
+    howto_show(b) {
+        this.screen_setShow(document.querySelector(".game-howto"), b);
     }
-    newgame_show(b: boolean) {
-        const newgame = document.getElementsByClassName("game-new")[0];
-        this.screen_setShow(newgame, b);
+    newgame_show(b) {
+        this.screen_setShow(document.querySelector(".game-new"), b);
     }
 }
